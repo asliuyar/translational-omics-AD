@@ -21,10 +21,10 @@ carpentry_description: 'Lesson Description'
 title: "Translational Omics in Alzheimer's Disease"
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: 2024-10-02 # FIXME
+created: 2024-10-02
 
 # Comma-separated list of keywords for the lesson
-keywords: 'Alzheimer"'"s Disease, Cross-species translation, omics, AD Knowledge Portal' # FIXME
+keywords: "Alzheimer's Disease, Cross-species translation, omics, AD Knowledge Portal"
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable
@@ -34,7 +34,7 @@ life_cycle: 'pre-alpha' # FIXME
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/carpentries/workbench-template-md' # FIXME
+source: 'https://github.com/asliuyar/translational-omics-AD'
 
 # Default branch of your lesson
 branch: 'main'
