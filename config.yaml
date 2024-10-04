@@ -50,7 +50,7 @@ contact: '' # FIXME
 #
 # Example -------------
 #
-# episodes:
+episodes:
 - introduction.md
 - exploring-data-in-synapse.Rmd
 - differential-expression-analysis.Rmd
