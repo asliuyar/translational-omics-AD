@@ -51,9 +51,11 @@ contact: '' # FIXME
 # Example -------------
 #
 # episodes:
-# - introduction.md
-# - first-steps.md
-#
+- introduction.md
+- exploring-data-in-synapse.Rmd
+- differential-expression-analysis.Rmd
+- mouse-human-alignment.Rmd
+
 # learners:
 # - setup.md
 #
