@@ -642,3 +642,9 @@ sessionInfo()
 ```
 
 
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Use your Synapse login credentials to access the Portal.
+- Use Synapser package to download data from the Portal.
+
+::::::::::::::::::::::::::::::::::::::::::::::::

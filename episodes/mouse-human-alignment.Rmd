@@ -1477,6 +1477,12 @@ Overall, by aligning human and mouse omics signatures through the lens of
 domains affected in each context, we can get a better understanding of the 
 relationships between the biological processes affected in each context. 
 
+## Session Info
+
+```{r session_info,collapse=TRUE}
+sessionInfo()
+```
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - AMP-AD gene modules represent major transcriptomic heterogeneity in AD
@@ -1489,8 +1495,3 @@ granular comparisons.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Session Info
-
-```{r session_info,collapse=TRUE}
-sessionInfo()
-```

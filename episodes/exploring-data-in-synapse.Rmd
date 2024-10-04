@@ -259,6 +259,11 @@ counts %>%
   left_join(joined_meta, by = "specimenID")
 ```
 
+## Session Info
+```{r}
+sessionInfo()
+```
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Use your Synapse login credentials to access the Portal.
@@ -266,7 +271,3 @@ counts %>%
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Session Info
-```{r}
-sessionInfo()
-```
