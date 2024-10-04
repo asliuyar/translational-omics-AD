@@ -1,5 +1,5 @@
 ---
-title: 'Mouse-human alignment of transcriptomic signatures'
+title: "Mouse-human alignment of transcriptomic signatures"
 teaching: 60
 exercises: 40
 ---
