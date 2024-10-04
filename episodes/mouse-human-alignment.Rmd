@@ -893,17 +893,23 @@ features to sets of functional annotations for those features. There are many
 different functional annotation sets available, some of the more commonly used 
 include:  
 
- * gene function resources, such as the [Gene Ontology](amigo.geneontology.org/amigo) (i.e. GO)    
- * pathway databases, such as [Reactome](reactome.org) or [KEGG](www.genome.jp/kegg/)   
- * disease and phenotype ontologies, such as the [Human Phenotype Ontology](hpo.jax.org/app), the [Mammalian Phenotype Ontology](www.informatics.jax.org/vocab/mp_ontology), and the [Disease Ontology](https://disease-ontology.org/)   
+ * gene function resources, such as the 
+ [Gene Ontology](https://amigo.geneontology.org/amigo) (i.e. GO)    
+ * pathway databases, such as [Reactome](https://reactome.org/) or
+ [KEGG](https://www.genome.jp/kegg/)   
+ * disease and phenotype ontologies, such as the 
+ [Human Phenotype Ontology](https://hpo.jax.org/), the 
+ [Mammalian Phenotype Ontology](https://www.informatics.jax.org/vocab/mp_ontology), 
+ and the [Disease Ontology](https://disease-ontology.org/)   
 
 These are the resources that are the foundation for many genomics knowledge 
-bases, such as [MGI](www.informatics.jax.org), 
-[monarch initiative](monarchinitiative.org), and  the 
-[Alliance of Genome Resources](alliancegenome.org). The precise nature of each 
-of these resources varies, but the core information contained within each is the 
-relationship of sets of genes to biologically meaningful annotations. These 
-annotations are typically expertly curated from the published literature.
+bases, such as [MGI](https://www.informatics.jax.org), 
+[monarch initiative](https://monarchinitiative.org), and  the 
+[Alliance of Genome Resources](https://alliancegenome.org). The precise nature 
+of each of these resources varies, but the core information contained within 
+each is the relationship of sets of genes to biologically meaningful 
+annotations. These annotations are typically expertly curated from the published
+literature.
 
 There are a variety of statistical approaches that can be employed to test for 
 functional enrichment among genes identified from an omics dataset. Two of the 
