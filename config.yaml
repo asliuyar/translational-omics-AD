@@ -50,12 +50,8 @@ contact: '' # FIXME
 #
 # Example -------------
 #
-episodes:
-- introduction.md
-- exploring-data-in-synapse.Rmd
-- differential-expression-analysis.Rmd
-- mouse-human-alignment.Rmd
-
+# episodes:
+# - introduction.md
 # learners:
 # - setup.md
 #
@@ -69,6 +65,9 @@ episodes:
 # Order of episodes in your lesson
 episodes: 
 - introduction.md
+- exploring-data-in-synapse.Rmd
+- differential-expression-analysis.Rmd
+- mouse-human-alignment.Rmd
 
 # Information for Learners
 learners: 
