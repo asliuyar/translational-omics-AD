@@ -870,7 +870,9 @@ Considering the LOAD1 (i.e. APOE4.Trem2) model results, which modules show corre
      legend.position = "right"
    )
 ```
-The LOAD1 models show weaker correlation to AMP-AD module gene expression overall, and in particular anti-correlation for Consensus Cluster B (immune) modules.
+The LOAD1 models show weaker correlation to AMP-AD module gene expression 
+overall, and in particular anti-correlation for Consensus Cluster B (immune) 
+modules.
 :::::::::::::::::::::::::::::::::
 
 
@@ -1021,7 +1023,8 @@ enr.dn@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length(
 
 ## Challenge 4
 
-How many significant terms are identified from the up-regulated gene list if you do not specify the "universe"?
+How many significant terms are identified from the up-regulated gene list if you 
+do not specify the "universe"?
 
 :::::::::::::::::::::::: solution 
 
@@ -1096,7 +1099,10 @@ enr@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
 
 ## Challenge 5
 
-The tally above represents all genes, both up- and down-regulatd. To compare between GSEA and ORA, can you identify how many GSEA enriched terms are associated with up-regulated genes and how many are associated with down-regulated genes? (Hint: the `NES` value within the results relates to the directionality of enrichment). 
+The tally above represents all genes, both up- and down-regulatd. To compare 
+between GSEA and ORA, can you identify how many GSEA enriched terms are 
+associated with up-regulated genes and how many are associated with 
+down-regulated genes? (Hint: the `NES` value within the results relates to the directionality of enrichment). 
 
 :::::::::::::::::::::::: solution 
 
@@ -1162,7 +1168,7 @@ cataloged among the targets of therapeutics in clinical trials for AD
 ![Drugs in Pipeline by CADRO](fig/rmd04-CADRO_2023_2.jpg)
 
 In order to formalize and operationalize these endophenotypic areas, the 
-[Emory-Sage-SGC center of the TREAT-AD consortium](treatad.org/emory-sage-sgc/) 
+[Emory-Sage-SGC center of the TREAT-AD consortium](https://treatad.org/emory-sage-sgc/) 
 has developed the [Biological Domains of AD](https://alz-journals.onlinelibrary.wiley.com/doi/pdfdirect/10.1002/trc2.12461). 
 In the enumeration of these domains, several criteria were established; the 
 biological domains defined should be:  
@@ -1185,7 +1191,7 @@ least 1 biodomain term. While the biodomains exhibit very few overlapping GO
 terms (panel A), due to gene pleiotropy (etc) the number of overlapping genes 
 between biological domains is quite a bit higher (panel B). The development of 
 the biological domains is described in more detail in the published paper 
-[Genetic and Multi-omic Risk Assessment of Alzheimer’s Disease Implicates Core Associated Biological Domains](doi.org/10.1002/trc2.12461). 
+[Genetic and Multi-omic Risk Assessment of Alzheimer’s Disease Implicates Core Associated Biological Domains](https://alz-journals.onlinelibrary.wiley.com/doi/10.1002/trc2.12461). 
 
 ![AD Biodomain Demographics](fig/rmd04-score_domains_preprint_F1_cropped.jpeg)
 
