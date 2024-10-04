@@ -6,8 +6,7 @@ exercises: 10
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- What transcriptomic changes do we observe in mouse models carrying AD-related 
-mutations?
+- What transcriptomic changes do we observe in mouse models carrying AD-related mutations?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
