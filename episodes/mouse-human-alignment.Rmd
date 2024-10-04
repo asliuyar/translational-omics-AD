@@ -642,7 +642,7 @@ ggplot2::ggplot() +
 ```
 
 ```{r, echo=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
-png(file="../results/AMPAD1.png", width=16, height=4, units="in", res = 1200)
+png(file="/fig/AMPAD1.png", width=16, height=4, units="in", res = 1200)
 ggplot2::ggplot() +
   ggplot2::geom_tile(data = data, ggplot2::aes(x = .data$module, y = .data$model_sex), colour = "black", fill = "white") +
   ggplot2::geom_point(data = dplyr::filter(data), ggplot2::aes(x = .data$module, y = .data$model_sex, colour = .data$correlation, size = abs(.data$correlation))) +
@@ -668,7 +668,7 @@ dev.off()
 ```
 
 
-![AMPAD - 5XFAD correlation plot](results/AMPAD1.png)
+![AMPAD - 5XFAD correlation plot](fig/AMPAD1.png)
 
 In the above plot, categories along the x-axis are the 30 AMP-AD co-expression 
 modules grouped into 5 consensus clusters, while the categories along the y-axis 
@@ -726,7 +726,7 @@ a <- c('4 mo','6 mo')
 indiv.corr <- cor.df %>% filter(module == m, sex == s, age %in% a) %>% unnest(data) %>% 
   mutate( facet = str_c(age, '\n', 'r = ',signif(estimate,3),' ; p = ',signif(p_value,3) ))
 
-png(file="../results/AMPAD_FPbrown.png", width=8, height=4, units="in", res = 1200)
+png(file="fig/AMPAD_FPbrown.png", width=8, height=4, units="in", res = 1200)
 ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
   geom_vline(xintercept = 0, lwd = .1)+
   geom_hline(yintercept = 0, lwd = .1)+
@@ -741,7 +741,7 @@ ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
 dev.off()
 ```
 
-![AMPAD - 5XFAD FPbrown correlation](../results/AMPAD_FPbrown.png)
+![AMPAD - 5XFAD FPbrown correlation](fig/AMPAD_FPbrown.png)
 
 Here we can see that the 5xFAD logFC are pretty small in general. The 
 correlations are relatively weak and driven by individual genes that have 
@@ -781,7 +781,7 @@ a <- c('4 mo','12 mo')
 indiv.corr <- cor.df %>% filter(module == m, sex == s, age %in% a) %>% unnest(data) %>% 
   mutate( facet = str_c(age, '\n', 'r = ',signif(estimate,3),' ; p = ',signif(p_value,3) ))
 
-png(file="../results/AMPAD_STGblue.png", width=8, height=4, units="in", res = 1200)
+png(file="fig/AMPAD_STGblue.png", width=8, height=4, units="in", res = 1200)
 ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
   geom_vline(xintercept = 0, lwd = .1)+
   geom_hline(yintercept = 0, lwd = .1)+
@@ -796,7 +796,7 @@ ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
 dev.off()
 ```
 
-![AMPAD - 5XFAD STGblue correlation](../results/AMPAD_STGblue.png)
+![AMPAD - 5XFAD STGblue correlation](fig/AMPAD_STGblue.png)
 
 These correlations are much stronger (r ~ 0.3 vs 0.1 in the previous example), 
 and there is a consistent pattern between young mice and old mice, with similar 
@@ -815,7 +815,7 @@ Considering the LOAD1 (i.e. APOE4.Trem2) model results, which modules show corre
 :::::::::::::::::::::::: solution 
 
 ```r
- load("../results/DEAnalysis_LOAD1.Rdata")
+ load("fig/DEAnalysis_LOAD1.Rdata")
  model_vs_ampad <- inner_join(DE_LOAD1.df, ampad_modules_fc, by = c("symbol"), multiple = "all") 
  cor.df <- model_vs_ampad %>%
    dplyr::select(module, model, sex, age, symbol, log2FoldChange, ampad_fc) %>%
@@ -1038,14 +1038,14 @@ cowplot::plot_grid(
 ```
 
 ```{r, echo=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
-png(file="../results/significantTerms.png", width=12, height=5, units="in", res = 1200)
+png(file="fig/significantTerms.png", width=12, height=5, units="in", res = 1200)
 cowplot::plot_grid(
   dotplot(enr.dn, showCategory = 10) + ggtitle('down'),
   dotplot(enr.up, showCategory = 10) + ggtitle('up'))
 dev.off()
 ```
 
-![significantTerms](../results/significantTerms.png) 
+![significantTerms](fig/significantTerms.png) 
 
 From this we can see that nervous system related terms (e.g. "learning or 
 memory", "neurotransmitter transport") are down in 5xFAD males at 12 months, 
@@ -1111,12 +1111,12 @@ ridgeplot(enr, core_enrichment = T, showCategory = 15)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
-png(file="../results/ridgePlot.png", width=12, height=8, units="in", res = 1200)
+png(file="fig/ridgePlot.png", width=12, height=8, units="in", res = 1200)
 ridgeplot(enr, core_enrichment = T, showCategory = 15)
 dev.off()
 ```
 
-![ridgeplot](../results/ridgePlot.png)
+![ridgeplot](fig/ridgePlot.png)
 
 This plot shows the top 15 GSEA enriched terms. The displayed terms are all from 
 the up-regulated class (i.e. `NES > 0`), and consist of many immune-relevant 
@@ -1293,7 +1293,7 @@ enr.bd_plot <- full_join(enr.bd, dom.lab, by = c('Biodomain' = 'domain')) %>%
   mutate(Biodomain = factor(Biodomain, levels = arrange(bd.tally, n_sig_term) %>% pull(domain))) %>% 
   arrange(Biodomain, p.adjust) 
 
-png(file="../results/biodom_plot.png", width=10, height=6, units="in", res = 1200)
+png(file="fig/biodom_plot.png", width=10, height=6, units="in", res = 1200)
 ggplot(enr.bd_plot, aes(NES, Biodomain)) +
   geom_violin(data = subset(enr.bd_plot, NES > 0), 
               aes(color = color), scale = 'width')+
@@ -1307,7 +1307,7 @@ ggplot(enr.bd_plot, aes(NES, Biodomain)) +
 dev.off()
 ```
 
-![ridgeplot](../results/biodom_plot.png)
+![ridgeplot](fig/biodom_plot.png)
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
