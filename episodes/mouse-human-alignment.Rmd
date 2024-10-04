@@ -1,5 +1,5 @@
 ---
-title: "Mouse-human alignment of transcriptomic signatures"
+title: "Mouse human alignment of transcriptomic signatures"
 teaching: 60
 exercises: 40
 ---
@@ -21,7 +21,7 @@ exercises: 40
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Author: Gregory Cary, Jackson Laboratory
+Author Gregory Cary, Jackson Laboratory
 
 ```{r libs, warning=FALSE, include=FALSE}
 #suppressPackageStartupMessages(library("DESeq2"))
