@@ -18,13 +18,13 @@ carpentry: 'incubator'
 carpentry_description: 'Lesson Description'
 
 # Overall title for pages.
-title: "Translational Omics in Alzheimer's Disease"
+title: "Translational Omics in Alzheimers Disease"
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
 created: 2024-10-02
 
 # Comma-separated list of keywords for the lesson
-keywords: "Alzheimer's Disease, Cross-species translation, omics, AD Knowledge Portal"
+keywords: "Alzheimers Disease, Cross-species translation, omics, AD Knowledge Portal"
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable
