@@ -18,7 +18,7 @@ carpentry: 'incubator'
 carpentry_description: 'Lesson Description'
 
 # Overall title for pages.
-title: "Translational Omics in Alzheimer's Disease"
+title: "Translational Omics in Alzheimers Disease"
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
 created: 2024-10-02
