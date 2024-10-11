@@ -1,45 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/404.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/404.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/CODE_OF_CONDUCT.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/LICENSE.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/index.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/aio.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/404.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/differential-expression-analysis.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/CODE_OF_CONDUCT.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/exploring-data-in-synapse.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/LICENSE.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/images.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/index.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/index.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/introduction.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/404.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/profiles.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/instructor/reference.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/introduction.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/aio.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/profiles.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/differential-expression-analysis.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-md/reference.html</loc>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/exploring-data-in-synapse.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/images.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/index.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/key-points.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/mouse-human-alignment.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/profiles.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor/reference.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/key-points.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/mouse-human-alignment.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/profiles.html</loc>
+  </url>
+  <url>
+    <loc>https://asliuyar.github.io/translational-omics-AD/reference.html</loc>
   </url>
 </urlset>
