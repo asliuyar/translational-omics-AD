@@ -1489,7 +1489,7 @@ other attached packages:
 
 loaded via a namespace (and not attached):
  [1] bit_4.5.0        gtable_0.3.5     crayon_1.5.3     compiler_4.4.1  
- [5] renv_1.0.10      tidyselect_1.2.1 parallel_4.4.1   scales_1.3.0    
+ [5] renv_1.0.11      tidyselect_1.2.1 parallel_4.4.1   scales_1.3.0    
  [9] yaml_2.3.10      R6_2.5.1         generics_0.1.3   knitr_1.48      
 [13] munsell_0.5.1    pillar_1.9.0     tzdb_0.4.0       rlang_1.1.4     
 [17] utf8_1.2.4       stringi_1.8.4    xfun_0.48        bit64_4.5.2     

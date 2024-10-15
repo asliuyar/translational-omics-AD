@@ -965,7 +965,7 @@ other attached packages:
  [9] ggplot2_3.5.1   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] Matrix_1.6-5     gtable_0.3.5     compiler_4.4.1   renv_1.0.10     
+ [1] Matrix_1.6-5     gtable_0.3.5     compiler_4.4.1   renv_1.0.11     
  [5] highr_0.11       tidyselect_1.2.1 scales_1.3.0     yaml_2.3.10     
  [9] lattice_0.22-5   R6_2.5.1         labeling_0.4.3   generics_0.1.3  
 [13] knitr_1.48       munsell_0.5.1    pillar_1.9.0     tzdb_0.4.0      
