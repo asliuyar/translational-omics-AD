@@ -31,24 +31,24 @@ exercises: 10
 # Do you want to install from sources the packages which need compilation? 
 # (Yes/no/cancel) n
 
-# if (!requireNamespace("BiocManager", quietly = TRUE))
-# 
-#     install.packages("BiocManager")
-# 
-# BiocManager::install("clusterProfiler")
-# BiocManager::install("DESeq2")
-# BiocManager::install("AnnotationDbi")
-# BiocManager::install("org.Mm.eg.db")
-# BiocManager::install("org.Hs.eg.db")
-# BiocManager::install("GO.db")
-# BiocManager::install("EnhancedVolcano")
-# suppressPackageStartupMessages(library("clusterProfiler"))
-# suppressPackageStartupMessages(library("DESeq2"))
-# suppressPackageStartupMessages(library("AnnotationDbi"))
-# suppressPackageStartupMessages(library("org.Mm.eg.db"))
-# suppressPackageStartupMessages(library("org.Hs.eg.db"))
-# suppressPackageStartupMessages(library("GO.db"))
-# suppressPackageStartupMessages(library("EnhancedVolcano"))
+if (!requireNamespace("BiocManager", quietly = TRUE))
+
+    install.packages("BiocManager")
+
+BiocManager::install("clusterProfiler")
+BiocManager::install("DESeq2")
+BiocManager::install("AnnotationDbi")
+BiocManager::install("org.Mm.eg.db")
+BiocManager::install("org.Hs.eg.db")
+BiocManager::install("GO.db")
+BiocManager::install("EnhancedVolcano")
+suppressPackageStartupMessages(library("clusterProfiler"))
+suppressPackageStartupMessages(library("DESeq2"))
+suppressPackageStartupMessages(library("AnnotationDbi"))
+suppressPackageStartupMessages(library("org.Mm.eg.db"))
+suppressPackageStartupMessages(library("org.Hs.eg.db"))
+suppressPackageStartupMessages(library("GO.db"))
+suppressPackageStartupMessages(library("EnhancedVolcano"))
 suppressPackageStartupMessages(library("tidyverse"))
 suppressPackageStartupMessages(library("dplyr"))
 ```
