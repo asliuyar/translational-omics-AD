@@ -27,8 +27,6 @@ suppressPackageStartupMessages(library(knitr))
 
 ## Working with AD Portal metadata 
 
-**Metadata basics** 
-
 We have now downloaded several metadata files and an RNAseq counts file from the
 portal. For our next exercises, we want to read those files in as R data so we 
 can work with them.
@@ -65,7 +63,7 @@ rna_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_assay_RNAseq_metadata.csv",
 
 Let’s examine the data and metadata files a bit before we begin our
 analyses. We start by exploring the `counts` data that we read in using the
-tidyverse `read_csv()` function. This function reads data in as a *tibble*, a
+tidyverse `read_tsv()` (*read*_*t*ab-*s*eparated *v*alues) function. This function reads data in as a *tibble*, a
 kind of data table with some nice features that avoid some bad habits of the
 base R `read.csv()` function. Calling a `tibble` object will print the first ten 
 rows in a nice tidy output. Doing the same for a base R dataframe read in with
