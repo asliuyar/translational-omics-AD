@@ -20,9 +20,11 @@ exercises: 10
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r, echo=FALSE}
-suppressPackageStartupMessages(library(`dplyr`))
+suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(knitr))
 ```
+
 ## Working with AD Portal metadata 
 
 **Metadata basics** 
@@ -36,14 +38,14 @@ that we have five metadata files. Two of these should be the individual
 and biospecimen files, and three of them are assay metadata files.
 
 ```{r, eval=FALSE}
-download_table %>% 
-  `dplyr`::select(name, metadataType, assay)
+download_table %>%
+  dplyr::select(name, metadataType, assay)
 ```
 
 We are only interested in RNAseq data, so we will only read in the
 individual, biospecimen, and RNAseq assay metadata files.
 
-```{r}
+```{r, read_data}
 # counts matrix
 counts <- read_tsv("data/htseqcounts_5XFAD.txt", 
                    show_col_types = FALSE)
@@ -56,27 +58,28 @@ ind_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_individual_metadata.csv",
 bio_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_biospecimen_metadata.csv", 
                      show_col_types = FALSE)
 
-#assay metadata
+# assay metadata
 rna_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_assay_RNAseq_metadata.csv", 
                      show_col_types = FALSE)
 ```
 
 Let’s examine the data and metadata files a bit before we begin our
-analyses.
+analyses. We start by exploring the `counts` data that we read in using the
+tidyverse `read_csv()` function. This function reads data in as a *tibble*, a
+kind of data table with some nice features that avoid some bad habits of the
+base R `read.csv()` function. Calling a `tibble` object will print the first ten 
+rows in a nice tidy output. Doing the same for a base R dataframe read in with
+`read.csv()` will print the whole thing until it runs out of memory. If you want 
+to inspect a large dataframe, use `head(df)` to view the first several rows 
+only.
 
-**Counts data**
-
-```{r}
-# Calling a tibble object will print the first ten rows in a nice tidy output; 
-# doing the same for a base R dataframe will print the whole thing until it runs 
-# out of memory. If you want to inspect a large dataframe, use `head(df)`
-counts
+```{r, counts_tibble}
+kable(counts)
 ```
 
-The data file has a column of ENSEMBL gene ids and then a bunch of
-columns with count data, where the column headers correspond to the
-`specimenID`s. These `specimenID`s should all be in the RNAseq assay
-metadata file, so let’s check.
+The data file has a column of ENSEMBL `gene_id`s and then a bunch of columns 
+with count data, where the column headers correspond to the `specimenID`s. These 
+`specimenID`s should all be in the RNAseq assay metadata file, so let’s check.
 
 ```{r}
 # what does the RNAseq assay metadata look like?
