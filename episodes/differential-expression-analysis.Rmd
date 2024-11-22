@@ -24,6 +24,8 @@ exercises: 10
 # Differential Expression Analysis
 
 ```{r, echo=FALSE}
+install.packages("BiocManager")
+suppressPackageStartupMessages(library("BiocManager"))
 suppressPackageStartupMessages(library("clusterProfiler"))
 suppressPackageStartupMessages(library("DESeq2"))
 suppressPackageStartupMessages(library("AnnotationDbi"))
