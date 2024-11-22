@@ -71,8 +71,8 @@ rows in a nice tidy output. Doing the same for a base R dataframe read in with
 to inspect a large dataframe, use `head(df)` to view the first several rows 
 only.
 
-```{r, counts_tibble}
-kable(counts)
+```{r, counts_tibble, results='asis'}
+counts
 ```
 
 The data file has a column of ENSEMBL `gene_id`s and then a bunch of columns 
