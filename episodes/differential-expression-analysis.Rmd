@@ -41,7 +41,8 @@ In this lesson, we will use the raw counts matrix and metadata downloaded in the
 previous lesson and will perform differential expression analysis.
 
 ```{r}
-counts <- read.delim("data/htseqcounts_5XFAD.txt", check.names = FALSE)
+counts <- read.delim("data/htseqcounts_5XFAD.txt", 
+                      check.names = FALSE)
 ```
 
 **Reading Sample Metadata from Previous Lesson**
@@ -108,9 +109,9 @@ need only count data in matrix, so we will change the `gene_id` column to
 
 ```{r}
 # Converting the `gene_id` as `rownames` of `counts` matrix
-counts <- counts %>% 
-  column_to_rownames(., var="gene_id") %>% 
-  as.data.frame()
+counts <- counts %>%
+          column_to_rownames(., var = "gene_id") %>% 
+          as.data.frame()
 ```
 
 Let’s confirm if change is done correctly.
@@ -147,14 +148,15 @@ First we convert the dataframe to longer format and join our covariates by
 
 ```{r}
 count_tpose <-  counts  %>%
-                rownames_to_column(., var="gene_id") %>% 
+                rownames_to_column(., var = "gene_id") %>% 
                 filter(gene_id %in%
-                  c("ENSG00000080815",
-                    "ENSMUSG00000019969",
-                    "ENSG00000142192",
-                    "ENSMUSG00000022892")) %>%
-                pivot_longer(., cols = -"gene_id",
-                  names_to = "specimenID",  values_to="counts") %>%
+                      c("ENSG00000080815",
+                        "ENSMUSG00000019969",
+                        "ENSG00000142192",
+                        "ENSMUSG00000022892")) %>%
+                pivot_longer(., cols    = -"gene_id",
+                              names_to  = "specimenID",
+                              values_to = "counts") %>%
                 as.data.frame() %>%
                 left_join(covars, by="specimenID") %>%
                 as.data.frame()
@@ -165,9 +167,9 @@ head(count_tpose)
 Rename the APP and PSEN1 genes to specify whether mouse or human.
 
 ```{r}
-#make the age column a factor and re-order the levels
-count_tpose$timepoint <- 
-  factor(count_tpose$timepoint,levels=c("4 mo","6 mo","12 mo"))
+# make the age column a factor and re-order the levels
+count_tpose$timepoint <- factor(count_tpose$timepoint,
+                                levels = c("4 mo", "6 mo", "12 mo"))
 
 # rename the gene id to gene symbol
 count_tpose$gene_id[count_tpose$gene_id %in% "ENSG00000142192"] <- 
@@ -183,7 +185,8 @@ count_tpose$gene_id[count_tpose$gene_id %in% "ENSMUSG00000019969"] <-
 Visualize orthologous genes.
 
 ```{r}
-#Create simple box plots showing normalized counts by genotype and time point, faceted by sex.
+# Create simple box plots showing normalized counts 
+# by genotype and time point faceted by sex.
 count_tpose %>% 
   ggplot(aes(x = timepoint, y = counts, color = genotype)) +
         geom_boxplot() + 
@@ -201,14 +204,14 @@ of mouse genes, respectively to match with gene names in control mice.
 
 ```{r}
 # merge mouse and human APP gene raw count
-counts[rownames(counts) %in% "ENSMUSG00000022892", ]   <- 
+counts[rownames(counts)   %in% "ENSMUSG00000022892", ] <- 
   counts[rownames(counts) %in% "ENSMUSG00000022892", ] + 
   counts[rownames(counts) %in% "ENSG00000142192", ]
 
 counts <- counts[!rownames(counts) %in% c("ENSG00000142192"), ]
 
 # merge mouse and human PS1 gene raw count
-counts[rownames(counts) %in% "ENSMUSG00000019969", ]   <- 
+counts[rownames(counts)   %in% "ENSMUSG00000019969", ] <- 
   counts[rownames(counts) %in% "ENSMUSG00000019969", ] + 
   counts[rownames(counts) %in% "ENSG00000080815", ]
 
@@ -256,8 +259,8 @@ mice. You can amend the code to compare wild type and 5XFAD mice from either
 sex, at any time point.
 
 ```{r}
-meta.12M.Male <- metadata[(metadata$sex == "male" & 
-                 metadata$timepoint     == "12 mo"), ]
+meta.12M.Male <- metadata[(metadata$sex           == "male" & 
+                           metadata$timepoint     == "12 mo"), ]
 
 meta.12M.Male
 ```
@@ -368,14 +371,12 @@ differential expression analysis.
 
 ```{r}
 map_function.df <- function(x, inputtype, outputtype) {
-  mapIds(
-    org.Mm.eg.db,
-    keys      = row.names(x),
-    column    = outputtype,
-    keytype   = inputtype,
-    multiVals = "first"
-  )
-}
+                            mapIds( org.Mm.eg.db,
+                                    keys      = row.names(x),
+                                    column    = outputtype,
+                                    keytype   = inputtype,
+                                    multiVals = "first")
+                            }
 ```
 
 **Generating Results table**
@@ -386,8 +387,10 @@ interested in.
 
 ```{r}
 All_res <- as.data.frame(res) %>% 
+           
            # run map_function to add symbol of gene corresponding to ENSEMBL ID
            mutate(symbol = map_function.df(res, "ENSEMBL", "SYMBOL")) %>%    
+           
            # run map_function to add Entrez ID of gene corresponding to ENSEMBL ID
            mutate(EntrezGene = map_function.df(res, "ENSEMBL", "ENTREZID")) %>%  
            dplyr::select("symbol",
@@ -487,8 +490,8 @@ It is also possible to customize the PCA plot using the `ggplot` function.
 
 ```{r}
 pcaData <- plotPCA(vsd, 
-                   intgroup = c("genotype", "sex","timepoint"),
-                   returnData=TRUE)
+                   intgroup   = c("genotype", "sex","timepoint"),
+                   returnData = TRUE)
 
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 
@@ -616,7 +619,7 @@ for (i in 1:nrow(comparisons))
                                 sex   = unique(meta$sex),
                                 age   = unique(meta$timepoint)))
     
-    #append results in list
+    # append results in list
     DE_5xFAD.list[[i]] <- All_res
     names(DE_5xFAD.list)[i] <- paste0(comparisons[i,2])
 }
@@ -697,11 +700,11 @@ dat <- list(FAD_M_4 = subset(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`[order(DE_5x
                                   padj < 0.05) %>% 
             pull(EntrezGene))
 
-## perform enrichment analysis
+# perform enrichment analysis
 enrich_pathway <- compareCluster(dat,
-                                 fun = "enrichKEGG",
+                                 fun          = "enrichKEGG",
                                  pvalueCutoff = 0.05,
-                                 organism = "mmu"
+                                 organism     = "mmu"
                                  )
 
 enrich_pathway@compareClusterResult$Description <- 
@@ -716,8 +719,8 @@ Let’s plot top enriched functions using the `dotplot` function of the
 ```{r}
 clusterProfiler::dotplot(enrich_pathway,
                          showCategory = 10,
-                         font.size = 14,
-                         title = "Enriched KEGG Pathways")
+                         font.size    = 14,
+                         title        = "Enriched KEGG Pathways")
 ```
 
 What does this plot infer?
@@ -731,7 +734,7 @@ objects in compressed, binary format. The `save` command is useful when you want
 to save multiple objects in one file.
 
 ```{r}
-save(DE_5xFAD.df,DE_5xFAD.list, file="results/DEAnalysis_5XFAD.Rdata")
+save(DE_5xFAD.df, DE_5xFAD.list, file = "results/DEAnalysis_5XFAD.Rdata")
 ```
 
 ## Session Info
