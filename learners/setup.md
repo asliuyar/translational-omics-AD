@@ -2,9 +2,6 @@
 title: Setup
 ---
 
----
-title: Setup
----
 For this lesson, you will be working in the R programming language and the 
 RStudio development environment.
 
