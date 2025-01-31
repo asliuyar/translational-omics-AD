@@ -21,6 +21,10 @@ Next, install the required packages for this lesson. In RStudio, copy and paste
 the following commands into the Console:
 
 ```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.20")
+
 # install synapser
 install.packages("synapser", repos = c("http://ran.synapse.org", "http://cran.fhcrc.org"))
 
