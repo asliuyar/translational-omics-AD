@@ -234,10 +234,13 @@ Orthology mapping can be tricky, but thankfully Wan *et al* have already
 identified mouse orthologs for each of the human genes using the HGNC Comparison 
 of Orthology Predictions ([HCOP](https://www.genenames.org/tools/hcop/)) tool. 
 While there are a variety of different ways to get data about gene orthology, 
-for the sake of simplicity we are going to read that table from [Synapse](https://doi.org/10.7303/syn17010253.1).  
+for the sake of simplicity we are going to read that table from 
+[Synapse](https://doi.org/10.7303/syn17010253.1).  
 
 ```{r AMP-AD2, warning=FALSE, message=FALSE, eval=FALSE}
-mouse.human.ortho <- fread(synapser::synGet("syn17010253")$path,check.names = F,header=T)
+mouse.human.ortho <- fread(synapser::synGet("syn17010253")$path,
+                           check.names = F,
+                           header=T)
 ```
 
 Let's take a look at the first few rows of this orthology table:  
@@ -252,7 +255,7 @@ human ENSEMBL IDs from both tables.
 ```{r , warning=FALSE, message=FALSE, eval=FALSE}
 module_table$Mouse_gene_name <-
   mouse.human.ortho$mouse_symbol[
-    match(module_table$GeneID,mouse.human.ortho$human_ensembl_gene)
+    match(module_table$GeneID, mouse.human.ortho$human_ensembl_gene)
     ]
 ```
 
@@ -268,7 +271,10 @@ information. Let's only keep the columns of interest and rows that contain a
 mouse ortholog mapping:  
 ```{r, eval=FALSE}
 ampad_modules <- module_table %>%
-  distinct(tissue = brainRegion, module = Module, gene = GeneID, Mouse_gene_name) %>%
+  distinct(tissue = brainRegion, 
+           module = Module, 
+           gene = GeneID, 
+           Mouse_gene_name) %>%
   filter(Mouse_gene_name != "")
 ```
 
@@ -310,7 +316,9 @@ for human transcripts can be obtained from
 [Synapse](https://www.synapse.org/#!Synapse:syn14237651).  
 
 ```{r AMP-AD3, warning=FALSE, message=FALSE, eval=FALSE}
-ampad_modules_raw <- fread(synapser::synGet("syn14237651")$path,check.names = F,header=T)
+ampad_modules_raw <- fread(synapser::synGet("syn14237651")$path,
+                           check.names = F,
+                           header=T)
 ```
 
 Let's take a look at these data  
@@ -340,7 +348,9 @@ only keep the three columns we'll need: `Tissue`, `Gene` and `logFC`.
 ampad_fc <- ampad_modules_raw %>%
   as_tibble() %>%
   filter(Model == "Diagnosis", Comparison == "AD-CONTROL") %>%
-  dplyr::select(tissue = Tissue, gene = ensembl_gene_id, ampad_fc = logFC) %>% 
+  dplyr::select(tissue = Tissue, 
+                gene = ensembl_gene_id, 
+                ampad_fc = logFC) %>% 
   distinct()
 ```
 
@@ -365,7 +375,7 @@ only be in one module per brain region. Let's double check using the first gene
 in the table:
 
 ```{r, eval=FALSE}
-ampad_modules[ampad_modules$gene %in% "ENSG00000168439",]
+ampad_modules[ampad_modules$gene %in% "ENSG00000168439", ]
 ```
 
 This gene is present in six different co-expression modules all from different 
@@ -373,8 +383,12 @@ brain regions. You can do this for any other gene as well.
 
 We'll merge the two tables using the `dplyr::inner_join` function:
 ```{r AMP-AD5, warning=FALSE, message=FALSE, eval=FALSE}
-ampad_modules_fc <- inner_join(ampad_modules, ampad_fc, by = c("gene", "tissue")) %>% 
-  dplyr::select(symbol = Mouse_gene_name, module, ampad_fc) 
+ampad_modules_fc <- inner_join(ampad_modules, 
+                               ampad_fc, 
+                               by = c("gene", "tissue")) %>% 
+  dplyr::select(symbol = Mouse_gene_name, 
+                module, 
+                ampad_fc) 
 ```
 
 Take a look at the new table we just made:  
@@ -490,7 +504,10 @@ First, we'll combine both mouse `DE_5xFAD.df` and human `ampad_modules_fc` log
 fold change data sets for all genes.
 
 ```{r step1, message=FALSE, warning=FALSE, eval=FALSE}
-model_vs_ampad <- inner_join(DE_5xFAD.df, ampad_modules_fc, by = c("symbol"), multiple = "all") 
+model_vs_ampad <- inner_join(DE_5xFAD.df, 
+                             ampad_modules_fc, 
+                             by = c("symbol"), 
+                             multiple = "all") 
 ```
 
 **Note:** for this join we specify `multiple = "all"` so that the same gene can 
@@ -633,7 +650,7 @@ ggplot2::ggplot() +
     axis.text.x = ggplot2::element_text(angle = 90, hjust = 0, size = 12),
     axis.text.y = ggplot2::element_text(angle = 0, size = 12),
     panel.background = ggplot2::element_blank(),
-    plot.title = ggplot2::element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title = ggplot2::element_text(angle = 0, vjust = -54, hjust = 0.03, size=12, face="bold"),
     plot.title.position = "plot",
     panel.grid = ggplot2::element_blank(),
     legend.position = "right"
@@ -723,8 +740,10 @@ s <- 'female'
 a <- c('4 mo','6 mo')
 
 # filter the correlation data frame to these comparisons
-indiv.corr <- cor.df %>% filter(module == m, sex == s, age %in% a) %>% unnest(data) %>% 
-  mutate( facet = str_c(age, '\n', 'r = ',signif(estimate,3),' ; p = ',signif(p_value,3) ))
+indiv.corr <- cor.df %>% 
+  filter(module == m, sex == s, age %in% a) %>% 
+  unnest(data) %>% 
+  mutate( facet = str_c(age, '\n', 'r = ', signif(estimate,3),' ; p = ', signif(p_value,3) ))
 
 png(file="fig/AMPAD_FPbrown.png", width=8, height=4, units="in", res = 1200)
 ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
@@ -732,7 +751,8 @@ ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
   geom_hline(yintercept = 0, lwd = .1)+
   geom_point( size = .5, color = 'darkred')+
   geom_smooth(method = 'lm', lwd = .5)+
-  ggrepel::geom_label_repel( data = arrange(indiv.corr, desc(abs(log2FoldChange))), 
+  ggrepel::geom_label_repel( data = arrange(indiv.corr, 
+                                            desc(abs(log2FoldChange))), 
                              aes(label = symbol), size = 2 ) +
   labs(x = '5xFAD logFC', y = 'AMP-AD logFC',
        title = unique(indiv.corr$module))+
@@ -754,7 +774,11 @@ m <- 'STGblue'
 s <- 'female'
 a <- c('4 mo','12 mo')
 
-indiv.corr <- cor.df %>% filter(module == m, sex == s, age %in% a) %>% unnest(data) %>% 
+indiv.corr <- cor.df %>% 
+  filter(module == m, 
+         sex == s, 
+         age %in% a) %>% 
+  unnest(data) %>% 
   mutate( v = str_c(age, '\n', 'r = ',signif(estimate,3),' ; p = ',signif(p_value,3) ))
 
 ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
@@ -810,7 +834,8 @@ in human AD patients.
 
 ## Challenge 3
 
-Considering the LOAD1 (i.e. APOE4.Trem2) model results, which modules show correlation and how does it compare with 5xFAD? 
+Considering the LOAD1 (i.e. APOE4.Trem2) model results, which modules show 
+correlation and how does it compare with 5xFAD? 
 
 :::::::::::::::::::::::: solution 
 
@@ -955,7 +980,8 @@ load('results/DEAnalysis_5XFAD.RData')
 ```
 
 We'll start by considering the genes that are significantly DE in 12 month old 
-male animals
+male animals.
+
 ```{r, eval=FALSE}
 gene.list.up <- DE_5xFAD.df %>% 
   filter(sex == 'male', 
@@ -991,7 +1017,11 @@ both measured by the experiment and contained within the annotation set.
 univ <- as.data.frame(org.Mm.egGO) %>% 
   pull(gene_id) %>% 
   unique() %>% 
-  bitr(., fromType = "ENTREZID", toType = 'SYMBOL', OrgDb = org.Mm.eg.db, drop = T) %>% 
+  bitr(., 
+       fromType = "ENTREZID", 
+       toType = 'SYMBOL', 
+       OrgDb = org.Mm.eg.db, 
+       drop = T) %>% 
   pull('SYMBOL') %>% 
   intersect(., DE_5xFAD.df$symbol)
 ```
@@ -1015,8 +1045,15 @@ enr.dn <- enrichGO(gene.list.dn,
 
 How many significant terms are identified:  
 ```{r, eval=FALSE}
-enr.up@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
-enr.dn@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
+enr.up@result %>% 
+  filter(p.adjust <= 0.05) %>% 
+  pull(ID) %>% unique() %>% 
+  length()
+enr.dn@result %>% 
+  filter(p.adjust <= 0.05) %>% 
+  pull(ID) %>% 
+  unique() %>% 
+  length()
 ```
 
 ::::::::::::::::::::::::::::::::::::: challenge 
@@ -1102,7 +1139,8 @@ enr@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
 The tally above represents all genes, both up- and down-regulatd. To compare 
 between GSEA and ORA, can you identify how many GSEA enriched terms are 
 associated with up-regulated genes and how many are associated with 
-down-regulated genes? (Hint: the `NES` value within the results relates to the directionality of enrichment). 
+down-regulated genes? (Hint: the `NES` value within the results relates to the 
+directionality of enrichment). 
 
 :::::::::::::::::::::::: solution 
 
