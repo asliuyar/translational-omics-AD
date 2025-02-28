@@ -26,7 +26,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.20")
 
 # install synapser
-install.packages("synapser", repos = c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 
 # install tidyverse if you don't already have it
 install.packages("tidyverse")
