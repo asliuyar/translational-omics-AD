@@ -24,18 +24,257 @@ exercises: 10
 # Differential Expression Analysis
 
 
+``` output
+The following package(s) will be installed:
+- BiocManager [1.30.25]
+These packages will be installed into "~/work/translational-omics-AD/translational-omics-AD/renv/profiles/lesson-requirements/renv/library/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu".
 
-**Reading Gene Expression Count matrix from Previous Lesson**
+# Installing packages --------------------------------------------------------
+- Installing BiocManager ...                    OK [linked from cache]
+Successfully installed 1 package in 8.4 milliseconds.
+```
 
-In this lesson, we will use the raw counts matrix and metadata
-downloaded in the previous lesson and will perform differential
-expression analysis.
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` output
+Installing package(s) 'clusterProfiler'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'DESeq2'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'AnnotationDbi'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'org.Mm.eg.db'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'org.Hs.eg.db'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'GO.db'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` output
+'getOption("repos")' replaces Bioconductor standard repositories, see
+'help("repositories", package = "BiocManager")' for details.
+Replacement repositories:
+    BioCsoft: https://bioconductor.org/packages/3.20/bioc
+    BioCann: https://bioconductor.org/packages/3.20/data/annotation
+    BioCexp: https://bioconductor.org/packages/3.20/data/experiment
+    BioCworkflows: https://bioconductor.org/packages/3.20/workflows
+    BioCbooks: https://bioconductor.org/packages/3.20/books
+    CRAN: https://cran.rstudio.com
+```
+
+``` output
+Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
+```
+
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'EnhancedVolcano'
+```
+
+``` output
+Installation paths not writeable, unable to update packages
+  path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
+  packages:
+    codetools, lattice, MASS, spatial
+```
+
+``` output
+Old packages: 'jsonlite', 'renv'
+```
+
+``` warning
+Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
+'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'
+```
+
+**Reading Gene Expression Count matrix from previous lesson**
+
+In this lesson, we will use the raw counts matrix and metadata downloaded in the 
+previous lesson and will perform differential expression analysis.
+
 
 ``` r
-counts <- read.delim("data/htseqcounts_5XFAD.txt", check.names = FALSE)
+counts <- read.delim("data/htseqcounts_5XFAD.txt", 
+                      check.names = FALSE)
 ```
 
 **Reading Sample Metadata from Previous Lesson**
+
 
 ``` r
 covars <- readRDS("data/covars_5XFAD.rds")
@@ -44,6 +283,7 @@ covars <- readRDS("data/covars_5XFAD.rds")
 Let’s explore the data:
 
 Let’s look at the top of the metadata.
+
 
 ``` r
 head(covars)
@@ -60,6 +300,7 @@ head(covars)
 ```
 
 identify distinct groups using sample metadata
+
 
 ``` r
 distinct(covars, sex, genotype, timepoint)
@@ -83,8 +324,10 @@ distinct(covars, sex, genotype, timepoint)
 
 How many mice were used to produce this data?
 
+
 ``` r
-covars %>% group_by(sex,genotype,timepoint) %>% 
+covars %>%
+  group_by(sex, genotype, timepoint) %>% 
   dplyr::count()
 ```
 
@@ -109,6 +352,7 @@ covars %>% group_by(sex,genotype,timepoint) %>%
 
 How many rows and columns are there in counts?
 
+
 ``` r
 dim(counts)
 ```
@@ -117,11 +361,12 @@ dim(counts)
 [1] 55489    73
 ```
 
-In the counts matrix, genes are in rows and samples are in columns.
-Let’s look at the first few rows.
+In the counts matrix, genes are in rows and samples are in columns. Let’s look 
+at the first few rows.
+
 
 ``` r
-head(counts,n=5)
+head(counts, n=5)
 ```
 
 ``` output
@@ -181,9 +426,10 @@ head(counts,n=5)
 5     179     117
 ```
 
-As you can see, the gene ids are ENSEMBL IDs. There is some risk that
-these may not be unique. Let’s check whether any of the gene symbols are
-duplicated. We will sum the number of duplicated gene symbols.
+As you can see, the gene ids are ENSEMBL IDs. There is some risk that these may 
+not be unique. Let’s check whether any of the gene symbols are duplicated. We 
+will sum the number of duplicated gene symbols.
+
 
 ``` r
 sum(duplicated(rownames(counts)))
@@ -193,9 +439,9 @@ sum(duplicated(rownames(counts)))
 [1] 0
 ```
 
-The sum equals zero, so there are no duplicated gene symbols, which is
-good. Similarly, samples should be unique. Once again, let’s verify
-this:
+The sum equals zero, so there are no duplicated gene symbols, which is good. 
+Similarly, samples should be unique. Once again, let’s verify this:
+
 
 ``` r
 sum(duplicated(colnames(counts)))
@@ -207,17 +453,20 @@ sum(duplicated(colnames(counts)))
 
 **Formatting the count matrix**
 
-Now, as we see that gene_id is in first column of count matrix, but we
-will need only count data in matrix, so we will change the gene_id
-column to rownames. Converting the gene_id as rownames of count matrix
+Now, as we see that `gene_id` is in first column of count matrix, but we will 
+need only count data in matrix, so we will change the `gene_id` column to 
+`rownames`. 
+
 
 ``` r
-counts <- counts %>% 
-  column_to_rownames(.,var="gene_id") %>% 
-  as.data.frame()
+# Converting the `gene_id` as `rownames` of `counts` matrix
+counts <- counts %>%
+          column_to_rownames(., var = "gene_id") %>% 
+          as.data.frame()
 ```
 
-let’s confirm if change is done correctly
+Let’s confirm if change is done correctly.
+
 
 ``` r
 head(counts, n=5)
@@ -292,14 +541,15 @@ ENSMUSG00000000003       0       0
 ENSMUSG00000000028     179     117
 ```
 
-As you can see from count table there are some genes that start with
-“ENSG” and others start with “ENSMUSG”. “ENSG” referes to human gene
-ENSEMBL id and “ENSMUSG” refer to mouse ENSEMBL id. Let’s check how many
-gene_ids are NOT from the mouse genome by searching for the string “MUS”
-(as in Mus musculus) in the rownames of count matrix
+As you can see from count table there are some genes that start with `ENSG` and 
+others start with `ENSMUSG`. `ENSG` refers to human gene ENSEMBL id and 
+`ENSMUSG` refer to mouse ENSEMBL id. Let’s check how many `gene_ids` are NOT 
+from the mouse genome by searching for the string "MUS" (as in *Mus musculus*) 
+in the `rownames` of the `counts` matrix.
+
 
 ``` r
-counts[,1:6] %>% 
+counts[, 1:6] %>% 
   filter(!str_detect(rownames(.), "MUS"))
 ```
 
@@ -309,28 +559,36 @@ ENSG00000080815   22554       0       0       0   16700       0
 ENSG00000142192  344489       4       0       1  260935       6
 ```
 
-Ok, so we see there are two human genes in out count matrix. Why? What
-genes are they?
+Ok, so we see there are two human genes in out count matrix. Why? What genes are 
+they?
 
-Briefly, 5xFAD mouse strain harbors two human transgenes APP
-(“ENSG00000142192”) and PSEN1 (“ENSG00000080815”) and inserted into exon
-2 of the mouse Thy1 gene. To validate 5XFAD strain and capture
-expression of human transgene APP and PS1, a custom mouse genomic
-sequence was created and we quantified expression of human as well as
-mouse App (“ENSMUSG00000022892”) and Psen1 (“ENSMUSG00000019969”) genes
-by our MODEL-AD RNA-Seq pipeline.
+Briefly, the 5xFAD mouse strain harbors two human transgenes APP 
+(`ENSG00000142192`) and PSEN1 (`ENSG00000080815`) and inserted into exon 2 of 
+the mouse Thy1 gene. To validate 5XFAD strain and capture expression of human 
+transgene APP and PS1, a custom mouse genomic sequence was created and we 
+quantified expression of human as well as mouse App (`ENSMUSG00000022892`) and 
+Psen1 (`ENSMUSG00000019969`) genes by our MODEL-AD RNA-Seq pipeline.
 
 **Validation of 5xFAD mouse strain** 
 
-First we convert the dataframe to
-longer format and join our covariates by MouseID
+First we convert the dataframe to longer format and join our covariates by 
+`MouseID`.
+
 
 ``` r
-count_tpose <- counts  %>%
-                rownames_to_column(.,var="gene_id") %>% 
-                filter(gene_id %in% c("ENSG00000080815","ENSMUSG00000019969","ENSG00000142192","ENSMUSG00000022892")) %>% 
-                pivot_longer(.,cols = -"gene_id",names_to = "specimenID",values_to="counts") %>% as.data.frame() %>%
-                left_join(covars, by="specimenID") %>% as.data.frame()
+count_tpose <-  counts  %>%
+                rownames_to_column(., var = "gene_id") %>% 
+                filter(gene_id %in%
+                      c("ENSG00000080815",
+                        "ENSMUSG00000019969",
+                        "ENSG00000142192",
+                        "ENSMUSG00000022892")) %>%
+                pivot_longer(., cols    = -"gene_id",
+                              names_to  = "specimenID",
+                              values_to = "counts") %>%
+                as.data.frame() %>%
+                left_join(covars, by="specimenID") %>%
+                as.data.frame()
 
 head(count_tpose) 
 ```
@@ -356,53 +614,66 @@ Rename the APP and PSEN1 genes to specify whether mouse or human.
 
 
 ``` r
-#make the age column a factor and re-order the levels
-count_tpose$timepoint <- factor(count_tpose$timepoint,levels=c("4 mo","6 mo","12 mo"))
+# make the age column a factor and re-order the levels
+count_tpose$timepoint <- factor(count_tpose$timepoint,
+                                levels = c("4 mo", "6 mo", "12 mo"))
 
 # rename the gene id to gene symbol
-count_tpose$gene_id[count_tpose$gene_id %in% "ENSG00000142192"] <- "Human APP"
-count_tpose$gene_id[count_tpose$gene_id %in% "ENSG00000080815"] <- "Human PSEN1"
-count_tpose$gene_id[count_tpose$gene_id %in% "ENSMUSG00000022892"] <- "Mouse App"
-count_tpose$gene_id[count_tpose$gene_id %in% "ENSMUSG00000019969"] <- "Mouse Psen1"
+count_tpose$gene_id[count_tpose$gene_id %in% "ENSG00000142192"] <- 
+  "Human APP"
+count_tpose$gene_id[count_tpose$gene_id %in% "ENSG00000080815"] <- 
+  "Human PSEN1"
+count_tpose$gene_id[count_tpose$gene_id %in% "ENSMUSG00000022892"] <- 
+  "Mouse App"
+count_tpose$gene_id[count_tpose$gene_id %in% "ENSMUSG00000019969"] <- 
+  "Mouse Psen1"
 ```
 
 Visualize orthologous genes.
 
 
 ``` r
-#Create simple box plots showing normalized counts by genotype and time point, faceted by sex.
+# Create simple box plots showing normalized counts 
+# by genotype and time point faceted by sex.
 count_tpose %>% 
-  ggplot(aes(x=timepoint, y=counts, color=genotype)) +
-  geom_boxplot() + 
-  geom_point(position=position_jitterdodge()) +
-  facet_wrap(~sex+gene_id) +theme_bw()
+  ggplot(aes(x = timepoint, y = counts, color = genotype)) +
+        geom_boxplot() + 
+        geom_point(position = position_jitterdodge()) +
+        facet_wrap(~ sex + gene_id) +
+        theme_bw()
 ```
 
 <img src="fig/differential-expression-analysis-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
-You will notice expression of Human APP is higher in 5XFAD carriers but
-lower in non-carriers. However mouse App expressed in both 5XFAD carrier
-and non-carrier.
+You will notice expression of Human APP is higher in 5XFAD carriers but lower in
+non-carriers. However mouse App expressed in both 5XFAD carrier and non-carrier.
 
-We are going to sum the counts from both ortholgous genes (human APP and
-mouse App; human PSEN1 and mouse Psen1) and save summed expression as
-expression of mouse genes, respectively to match with gene names in
-control mice.
+We are going to sum the counts from both orthologous genes (human APP and mouse 
+App; human PSEN1 and mouse Psen1) and save the summed expression as expression 
+of mouse genes, respectively to match with gene names in control mice.
+
 
 ``` r
-#merge mouse and human APP gene raw count
-counts[rownames(counts) %in% "ENSMUSG00000022892",] <- counts[rownames(counts) %in% "ENSMUSG00000022892",] + counts[rownames(counts) %in% "ENSG00000142192",]
-counts <- counts[!rownames(counts) %in% c("ENSG00000142192"),]
+# merge mouse and human APP gene raw count
+counts[rownames(counts)   %in% "ENSMUSG00000022892", ] <- 
+  counts[rownames(counts) %in% "ENSMUSG00000022892", ] + 
+  counts[rownames(counts) %in% "ENSG00000142192", ]
 
-#merge mouse and human PS1 gene raw count
-counts[rownames(counts) %in% "ENSMUSG00000019969",] <- counts[rownames(counts) %in% "ENSMUSG00000019969",] + counts[rownames(counts) %in% "ENSG00000080815",]
-counts <- counts[!rownames(counts) %in% c("ENSG00000080815"),]
+counts <- counts[!rownames(counts) %in% c("ENSG00000142192"), ]
+
+# merge mouse and human PS1 gene raw count
+counts[rownames(counts)   %in% "ENSMUSG00000019969", ] <- 
+  counts[rownames(counts) %in% "ENSMUSG00000019969", ] + 
+  counts[rownames(counts) %in% "ENSG00000080815", ]
+
+counts <- counts[!rownames(counts) %in% c("ENSG00000080815"), ]
 ```
 
 Let’s verify if expression of both human genes have been merged or not:
 
+
 ``` r
-counts[,1:6] %>% 
+counts[, 1:6] %>% 
   filter(!str_detect(rownames(.), "MUS"))
 ```
 
@@ -412,6 +683,7 @@ counts[,1:6] %>%
 ```
 
 What proportion of genes have zero counts in all samples?
+
 
 ``` r
 gene_sums <- data.frame(gene_id = rownames(counts),
@@ -423,37 +695,36 @@ sum(gene_sums$sums == 0)
 [1] 9691
 ```
 
-We can see that 9691 (17%) genes have no reads at all associated with
-them. In the next lesson, we will remove genes that have no counts in
-any samples.
-
+We can see that 9,691 (17%) genes have no reads at all associated with them. In 
+the next lesson, we will remove genes that have no counts in any samples.
 
 ## Differential Analysis using DESeq2 
 
-Now, after exploring and formatting
-the data, We will look for differential expression between the control
-and 5xFAD mice at different ages for both sexes. The differentially
-expressed genes (DEGs) can inform our understanding of how the 5XFAD
-mutation affect the biological processes.
+Now, after exploring and formatting the data, We will look for differential 
+expression between the control and 5xFAD mice at different ages for both sexes. 
+The differentially expressed genes (DEGs) can inform our understanding of how 
+the 5XFAD mutation affects biological processes.
 
-DESeq2 analysis consist of multiple steps. We are going to briefly
-understand some of the important steps using subset of data and then we
-will perform differential analysis on whole dataset. 
+DESeq2 analysis consist of multiple steps. We are going to briefly understand 
+some of the important steps using a subset of data and then we will perform differential analysis on the whole dataset. 
 
-First, order the data (so counts and metadata specimenID orders match) and save as another
-variable name
+First, order the data (so counts and metadata `specimenID` orders match) and 
+save as another variable name.
+
 
 ``` r
-rawdata <- counts[,sort(colnames(counts))]
-metadata <- covars[sort(rownames(covars)),]
+rawdata  <- counts[, sort(colnames(counts))]
+metadata <- covars[sort(rownames(covars)), ]
 ```
 
-subset the counts matrix and sample metadata to include only 12 month
-old male mice. You can amend the code to compare wild type and 5XFAD
-mice from either sex, at any time point.
+Subset the counts matrix and sample metadata to include only 12-month old male 
+mice. You can amend the code to compare wild type and 5XFAD mice from either 
+sex, at any time point.
+
 
 ``` r
-meta.12M.Male <- metadata[(metadata$sex=="male" & metadata$timepoint=='12 mo'),]
+meta.12M.Male <- metadata[(metadata$sex           == "male" & 
+                           metadata$timepoint     == "12 mo"), ]
 
 meta.12M.Male
 ```
@@ -476,7 +747,7 @@ meta.12M.Male
 
 
 ``` r
-dat <- as.matrix(rawdata[,colnames(rawdata) %in% rownames(meta.12M.Male)])
+dat <- as.matrix(rawdata[ , colnames(rawdata) %in% rownames(meta.12M.Male)])
 colnames(dat)
 ```
 
@@ -497,138 +768,312 @@ rownames(meta.12M.Male)
 
 
 ``` r
-match(colnames(dat),rownames(meta.12M.Male))
+match(colnames(dat), rownames(meta.12M.Male))
 ```
 
 ``` output
  [1]  1  2  3  4  5  6  7  8  9 10 11 12
 ```
 
-Next, we build the DESeqDataSet using the following function:
+Next, we build the `DESeqDataSet` using the following function:
+
 
 ``` r
-ddsHTSeq <- DESeqDataSetFromMatrix(countData=dat, 
-                                   colData=meta.12M.Male, 
-                                   design = ~genotype)
+ddsHTSeq <- DESeqDataSetFromMatrix(countData = dat, 
+                                   colData   = meta.12M.Male, 
+                                   design    = ~ genotype)
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
 ```
 
 
 ``` r
 ddsHTSeq
+```
+
+``` output
+class: DESeqDataSet 
+dim: 55487 12 
+metadata(1): version
+assays(1): counts
+rownames(55487): ENSMUSG00000000001 ENSMUSG00000000003 ...
+  ENSMUSG00000118487 ENSMUSG00000118488
+rowData names(0):
+colnames(12): 32044rh 32046rh ... 32088rh 32640rh
+colData names(5): individualID specimenID sex genotype timepoint
 ```
 
 **Pre-filtering** 
 
-While it is not necessary to pre-filter low count genes
-before running the DESeq2 functions, there are two reasons which make
-pre-filtering useful: by removing rows in which there are very few
-reads, we reduce the memory size of the dds data object, and we increase
-the speed of the transformation and testing functions within DESeq2. It
-can also improve visualizations, as features with no information for
-differential expression are not plotted.
+While it is not necessary to pre-filter low count genes before running the 
+DESeq2 functions, there are two reasons which make pre-filtering useful: by 
+removing rows in which there are very few reads, we reduce the memory size of 
+the dds data object, and we increase the speed of the transformation and testing 
+functions within DESeq2. It can also improve visualizations, as features with no
+information for differential expression are not plotted.
 
-Here we perform a minimal pre-filtering to keep only rows that have at
-least 10 reads total.
+Here we perform a minimal pre-filtering to keep only rows that have at least 10 
+reads total.
+
 
 ``` r
-ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq)) >= 10,]
+ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq)) >= 10, ]
 
 ddsHTSeq
 ```
 
+``` output
+class: DESeqDataSet 
+dim: 33059 12 
+metadata(1): version
+assays(1): counts
+rownames(33059): ENSMUSG00000000001 ENSMUSG00000000028 ...
+  ENSMUSG00000118486 ENSMUSG00000118487
+rowData names(0):
+colnames(12): 32044rh 32046rh ... 32088rh 32640rh
+colData names(5): individualID specimenID sex genotype timepoint
+```
+
 **Reference level** 
 
-By default, R will choose a reference level for factors
-based on alphabetical order. Then, if you never tell the DESeq2
-functions which level you want to compare against (e.g. which level
-represents the control group), the comparisons will be based on the
-alphabetical order of the levels.
+By default, R will choose a reference level for factors based on alphabetical 
+order. Then, if you never tell the `DESeq2` functions which level you want to 
+compare against (*e.g.* which level represents the control group), the 
+comparisons will be based on the alphabetical order of the levels.
 
-specifying the reference-level to 5XFAD_noncarrier:
 
 ``` r
-ddsHTSeq$genotype <- relevel(ddsHTSeq$genotype,ref="5XFAD_noncarrier")  
+# specifying the reference-level to `5XFAD_noncarrier`
+ddsHTSeq$genotype <- relevel(ddsHTSeq$genotype, ref = "5XFAD_noncarrier")  
 ```
 
 Run the standard differential expression analysis steps that is wrapped
-into a single function, DESeq.
+into a single function, `DESeq`.
+
 
 ``` r
-dds <- DESeq(ddsHTSeq,parallel = TRUE)
+dds <- DESeq(ddsHTSeq, parallel = TRUE)
 ```
 
-Results tables are generated using the function results, which extracts
-a results table with log2 fold changes, p values and adjusted p values.
-By default the argument alpha is set to 0.1. If the adjusted p value
-cutoff will be a value other than 0.1, alpha should be set to that
-value:
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+Results tables are generated using the function results, which extracts a 
+results table with log2 fold changes, p-values and adjusted p-values. By default 
+the argument `alpha` is set to 0.1. If the adjusted p-value cutoff will be a 
+value other than 0.1, alpha should be set to that value:
+
 
 ``` r
-res <- results(dds,alpha=0.05)  # setting 0.05 as significant threshold
+res <- results(dds, alpha=0.05)  # setting 0.05 as significant threshold
 res
 ```
 
-We can order our results table by the smallest p value:
-
-``` r
-resOrdered <- res[order(res$pvalue),]
-
-head(resOrdered,n=10)
+``` output
+log2 fold change (MLE): genotype 5XFAD carrier vs 5XFAD noncarrier 
+Wald test p-value: genotype 5XFAD carrier vs 5XFAD noncarrier 
+DataFrame with 33059 rows and 6 columns
+                    baseMean log2FoldChange     lfcSE      stat    pvalue
+                   <numeric>      <numeric> <numeric> <numeric> <numeric>
+ENSMUSG00000000001 3737.9009      0.0148125 0.0466948  0.317219 0.7510777
+ENSMUSG00000000028  138.5635     -0.0712500 0.1550131 -0.459639 0.6457754
+ENSMUSG00000000031   29.2983      0.6705922 0.3563442  1.881866 0.0598541
+ENSMUSG00000000037  123.6482     -0.2184054 0.1554362 -1.405113 0.1599876
+ENSMUSG00000000049   15.1733      0.3657555 0.3924376  0.932010 0.3513316
+...                      ...            ...       ...       ...       ...
+ENSMUSG00000118473   1.18647      -0.377971  1.531586 -0.246784  0.805075
+ENSMUSG00000118477  59.10359      -0.144081  0.226690 -0.635586  0.525046
+ENSMUSG00000118479  24.64566      -0.181992  0.341445 -0.533006  0.594029
+ENSMUSG00000118486   1.92048       0.199838  1.253875  0.159376  0.873372
+ENSMUSG00000118487  65.78311      -0.191362  0.218593 -0.875427  0.381342
+                        padj
+                   <numeric>
+ENSMUSG00000000001  0.943421
+ENSMUSG00000000028  0.913991
+ENSMUSG00000000031  0.352346
+ENSMUSG00000000037  0.566360
+ENSMUSG00000000049  0.765640
+...                      ...
+ENSMUSG00000118473        NA
+ENSMUSG00000118477  0.863565
+ENSMUSG00000118479  0.893356
+ENSMUSG00000118486        NA
+ENSMUSG00000118487  0.785846
 ```
 
-we can summarize some basic tallies using the summary function.
+We can order our results table by the smallest p-value:
+
+
+``` r
+resOrdered <- res[order(res$pvalue), ]
+
+head(resOrdered, n=10)
+```
+
+``` output
+log2 fold change (MLE): genotype 5XFAD carrier vs 5XFAD noncarrier 
+Wald test p-value: genotype 5XFAD carrier vs 5XFAD noncarrier 
+DataFrame with 10 rows and 6 columns
+                     baseMean log2FoldChange     lfcSE      stat       pvalue
+                    <numeric>      <numeric> <numeric> <numeric>    <numeric>
+ENSMUSG00000019969  13860.942        1.90740 0.0432685   44.0828  0.00000e+00
+ENSMUSG00000030579   2367.096        2.61215 0.0749326   34.8600 2.99982e-266
+ENSMUSG00000046805   7073.296        2.12247 0.0635035   33.4229 6.38461e-245
+ENSMUSG00000032011  80423.476        1.36195 0.0424007   32.1210 2.24203e-226
+ENSMUSG00000022892 271265.838        1.36140 0.0434167   31.3567 7.88742e-216
+ENSMUSG00000038642  10323.969        1.69717 0.0549488   30.8864 1.81875e-209
+ENSMUSG00000023992   2333.227        2.62290 0.0882819   29.7105 5.61838e-194
+ENSMUSG00000079293    761.313        5.12514 0.1738382   29.4822 4.86644e-191
+ENSMUSG00000040552    617.149        2.22726 0.0781799   28.4889 1.60609e-178
+ENSMUSG00000069516   2604.926        2.34471 0.0847390   27.6697 1.61630e-168
+                           padj
+                      <numeric>
+ENSMUSG00000019969  0.00000e+00
+ENSMUSG00000030579 3.60954e-262
+ENSMUSG00000046805 5.12152e-241
+ENSMUSG00000032011 1.34886e-222
+ENSMUSG00000022892 3.79622e-212
+ENSMUSG00000038642 7.29469e-206
+ENSMUSG00000023992 1.93152e-190
+ENSMUSG00000079293 1.46389e-187
+ENSMUSG00000040552 4.29450e-175
+ENSMUSG00000069516 3.88961e-165
+```
+
+We can summarize some basic tallies using the summary function.
+
 
 ``` r
 summary(res)
 ```
 
+``` output
+
+out of 33059 with nonzero total read count
+adjusted p-value < 0.05
+LFC > 0 (up)       : 1098, 3.3%
+LFC < 0 (down)     : 505, 1.5%
+outliers [1]       : 33, 0.1%
+low counts [2]     : 8961, 27%
+(mean count < 8)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
+```
+
 How many adjusted p-values were less than 0.05?
+
 
 ``` r
 sum(res$padj < 0.05, na.rm=TRUE)
 ```
 
+``` output
+[1] 1603
+```
+
 How many adjusted p-values were less than 0.1?
+
 
 ``` r
 sum(res$padj < 0.1, na.rm=TRUE)
 ```
 
+``` output
+[1] 2001
+```
+
 **Function to convert ensembleIDs to common gene names** 
 
-We’ll use a package
-to translate mouse ENSEMBL IDS to gene names. Run this function and they
-will be called up when assembling results from the differential
-expression analysis
+We’ll use a package to translate mouse ENSEMBL IDS to gene names. Run this 
+function and they will be called up when assembling results from the 
+differential expression analysis.
+
 
 ``` r
 map_function.df <- function(x, inputtype, outputtype) {
-  mapIds(
-    org.Mm.eg.db,
-    keys = row.names(x),
-    column = outputtype,
-    keytype = inputtype,
-    multiVals = "first"
-  )
-}
+                            mapIds( org.Mm.eg.db,
+                                    keys      = row.names(x),
+                                    column    = outputtype,
+                                    keytype   = inputtype,
+                                    multiVals = "first")
+                            }
 ```
 
 **Generating Results table**
 
-Here we will call the function to get the 'symbol' names of the genes incorporated into the results table, along with the columns we are most interested in
+Here we will call the function to get the `symbol` names of the genes 
+incorporated into the results table, along with the columns we are most 
+interested in.
+
 
 ``` r
 All_res <- as.data.frame(res) %>% 
-  mutate(symbol = map_function.df(res,"ENSEMBL","SYMBOL")) %>%    ##run map_function to add symbol of gene corresponding to ENSEBL ID
-  mutate(EntrezGene = map_function.df(res,"ENSEMBL","ENTREZID")) %>%  ##run map_function to add Entrez ID of gene corresponding to ENSEBL ID
-  dplyr::select("symbol", "EntrezGene","baseMean", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj")
+           
+           # run map_function to add symbol of gene corresponding to ENSEMBL ID
+           mutate(symbol = map_function.df(res, "ENSEMBL", "SYMBOL")) %>%    
+           
+           # run map_function to add Entrez ID of gene corresponding to ENSEMBL ID
+           mutate(EntrezGene = map_function.df(res, "ENSEMBL", "ENTREZID")) %>%  
+           dplyr::select("symbol",
+                         "EntrezGene",
+                         "baseMean", 
+                         "log2FoldChange", 
+                         "lfcSE", 
+                         "stat", 
+                         "pvalue", 
+                         "padj")
+```
 
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
+``` r
 head(All_res)
+```
+
+``` output
+                   symbol EntrezGene   baseMean log2FoldChange      lfcSE
+ENSMUSG00000000001  Gnai3      14679 3737.90089     0.01481247 0.04669481
+ENSMUSG00000000028  Cdc45      12544  138.56354    -0.07125004 0.15501305
+ENSMUSG00000000031    H19      14955   29.29832     0.67059217 0.35634418
+ENSMUSG00000000037  Scml2     107815  123.64823    -0.21840544 0.15543617
+ENSMUSG00000000049   Apoh      11818   15.17325     0.36575555 0.39243756
+ENSMUSG00000000056   Narf      67608 5017.30216    -0.06713961 0.04466809
+                         stat     pvalue      padj
+ENSMUSG00000000001  0.3172187 0.75107766 0.9434210
+ENSMUSG00000000028 -0.4596390 0.64577537 0.9139907
+ENSMUSG00000000031  1.8818665 0.05985415 0.3523459
+ENSMUSG00000000037 -1.4051134 0.15998756 0.5663602
+ENSMUSG00000000049  0.9320095 0.35133160 0.7656400
+ENSMUSG00000000056 -1.5030778 0.13281898 0.5203335
 ```
 
 **Extracting genes that are significantly expressed**
 
-Let's subset all the genes with a pvalue < 0.05
+Let's subset all the genes with a p-value < 0.05.
+
 
 ``` r
 dseq_res <- subset(All_res[order(All_res$padj), ], padj < 0.05)
@@ -637,8 +1082,13 @@ dseq_res <- subset(All_res[order(All_res$padj), ], padj < 0.05)
 Wow! We have a lot of genes with apparently very strong statistically
 significant differences between the control and 5xFAD carrier.
 
+
 ``` r
 dim(dseq_res)
+```
+
+``` output
+[1] 1603    8
 ```
 
 
@@ -646,80 +1096,192 @@ dim(dseq_res)
 head(dseq_res)
 ```
 
+``` output
+                   symbol EntrezGene   baseMean log2FoldChange      lfcSE
+ENSMUSG00000019969  Psen1      19164  13860.942       1.907397 0.04326854
+ENSMUSG00000030579 Tyrobp      22177   2367.096       2.612152 0.07493257
+ENSMUSG00000046805  Mpeg1      17476   7073.296       2.122467 0.06350348
+ENSMUSG00000032011   Thy1      21838  80423.476       1.361953 0.04240065
+ENSMUSG00000022892    App      11820 271265.838       1.361405 0.04341673
+ENSMUSG00000038642   Ctss      13040  10323.969       1.697172 0.05494883
+                       stat        pvalue          padj
+ENSMUSG00000019969 44.08277  0.000000e+00  0.000000e+00
+ENSMUSG00000030579 34.86004 2.999825e-266 3.609539e-262
+ENSMUSG00000046805 33.42285 6.384608e-245 5.121519e-241
+ENSMUSG00000032011 32.12104 2.242032e-226 1.348863e-222
+ENSMUSG00000022892 31.35669 7.887422e-216 3.796216e-212
+ENSMUSG00000038642 30.88640 1.818747e-209 7.294691e-206
+```
+
 ## Exploring and exporting results 
 
 **Exporting results to CSV files** 
 
-we can save results file into a csv file like this:
+We can save results file into a csv file like this:
+
 
 ``` r
-write.csv(All_res,file="results/All_5xFAD_12months_male.csv")
-write.csv(dseq_res,file="results/DEG_5xFAD_12months_male.csv")
+write.csv(All_res, file="results/All_5xFAD_12months_male.csv")
+```
+
+``` warning
+Warning in file(file, ifelse(append, "a", "w")): cannot open file
+'results/All_5xFAD_12months_male.csv': No such file or directory
+```
+
+``` error
+Error in file(file, ifelse(append, "a", "w")): cannot open the connection
+```
+
+``` r
+write.csv(dseq_res, file="results/DEG_5xFAD_12months_male.csv")
+```
+
+``` warning
+Warning in file(file, ifelse(append, "a", "w")): cannot open file
+'results/DEG_5xFAD_12months_male.csv': No such file or directory
+```
+
+``` error
+Error in file(file, ifelse(append, "a", "w")): cannot open the connection
 ```
 
 **Volcano plot** 
 
-We can visualize the differential expression results using
-Volcano plot function from EnhancedVolcano package. For the most basic
-volcano plot, only a single data-frame, data-matrix, or tibble of test
-results is required, containing point labels, log2FC, and adjusted or
-unadjusted P values. The default cut-off for log2FC is \>\|2\|; the
-default cut-off for P value is 10e-6.
+We can visualize the differential expression results using the volcano plot 
+function from `EnhancedVolcano` package. For the most basic volcano plot, only a 
+single data frame, data matrix, or tibble of test results is required, 
+containing point labels, log2FC, and adjusted or unadjusted p-values. The 
+default cut-off for log2FC is \>\|2\|; the default cut-off for p-value is 10e-6.
+
 
 ``` r
 EnhancedVolcano(All_res,
-                                   lab = (All_res$symbol),
-                                   x = 'log2FoldChange',
-                                   y = 'padj',legendPosition = 'none',
-                                   title = 'Volcano plot:Differential Expression Results',
-                                   subtitle = '',
-                                   FCcutoff = 0.1,
-                                   pCutoff = 0.05,
-                                   xlim = c(-3, 6))
+                lab            = (All_res$symbol),
+                x              = 'log2FoldChange',
+                y              = 'padj',
+                legendPosition = 'none',
+                title          = 'Volcano plot:Differential Expression Results',
+                subtitle       = '',
+                FCcutoff       = 0.1,
+                pCutoff        = 0.05,
+                xlim           = c(-3, 6))
 ```
 
-You can see that some top significantly expressed are
-immune/inflammation-related genes such as Ctsd, C4b, Csf1 etc. These
-genes are upregulated in the 5XFAD strain.
+``` warning
+Warning: One or more p-values is 0. Converting to 10^-1 * current lowest
+non-zero p-value...
+```
 
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-41-1.png" style="display: block; margin: auto;" />
+
+You can see that some top significantly expressed are 
+immune/inflammation-related genes such as Ctsd, C4b, Csf1 etc. These genes are 
+upregulated in the 5XFAD strain.
 
 **Principal component plot of the samples**
 
-Principal component analysis is a dimension reduction technique that reduces the dimensionality of these large matrixes into a linear coordinate system, so that we can more easily visualize what factors are contributing the most to variation in the dataset by graphing the principal components. 
+Principal component analysis is a dimension reduction technique that reduces the dimensionality of these large matrixes into a linear coordinate system, so that 
+we can more easily visualize what factors are contributing the most to variation 
+in the dataset by graphing the principal components. 
+
 
 ``` r
-ddsHTSeq <- DESeqDataSetFromMatrix(countData=as.matrix(rawdata), colData=metadata, design= ~ genotype)
+ddsHTSeq <- DESeqDataSetFromMatrix(countData = as.matrix(rawdata), 
+                                   colData   = metadata, 
+                                   design    = ~ genotype)
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
 ```
 
 
 ``` r
-ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq)>1) >= 10, ]
-dds <- DESeq(ddsHTSeq,parallel = TRUE)
+ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq) > 1) >= 10, ]
+dds <- DESeq(ddsHTSeq, parallel = TRUE)
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+-- replacing outliers and refitting for 42 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+fitting model and testing
 ```
 
 
 ``` r
-vsd <- varianceStabilizingTransformation(dds, blind=FALSE)
+vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
 
-plotPCA(vsd, intgroup=c("genotype", "sex","timepoint"))
+plotPCA(vsd, intgroup = c("genotype", "sex", "timepoint"))
 ```
-We can see that clustering is occurring, though it's kind of hard to see exactly how they are clustering in this visualization.
 
-It is also possible to customize the PCA plot using the ggplot function.
+``` output
+using ntop=500 top features by variance
+```
+
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-44-1.png" style="display: block; margin: auto;" />
+
+We can see that clustering is occurring, though it's kind of hard to see exactly 
+how they are clustering in this visualization.
+
+It is also possible to customize the PCA plot using the `ggplot` function.
+
 
 ``` r
-pcaData <- plotPCA(vsd, intgroup=c("genotype", "sex","timepoint"), returnData=TRUE)
+pcaData <- plotPCA(vsd, 
+                   intgroup   = c("genotype", "sex","timepoint"),
+                   returnData = TRUE)
+```
+
+``` output
+using ntop=500 top features by variance
+```
+
+``` r
 percentVar <- round(100 * attr(pcaData, "percentVar"))
-ggplot(pcaData, aes(PC1, PC2,color=genotype, shape=sex)) + 
-  geom_point(size=3) +
-  geom_text(aes(label=timepoint),hjust=0.5, vjust=2,size =3.5) +
-  labs(x= paste0("PC1: ",percentVar[1],"% variance"), y= paste0("PC2: ",percentVar[2],"% variance"))
+
+ggplot(pcaData, aes(PC1, PC2,color = genotype, shape = sex)) + 
+       geom_point(size=3) +
+       geom_text(aes(label = timepoint), hjust=0.5, vjust=2, size =3.5) +
+       labs(x = paste0("PC1: ", percentVar[1], "% variance"), 
+            y = paste0("PC2: ", percentVar[2], "% variance"))
 ```
 
-PCA identified genotype and sex being a major source of variation in
-between 5XFAD and WT mice. Female and male samples from the 5XFAD carriers 
-clustered distinctly at all ages, suggesting the presence of sex-biased 
-molecular changes in animals.
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-45-1.png" style="display: block; margin: auto;" />
+
+PCA identified genotype and sex being a major source of variation in between 
+5XFAD and WT mice. Female and male samples from the 5XFAD carriers  clustered 
+distinctly at all ages, suggesting the presence of sex-biased  molecular changes 
+in animals.
 
 
 **Function for Differential analysis using DESeq2** 
@@ -728,51 +1290,65 @@ Finally, we can build a function for differential analysis that consists of all
 above discussed steps. It will require to input sorted raw count matrix, sample 
 metadata and define the reference group.
 
-``` r
-DEG <- function(rawdata, meta,
-                   include.batch = FALSE,
-                   ref = ref) {
-  dseq_res <- data.frame()
-  All_res <- data.frame()
-  
-  if (include.batch) {
-    cat("Including batch as covariate\n")
-    design_formula <- ~ Batch + genotype
-  }
-  else{
-    design_formula <- ~ genotype
-  }
-  
-  dat2 <- as.matrix(rawdata[, colnames(rawdata) %in% rownames(meta)])
-  ddsHTSeq <-
-    DESeqDataSetFromMatrix(countData = dat2,
-                           colData = meta,
-                           design = design_formula)
-  ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq)) >= 10, ]
-  ddsHTSeq$genotype <- relevel(ddsHTSeq$genotype, ref = ref)
-  dds <- DESeq(ddsHTSeq, parallel = TRUE)
-  
-  res <- results(dds, alpha = 0.05)
-  #summary(res)
-  
-  res$symbol <- map_function.df(res,"ENSEMBL","SYMBOL")
-  
-  res$EntrezGene <- map_function.df(res,"ENSEMBL","ENTREZID")
-  
-  All_res <<- as.data.frame(res[, c("symbol", "EntrezGene","baseMean", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj")])
 
-}
+``` r
+DEG <- function(rawdata, meta, include.batch = FALSE, ref = ref) {
+                dseq_res <- data.frame()
+                All_res  <- data.frame()
+      
+                if (include.batch) {
+                    cat("Including batch as covariate\n")
+                    design_formula <- ~ Batch + genotype
+                    }
+                else {
+                    design_formula <- ~ genotype
+                    }
+  
+                dat2 <- as.matrix(rawdata[, colnames(rawdata) %in% 
+                                            rownames(meta)])
+  
+                ddsHTSeq <- DESeqDataSetFromMatrix(countData = dat2,
+                            colData = meta,
+                            design = design_formula)
+
+                ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq)) >= 10, ]
+  
+                ddsHTSeq$genotype <- relevel(ddsHTSeq$genotype, ref = ref)
+ 
+                dds <- DESeq(ddsHTSeq, parallel = TRUE)
+  
+                res <- results(dds, alpha = 0.05)
+                #summary(res)
+  
+                res$symbol <- map_function.df(res,"ENSEMBL","SYMBOL")
+  
+                res$EntrezGene <- map_function.df(res,"ENSEMBL","ENTREZID")
+  
+                All_res <<- as.data.frame(res[, c("symbol", 
+                                                  "EntrezGene",
+                                                  "baseMean", 
+                                                  "log2FoldChange", 
+                                                  "lfcSE", 
+                                                  "stat", 
+                                                  "pvalue", 
+                                                  "padj")])
+              }
 ```
 
 Let’s use this function to analyze all groups present in our data.
 
 **Differential Analysis of all groups** 
 
-First, we add a Group column to our metadata table that will combine all 
-variables of interest (genotype, sex, and timepoint) for each sample.
+First, we add a `Group` column to our metadata table that will combine all 
+variables of interest (`genotype`, `sex`, and `timepoint`) for each sample.
+
 
 ``` r
-metadata$Group <- paste0(metadata$genotype,"-",metadata$sex,"-",metadata$timepoint)
+metadata$Group <- paste0(metadata$genotype,
+                         "-",
+                         metadata$sex,
+                         "-",
+                         metadata$timepoint)
 
 unique(metadata$Group)
 ```
@@ -786,17 +1362,25 @@ unique(metadata$Group)
 [11] "5XFAD_carrier-male-4 mo"       "5XFAD_noncarrier-male-4 mo"   
 ```
 
-Next, we create a comparison table that has all cases and controls that
-we would like to compare with each other. Here I have made comparison
-groups for age and sex-matched 5xFAD carriers vs 5xFAD_noncarriers, with
-carriers as the cases and noncarriers as the controls:
+Next, we create a comparison table that has all cases and controls that we would 
+like to compare with each other. Here I have made comparison groups for age and
+sex-matched 5xFAD carriers vs 5xFAD_noncarriers, with carriers as the cases and
+noncarriers as the controls:
+
 
 ``` r
-comparisons <-  data.frame(control=c("5XFAD_noncarrier-male-4 mo", "5XFAD_noncarrier-female-4 mo", "5XFAD_noncarrier-male-6 mo", 
-                                     "5XFAD_noncarrier-female-6 mo","5XFAD_noncarrier-male-12 mo", "5XFAD_noncarrier-female-12 mo"), 
-                           case=c("5XFAD_carrier-male-4 mo", "5XFAD_carrier-female-4 mo", "5XFAD_carrier-male-6 mo", 
-                                  "5XFAD_carrier-female-6 mo","5XFAD_carrier-male-12 mo", "5XFAD_carrier-female-12 mo")
-                           )
+comparisons <-  data.frame(control = c("5XFAD_noncarrier-male-4 mo", 
+                                       "5XFAD_noncarrier-female-4 mo", 
+                                       "5XFAD_noncarrier-male-6 mo", 
+                                       "5XFAD_noncarrier-female-6 mo",
+                                       "5XFAD_noncarrier-male-12 mo", 
+                                       "5XFAD_noncarrier-female-12 mo"), 
+                           case    = c("5XFAD_carrier-male-4 mo",
+                                       "5XFAD_carrier-female-4 mo",
+                                       "5XFAD_carrier-male-6 mo", 
+                                       "5XFAD_carrier-female-6 mo",
+                                       "5XFAD_carrier-male-12 mo",
+                                       "5XFAD_carrier-female-12 mo"))
 ```
 
 
@@ -814,122 +1398,413 @@ comparisons
 6 5XFAD_noncarrier-female-12 mo 5XFAD_carrier-female-12 mo
 ```
 
-Finally, we implement our DEG function on each case/control comparison of
+Finally, we implement our `DEG` function on each case/control comparison of
 interest and store the result table in a list and data frame:
+
 
 ``` r
 # initiate an empty list and data frame to save results
 DE_5xFAD.list <- list()
-DE_5xFAD.df <- data.frame()
+DE_5xFAD.df   <- data.frame()
 
 for (i in 1:nrow(comparisons))
   {
     meta <- metadata[metadata$Group %in% comparisons[i,],]
-    DEG(rawdata,meta,ref = "5XFAD_noncarrier")
+    DEG(rawdata, meta, ref = "5XFAD_noncarrier")
     
-    #append results in data frame
-    DE_5xFAD.df <- rbind(DE_5xFAD.df,All_res %>% mutate(model="5xFAD",sex=unique(meta$sex),age=unique(meta$timepoint)))
+    # append results in data frame
+    DE_5xFAD.df <- rbind(DE_5xFAD.df,
+                         All_res %>% 
+                         mutate(model = "5xFAD",
+                                sex   = unique(meta$sex),
+                                age   = unique(meta$timepoint)))
     
-    #append results in list
+    # append results in list
     DE_5xFAD.list[[i]] <- All_res
     names(DE_5xFAD.list)[i] <- paste0(comparisons[i,2])
 }
 ```
 
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
+``` warning
+Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors
+```
+
+``` output
+estimating size factors
+```
+
+``` output
+estimating dispersions
+```
+
+``` output
+gene-wise dispersion estimates: 2 workers
+```
+
+``` output
+mean-dispersion relationship
+```
+
+``` output
+final dispersion estimates, fitting model and testing: 2 workers
+```
+
+``` output
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+```
+
 Let’s explore the result stored in our list:
+
 
 ``` r
 names(DE_5xFAD.list)
 ```
 
+``` output
+[1] "5XFAD_carrier-male-4 mo"    "5XFAD_carrier-female-4 mo" 
+[3] "5XFAD_carrier-male-6 mo"    "5XFAD_carrier-female-6 mo" 
+[5] "5XFAD_carrier-male-12 mo"   "5XFAD_carrier-female-12 mo"
+```
+
 We can easily extract the result table for any group of interest by using \$
-and name of group. Let’s check top few rows from 5XFAD_carrier-male-4 mo
+and name of group. Let’s check top few rows from `5XFAD_carrier-male-4 mo`
 group:
+
 
 ``` r
 head(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`)
 ```
 
+``` output
+                   symbol EntrezGene   baseMean log2FoldChange      lfcSE
+ENSMUSG00000000001  Gnai3      14679 3707.53159   -0.023085867 0.03816431
+ENSMUSG00000000028  Cdc45      12544  159.76225   -0.009444942 0.13226126
+ENSMUSG00000000031    H19      14955   35.96987    0.453401511 0.27852555
+ENSMUSG00000000037  Scml2     107815  126.82414    0.089394568 0.13774048
+ENSMUSG00000000049   Apoh      11818   19.99721    0.115325773 0.31548606
+ENSMUSG00000000056   Narf      67608 5344.21741   -0.100413295 0.03811800
+                          stat      pvalue      padj
+ENSMUSG00000000001 -0.60490724 0.545240632 0.9999514
+ENSMUSG00000000028 -0.07141125 0.943070457 0.9999514
+ENSMUSG00000000031  1.62786329 0.103553876 0.9999514
+ENSMUSG00000000037  0.64900725 0.516333691 0.9999514
+ENSMUSG00000000049  0.36554951 0.714701258 0.9999514
+ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567
+```
+
 Let’s check the result stored as dataframe:
+
 
 ``` r
 head(DE_5xFAD.df)
 ```
 
+``` output
+                   symbol EntrezGene   baseMean log2FoldChange      lfcSE
+ENSMUSG00000000001  Gnai3      14679 3707.53159   -0.023085867 0.03816431
+ENSMUSG00000000028  Cdc45      12544  159.76225   -0.009444942 0.13226126
+ENSMUSG00000000031    H19      14955   35.96987    0.453401511 0.27852555
+ENSMUSG00000000037  Scml2     107815  126.82414    0.089394568 0.13774048
+ENSMUSG00000000049   Apoh      11818   19.99721    0.115325773 0.31548606
+ENSMUSG00000000056   Narf      67608 5344.21741   -0.100413295 0.03811800
+                          stat      pvalue      padj model  sex  age
+ENSMUSG00000000001 -0.60490724 0.545240632 0.9999514 5xFAD male 4 mo
+ENSMUSG00000000028 -0.07141125 0.943070457 0.9999514 5xFAD male 4 mo
+ENSMUSG00000000031  1.62786329 0.103553876 0.9999514 5xFAD male 4 mo
+ENSMUSG00000000037  0.64900725 0.516333691 0.9999514 5xFAD male 4 mo
+ENSMUSG00000000049  0.36554951 0.714701258 0.9999514 5xFAD male 4 mo
+ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo
+```
+
 Check if result is present for all ages:
+
 
 ``` r
 unique((DE_5xFAD.df$age))
 ```
 
+``` output
+[1] "4 mo"  "6 mo"  "12 mo"
+```
+
 Check if result is present for both sexes:
+
 
 ``` r
 unique((DE_5xFAD.df$sex))
 ```
 
-Check number of genes in each group:
-
-``` r
-dplyr::count(DE_5xFAD.df,model,sex,age)
+``` output
+[1] "male"   "female"
 ```
 
-Check number of genes significantly differentially expressed in all
-cases compared to age and sex-matched controls:
+Check number of genes in each group:
+
 
 ``` r
-degs.up <- map(DE_5xFAD.list, ~length(which(.x$padj<0.05 & .x$log2FoldChange>0)))
-degs.down <- map(DE_5xFAD.list, ~length(which(.x$padj<0.05 & .x$log2FoldChange<0)))
-deg <- data.frame(Cases=names(degs.up), Up_DEGs.pval.05=as.vector(unlist(degs.up)),Down_DEGs.pval.05=as.vector(unlist(degs.down)))
+dplyr::count(DE_5xFAD.df, model, sex, age)
+```
+
+``` output
+  model    sex   age     n
+1 5xFAD female 12 mo 33120
+2 5xFAD female  4 mo 32930
+3 5xFAD female  6 mo 33249
+4 5xFAD   male 12 mo 33059
+5 5xFAD   male  4 mo 33119
+6 5xFAD   male  6 mo 33375
+```
+
+Check number of genes significantly differentially expressed in all cases 
+compared to age and sex-matched controls:
+
+
+``` r
+degs.up <- map(DE_5xFAD.list,
+               ~ length(which(.x$padj          < 0.05 &
+                             .x$log2FoldChange > 0)))
+
+degs.down <- map(DE_5xFAD.list,
+                 ~ length(which(.x$padj           < 0.05 & 
+                                .x$log2FoldChange < 0)))
+
+deg <- data.frame(Case              = names(degs.up),
+                  Up_DEGs.pval.05   = as.vector(unlist(degs.up)),
+                  Down_DEGs.pval.05 = as.vector(unlist(degs.down)))
+
 knitr::kable(deg)
 ```
 
+
+
+|Case                       | Up_DEGs.pval.05| Down_DEGs.pval.05|
+|:--------------------------|---------------:|-----------------:|
+|5XFAD_carrier-male-4 mo    |              86|                11|
+|5XFAD_carrier-female-4 mo  |             522|                90|
+|5XFAD_carrier-male-6 mo    |             714|               488|
+|5XFAD_carrier-female-6 mo  |            1081|               409|
+|5XFAD_carrier-male-12 mo   |            1098|               505|
+|5XFAD_carrier-female-12 mo |            1494|              1023|
+
 Interestingly, in females more genes are differentially expressed at all age 
-groups, and more genes are differentially expressed the older the mice get
-in both sexes. 
+groups, and more genes are differentially expressed the older the mice get in 
+both sexes. 
 
 ## Pathway Enrichment 
 
-We may wish to look for enrichment of biological
-pathways in a list of differentially expressed genes. Here we will test
-for enrichment of KEGG pathways using using enrichKEGG function in
-clusterProfiler package.
+We may wish to look for enrichment of biological pathways in a list of 
+differentially expressed genes. Here we will test for enrichment of KEGG 
+pathways using using the `enrichKEGG` function in the `clusterProfiler` package.
+
 
 ``` r
-dat <- list(FAD_M_4=subset(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`[order(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`$padj), ], padj < 0.05) %>% pull(EntrezGene),
-            FAD_F_4=subset(DE_5xFAD.list$`5XFAD_carrier-female-4 mo`[order(DE_5xFAD.list$`5XFAD_carrier-female-4 mo`$padj), ], padj < 0.05) %>% pull(EntrezGene))
+dat <- list(FAD_M_4 = subset(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`[order(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`$padj), ],
+                             padj < 0.05) %>% 
+            pull(EntrezGene),
+                 FAD_F_4 = subset(DE_5xFAD.list$`5XFAD_carrier-female-4 mo`[order(DE_5xFAD.list$`5XFAD_carrier-female-4 mo`$padj), ],
+                                  padj < 0.05) %>% 
+            pull(EntrezGene))
 
-## perform enrichment analysis
+# perform enrichment analysis
 enrich_pathway <- compareCluster(dat,
-                                 fun = "enrichKEGG",
-                                  pvalueCutoff = 0.05,
-                                  organism = "mmu"
+                                 fun          = "enrichKEGG",
+                                 pvalueCutoff = 0.05,
+                                 organism     = "mmu"
                                  )
 
-enrich_pathway@compareClusterResult$Description <- gsub(" - Mus musculus \\(house mouse)","",enrich_pathway@compareClusterResult$Description)
+enrich_pathway@compareClusterResult$Description <- 
+                          gsub(" - Mus musculus \\(house mouse)",
+                               "",
+                               enrich_pathway@compareClusterResult$Description)
 ```
 
-Let’s plot top enriched functions using dotplot function of
-clusterProfiler package.
+Let’s plot top enriched functions using the `dotplot` function of the
+`clusterProfiler` package.
+
 
 ``` r
-clusterProfiler::dotplot(enrich_pathway,showCategory=10,font.size = 14,title="Enriched KEGG Pathways")
+clusterProfiler::dotplot(enrich_pathway,
+                         showCategory = 10,
+                         font.size    = 14,
+                         title        = "Enriched KEGG Pathways")
 ```
+
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-59-1.png" style="display: block; margin: auto;" />
 
 What does this plot infer?
 
 
-
 ## Save Data for Next Lesson
 
-We will use the results data in the next
-lesson. Save it now and we will load it at the beginning of the next
-lesson. We will use R’s save command to save the objects in compressed,
-binary format. The save command is useful when you want to save multiple
-objects in one file.
+We will use the results data in the next lesson. Save it now and we will load it 
+at the beginning of the next lesson. We will use R’s `save` command to save the 
+objects in compressed, binary format. The `save` command is useful when you want 
+to save multiple objects in one file.
+
 
 ``` r
-save(DE_5xFAD.df,DE_5xFAD.list,file="results/DEAnalysis_5XFAD.Rdata")
+save(DE_5xFAD.df, DE_5xFAD.list, file = "results/DEAnalysis_5XFAD.Rdata")
+```
+
+``` warning
+Warning in gzfile(file, "wb"): cannot open compressed file
+'results/DEAnalysis_5XFAD.Rdata', probable reason 'No such file or directory'
+```
+
+``` error
+Error in gzfile(file, "wb"): cannot open the connection
 ```
 
 ## Session Info
@@ -939,7 +1814,7 @@ sessionInfo()
 ```
 
 ``` output
-R version 4.4.1 (2024-06-14)
+R version 4.4.2 (2024-10-31)
 Platform: x86_64-pc-linux-gnu
 Running under: Ubuntu 22.04.5 LTS
 
@@ -957,23 +1832,57 @@ time zone: UTC
 tzcode source: system (glibc)
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
 
 other attached packages:
- [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    
- [5] purrr_1.0.2     readr_2.1.5     tidyr_1.3.1     tibble_3.2.1   
- [9] ggplot2_3.5.1   tidyverse_2.0.0
+ [1] lubridate_1.9.4             forcats_1.0.0              
+ [3] stringr_1.5.1               dplyr_1.1.4                
+ [5] purrr_1.0.4                 readr_2.1.5                
+ [7] tidyr_1.3.1                 tibble_3.2.1               
+ [9] tidyverse_2.0.0             EnhancedVolcano_1.24.0     
+[11] ggrepel_0.9.6               ggplot2_3.5.1              
+[13] GO.db_3.20.0                org.Hs.eg.db_3.20.0        
+[15] org.Mm.eg.db_3.20.0         AnnotationDbi_1.68.0       
+[17] DESeq2_1.46.0               SummarizedExperiment_1.36.0
+[19] Biobase_2.66.0              MatrixGenerics_1.18.1      
+[21] matrixStats_1.5.0           GenomicRanges_1.58.0       
+[23] GenomeInfoDb_1.42.3         IRanges_2.40.1             
+[25] S4Vectors_0.44.0            BiocGenerics_0.52.0        
+[27] clusterProfiler_4.14.6      BiocManager_1.30.25        
 
 loaded via a namespace (and not attached):
- [1] Matrix_1.6-5     gtable_0.3.6     compiler_4.4.1   renv_1.0.11     
- [5] highr_0.11       tidyselect_1.2.1 scales_1.3.0     yaml_2.3.10     
- [9] lattice_0.22-5   R6_2.5.1         labeling_0.4.3   generics_0.1.3  
-[13] knitr_1.48       munsell_0.5.1    pillar_1.9.0     tzdb_0.4.0      
-[17] rlang_1.1.4      utf8_1.2.4       stringi_1.8.4    xfun_0.48       
-[21] timechange_0.3.0 cli_3.6.3        withr_3.0.1      magrittr_2.0.3  
-[25] grid_4.4.1       hms_1.1.3        lifecycle_1.0.4  vctrs_0.6.5     
-[29] evaluate_1.0.1   glue_1.8.0       farver_2.1.2     fansi_1.0.6     
-[33] colorspace_2.1-1 tools_4.4.1      pkgconfig_2.0.3 
+ [1] DBI_1.2.3               gson_0.1.0              rlang_1.1.5            
+ [4] magrittr_2.0.3          DOSE_4.0.0              compiler_4.4.2         
+ [7] RSQLite_2.3.9           png_0.1-8               vctrs_0.6.5            
+[10] reshape2_1.4.4          pkgconfig_2.0.3         crayon_1.5.3           
+[13] fastmap_1.2.0           XVector_0.46.0          labeling_0.4.3         
+[16] utf8_1.2.4              tzdb_0.4.0              enrichplot_1.26.6      
+[19] UCSC.utils_1.2.0        bit_4.5.0.1             xfun_0.51              
+[22] zlibbioc_1.52.0         cachem_1.1.0            aplot_0.2.5            
+[25] jsonlite_1.9.0          blob_1.2.4              DelayedArray_0.32.0    
+[28] BiocParallel_1.40.0     parallel_4.4.2          R6_2.6.1               
+[31] stringi_1.8.4           RColorBrewer_1.1-3      GOSemSim_2.32.0        
+[34] Rcpp_1.0.14             knitr_1.49              ggtangle_0.0.6         
+[37] R.utils_2.13.0          timechange_0.3.0        Matrix_1.7-2           
+[40] splines_4.4.2           igraph_2.1.4            tidyselect_1.2.1       
+[43] qvalue_2.38.0           abind_1.4-8             yaml_2.3.10            
+[46] codetools_0.2-20        lattice_0.22-6          plyr_1.8.9             
+[49] withr_3.0.2             treeio_1.30.0           KEGGREST_1.46.0        
+[52] evaluate_1.0.3          gridGraphics_0.5-1      Biostrings_2.74.1      
+[55] pillar_1.10.1           ggtree_3.14.0           renv_1.1.2             
+[58] ggfun_0.1.8             generics_0.1.3          hms_1.1.3              
+[61] munsell_0.5.1           scales_1.3.0            tidytree_0.4.6         
+[64] glue_1.8.0              lazyeval_0.2.2          tools_4.4.2            
+[67] data.table_1.17.0       locfit_1.5-9.11         fgsea_1.32.2           
+[70] fs_1.6.5                fastmatch_1.1-6         cowplot_1.1.3          
+[73] grid_4.4.2              ape_5.8-1               colorspace_2.1-1       
+[76] nlme_3.1-167            GenomeInfoDbData_1.2.13 patchwork_1.3.0        
+[79] cli_3.6.4               S4Arrays_1.6.0          gtable_0.3.6           
+[82] R.methodsS3_1.8.2       yulab.utils_0.2.0       digest_0.6.37          
+[85] SparseArray_1.6.2       ggplotify_0.1.2         farver_2.1.2           
+[88] memoise_2.0.1           R.oo_1.27.0             lifecycle_1.0.4        
+[91] httr_1.4.7              bit64_4.6.0-1          
 ```
 
 

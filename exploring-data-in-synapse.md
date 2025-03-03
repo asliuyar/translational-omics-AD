@@ -20,9 +20,8 @@ exercises: 10
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-## Working with AD Portal metadata 
 
-**Metadata basics** 
+## Working with AD Portal metadata 
 
 We have now downloaded several metadata files and an RNAseq counts file from the
 portal. For our next exercises, we want to read those files in as R data so we 
@@ -34,8 +33,8 @@ and biospecimen files, and three of them are assay metadata files.
 
 
 ``` r
-download_table %>% 
-  `dplyr`::select(name, metadataType, assay)
+download_table %>%
+  dplyr::select(name, metadataType, assay)
 ```
 
 We are only interested in RNAseq data, so we will only read in the
@@ -55,25 +54,26 @@ ind_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_individual_metadata.csv",
 bio_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_biospecimen_metadata.csv", 
                      show_col_types = FALSE)
 
-#assay metadata
+# assay metadata
 rna_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_assay_RNAseq_metadata.csv", 
                      show_col_types = FALSE)
 ```
 
 Let’s examine the data and metadata files a bit before we begin our
-analyses.
-
-**Counts data**
+analyses. We start by exploring the `counts` data that we read in using the
+tidyverse `read_tsv()` (*read*_*t*ab-*s*eparated *v*alues) function. This function reads data in as a *tibble*, a
+kind of data table with some nice features that avoid some bad habits of the
+base R `read.csv()` function. Calling a `tibble` object will print the first ten 
+rows in a nice tidy output. Doing the same for a base R dataframe read in with
+`read.csv()` will print the whole thing until it runs out of memory. If you want 
+to inspect a large dataframe, use `head(df)` to view the first several rows 
+only.
 
 
 ``` r
-# Calling a tibble object will print the first ten rows in a nice tidy output; 
-# doing the same for a base R dataframe will print the whole thing until it runs 
-# out of memory. If you want to inspect a large dataframe, use `head(df)`
 counts
 ```
 
-``` output
 # A tibble: 55,489 × 73
    gene_id `32043rh` `32044rh` `32046rh` `32047rh` `32048rh` `32049rh` `32050rh`
    <chr>       <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
@@ -94,12 +94,10 @@ counts
 #   `32074rh` <dbl>, `32075rh` <dbl>, `32078rh` <dbl>, `32081rh` <dbl>,
 #   `32088rh` <dbl>, `32640rh` <dbl>, `46105rh` <dbl>, `46106rh` <dbl>,
 #   `46107rh` <dbl>, `46108rh` <dbl>, `46109rh` <dbl>, `46110rh` <dbl>, …
-```
 
-The data file has a column of ENSEMBL gene ids and then a bunch of
-columns with count data, where the column headers correspond to the
-`specimenID`s. These `specimenID`s should all be in the RNAseq assay
-metadata file, so let’s check.
+The data file has a column of ENSEMBL `gene_id`s and then a bunch of columns 
+with count data, where the column headers correspond to the `specimenID`s. These 
+`specimenID`s should all be in the RNAseq assay metadata file, so let’s check.
 
 
 ``` r
@@ -502,7 +500,7 @@ sessionInfo()
 ```
 
 ``` output
-R version 4.4.1 (2024-06-14)
+R version 4.4.2 (2024-10-31)
 Platform: x86_64-pc-linux-gnu
 Running under: Ubuntu 22.04.5 LTS
 
@@ -523,20 +521,23 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   purrr_1.0.2    
- [5] readr_2.1.5     tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.1  
- [9] tidyverse_2.0.0 dplyr_1.1.4    
+ [1] knitr_1.49      lubridate_1.9.4 forcats_1.0.0   stringr_1.5.1  
+ [5] purrr_1.0.4     readr_2.1.5     tidyr_1.3.1     tibble_3.2.1   
+ [9] ggplot2_3.5.1   tidyverse_2.0.0 dplyr_1.1.4    
 
 loaded via a namespace (and not attached):
- [1] bit_4.5.0        gtable_0.3.6     compiler_4.4.1   renv_1.0.11     
- [5] crayon_1.5.3     tidyselect_1.2.1 parallel_4.4.1   scales_1.3.0    
- [9] yaml_2.3.10      R6_2.5.1         generics_0.1.3   knitr_1.48      
-[13] munsell_0.5.1    pillar_1.9.0     tzdb_0.4.0       rlang_1.1.4     
-[17] utf8_1.2.4       stringi_1.8.4    xfun_0.48        bit64_4.5.2     
-[21] timechange_0.3.0 cli_3.6.3        withr_3.0.1      magrittr_2.0.3  
-[25] grid_4.4.1       vroom_1.6.5      hms_1.1.3        lifecycle_1.0.4 
-[29] vctrs_0.6.5      evaluate_1.0.1   glue_1.8.0       fansi_1.0.6     
-[33] colorspace_2.1-1 tools_4.4.1      pkgconfig_2.0.3 
+ [1] bit_4.5.0.1         gtable_0.3.6        crayon_1.5.3       
+ [4] compiler_4.4.2      BiocManager_1.30.25 renv_1.1.2         
+ [7] tidyselect_1.2.1    parallel_4.4.2      scales_1.3.0       
+[10] yaml_2.3.10         R6_2.6.1            generics_0.1.3     
+[13] munsell_0.5.1       pillar_1.10.1       tzdb_0.4.0         
+[16] rlang_1.1.5         utf8_1.2.4          stringi_1.8.4      
+[19] xfun_0.51           bit64_4.6.0-1       timechange_0.3.0   
+[22] cli_3.6.4           withr_3.0.2         magrittr_2.0.3     
+[25] grid_4.4.2          vroom_1.6.5         hms_1.1.3          
+[28] lifecycle_1.0.4     vctrs_0.6.5         evaluate_1.0.3     
+[31] glue_1.8.0          colorspace_2.1-1    tools_4.4.2        
+[34] pkgconfig_2.0.3    
 ```
 
 ::::::::::::::::::::::::::::::::::::: keypoints 

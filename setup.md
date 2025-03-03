@@ -2,9 +2,6 @@
 title: Setup
 ---
 
----
-title: Setup
----
 For this lesson, you will be working in the R programming language and the 
 RStudio development environment.
 
@@ -24,23 +21,60 @@ Next, install the required packages for this lesson. In RStudio, copy and paste
 the following commands into the Console:
 
 ```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.20")
+
 # install synapser
-install.packages("synapser", repos = c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 
 # install tidyverse if you don't already have it
 install.packages("tidyverse")
 install.packages("dplyr")
 install.packages("lubridate")
+
+# load the 4 libraries you just installed
+library(synapser)
+library("tidyverse")
+library("dplyr")
+library("lubridate")
+```
+
+Install Bioconductor packages.
+
+```
+
+# When the following query arises, type 'a'
+# Update all/some/none? [a/s/n]: a
+
+# When the following query arises, type 'n' (it is faster)
+# Do you want to install from sources the packages which need compilation? 
+# (Yes/no/cancel) n
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+
+    install.packages("BiocManager")
+
+BiocManager::install("clusterProfiler")
+BiocManager::install("DESeq2")
+BiocManager::install("AnnotationDbi")
+BiocManager::install("org.Mm.eg.db")
+BiocManager::install("org.Hs.eg.db")
+BiocManager::install("GO.db")
+BiocManager::install("EnhancedVolcano")
 ```
 
 Once the installation has finished, copy and paste the following commands into 
 the console to verify that packages installed correctly.
 
-```r
-library(synapser)
-library(tidyverse)
-library(dplyr)
-library(lubridate)
+```
+library("clusterProfiler")
+library("DESeq2")
+library("AnnotationDbi")
+library("org.Mm.eg.db")
+library("org.Hs.eg.db")
+library("GO.db")
+library("EnhancedVolcano")
 ```
 
 Next, you will need to log in to your Synapse account.
@@ -97,13 +131,13 @@ BiocManager::install("GO.db")
 BiocManager::install("EnhancedVolcano")
 ```
 ```r
-suppressPackageStartupMessages(library("DESeq2"))
-suppressPackageStartupMessages(library("AnnotationDbi"))
-suppressPackageStartupMessages(library("org.Mm.eg.db"))
-suppressPackageStartupMessages(library("org.Hs.eg.db"))
-suppressPackageStartupMessages(library("GO.db"))
-suppressPackageStartupMessages(library("EnhancedVolcano"))
-suppressPackageStartupMessages(library("clusterProfiler"))
+library("DESeq2"))
+library("AnnotationDbi"))
+library("org.Mm.eg.db"))
+library("org.Hs.eg.db"))
+library("GO.db"))
+library("EnhancedVolcano"))
+library("clusterProfiler"))
 ```
 
 ## Project Setup

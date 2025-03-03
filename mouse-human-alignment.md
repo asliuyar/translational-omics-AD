@@ -223,11 +223,14 @@ Orthology mapping can be tricky, but thankfully Wan *et al* have already
 identified mouse orthologs for each of the human genes using the HGNC Comparison 
 of Orthology Predictions ([HCOP](https://www.genenames.org/tools/hcop/)) tool. 
 While there are a variety of different ways to get data about gene orthology, 
-for the sake of simplicity we are going to read that table from [Synapse](https://doi.org/10.7303/syn17010253.1).  
+for the sake of simplicity we are going to read that table from 
+[Synapse](https://doi.org/10.7303/syn17010253.1).  
 
 
 ``` r
-mouse.human.ortho <- fread(synapser::synGet("syn17010253")$path,check.names = F,header=T)
+mouse.human.ortho <- fread(synapser::synGet("syn17010253")$path,
+                           check.names = F,
+                           header=T)
 ```
 
 Let's take a look at the first few rows of this orthology table:  
@@ -244,7 +247,7 @@ human ENSEMBL IDs from both tables.
 ``` r
 module_table$Mouse_gene_name <-
   mouse.human.ortho$mouse_symbol[
-    match(module_table$GeneID,mouse.human.ortho$human_ensembl_gene)
+    match(module_table$GeneID, mouse.human.ortho$human_ensembl_gene)
     ]
 ```
 
@@ -262,7 +265,10 @@ mouse ortholog mapping:
 
 ``` r
 ampad_modules <- module_table %>%
-  distinct(tissue = brainRegion, module = Module, gene = GeneID, Mouse_gene_name) %>%
+  distinct(tissue = brainRegion, 
+           module = Module, 
+           gene = GeneID, 
+           Mouse_gene_name) %>%
   filter(Mouse_gene_name != "")
 ```
 
@@ -306,7 +312,9 @@ for human transcripts can be obtained from
 
 
 ``` r
-ampad_modules_raw <- fread(synapser::synGet("syn14237651")$path,check.names = F,header=T)
+ampad_modules_raw <- fread(synapser::synGet("syn14237651")$path,
+                           check.names = F,
+                           header=T)
 ```
 
 Let's take a look at these data  
@@ -340,7 +348,9 @@ only keep the three columns we'll need: `Tissue`, `Gene` and `logFC`.
 ampad_fc <- ampad_modules_raw %>%
   as_tibble() %>%
   filter(Model == "Diagnosis", Comparison == "AD-CONTROL") %>%
-  dplyr::select(tissue = Tissue, gene = ensembl_gene_id, ampad_fc = logFC) %>% 
+  dplyr::select(tissue = Tissue, 
+                gene = ensembl_gene_id, 
+                ampad_fc = logFC) %>% 
   distinct()
 ```
 
@@ -367,7 +377,7 @@ in the table:
 
 
 ``` r
-ampad_modules[ampad_modules$gene %in% "ENSG00000168439",]
+ampad_modules[ampad_modules$gene %in% "ENSG00000168439", ]
 ```
 
 This gene is present in six different co-expression modules all from different 
@@ -376,8 +386,12 @@ brain regions. You can do this for any other gene as well.
 We'll merge the two tables using the `dplyr::inner_join` function:
 
 ``` r
-ampad_modules_fc <- inner_join(ampad_modules, ampad_fc, by = c("gene", "tissue")) %>% 
-  dplyr::select(symbol = Mouse_gene_name, module, ampad_fc) 
+ampad_modules_fc <- inner_join(ampad_modules, 
+                               ampad_fc, 
+                               by = c("gene", "tissue")) %>% 
+  dplyr::select(symbol = Mouse_gene_name, 
+                module, 
+                ampad_fc) 
 ```
 
 Take a look at the new table we just made:  
@@ -497,7 +511,10 @@ fold change data sets for all genes.
 
 
 ``` r
-model_vs_ampad <- inner_join(DE_5xFAD.df, ampad_modules_fc, by = c("symbol"), multiple = "all") 
+model_vs_ampad <- inner_join(DE_5xFAD.df, 
+                             ampad_modules_fc, 
+                             by = c("symbol"), 
+                             multiple = "all") 
 ```
 
 **Note:** for this join we specify `multiple = "all"` so that the same gene can 
@@ -651,7 +668,7 @@ ggplot2::ggplot() +
     axis.text.x = ggplot2::element_text(angle = 90, hjust = 0, size = 12),
     axis.text.y = ggplot2::element_text(angle = 0, size = 12),
     panel.background = ggplot2::element_blank(),
-    plot.title = ggplot2::element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title = ggplot2::element_text(angle = 0, vjust = -54, hjust = 0.03, size=12, face="bold"),
     plot.title.position = "plot",
     panel.grid = ggplot2::element_blank(),
     legend.position = "right"
@@ -726,7 +743,11 @@ m <- 'STGblue'
 s <- 'female'
 a <- c('4 mo','12 mo')
 
-indiv.corr <- cor.df %>% filter(module == m, sex == s, age %in% a) %>% unnest(data) %>% 
+indiv.corr <- cor.df %>% 
+  filter(module == m, 
+         sex == s, 
+         age %in% a) %>% 
+  unnest(data) %>% 
   mutate( v = str_c(age, '\n', 'r = ',signif(estimate,3),' ; p = ',signif(p_value,3) ))
 
 ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
@@ -758,7 +779,8 @@ in human AD patients.
 
 ## Challenge 3
 
-Considering the LOAD1 (i.e. APOE4.Trem2) model results, which modules show correlation and how does it compare with 5xFAD? 
+Considering the LOAD1 (i.e. APOE4.Trem2) model results, which modules show 
+correlation and how does it compare with 5xFAD? 
 
 :::::::::::::::::::::::: solution 
 
@@ -904,7 +926,8 @@ load('results/DEAnalysis_5XFAD.RData')
 ```
 
 We'll start by considering the genes that are significantly DE in 12 month old 
-male animals
+male animals.
+
 
 ``` r
 gene.list.up <- DE_5xFAD.df %>% 
@@ -942,7 +965,11 @@ both measured by the experiment and contained within the annotation set.
 univ <- as.data.frame(org.Mm.egGO) %>% 
   pull(gene_id) %>% 
   unique() %>% 
-  bitr(., fromType = "ENTREZID", toType = 'SYMBOL', OrgDb = org.Mm.eg.db, drop = T) %>% 
+  bitr(., 
+       fromType = "ENTREZID", 
+       toType = 'SYMBOL', 
+       OrgDb = org.Mm.eg.db, 
+       drop = T) %>% 
   pull('SYMBOL') %>% 
   intersect(., DE_5xFAD.df$symbol)
 ```
@@ -968,8 +995,15 @@ enr.dn <- enrichGO(gene.list.dn,
 How many significant terms are identified:  
 
 ``` r
-enr.up@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
-enr.dn@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
+enr.up@result %>% 
+  filter(p.adjust <= 0.05) %>% 
+  pull(ID) %>% unique() %>% 
+  length()
+enr.dn@result %>% 
+  filter(p.adjust <= 0.05) %>% 
+  pull(ID) %>% 
+  unique() %>% 
+  length()
 ```
 
 ::::::::::::::::::::::::::::::::::::: challenge 
@@ -1053,7 +1087,8 @@ enr@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
 The tally above represents all genes, both up- and down-regulatd. To compare 
 between GSEA and ORA, can you identify how many GSEA enriched terms are 
 associated with up-regulated genes and how many are associated with 
-down-regulated genes? (Hint: the `NES` value within the results relates to the directionality of enrichment). 
+down-regulated genes? (Hint: the `NES` value within the results relates to the 
+directionality of enrichment). 
 
 :::::::::::::::::::::::: solution 
 
@@ -1462,7 +1497,7 @@ relationships between the biological processes affected in each context.
 
 ``` r
 sessionInfo()
-R version 4.4.1 (2024-06-14)
+R version 4.4.2 (2024-10-31)
 Platform: x86_64-pc-linux-gnu
 Running under: Ubuntu 22.04.5 LTS
 
@@ -1480,23 +1515,58 @@ time zone: UTC
 tzcode source: system (glibc)
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
 
 other attached packages:
- [1] data.table_1.16.2 lubridate_1.9.3   forcats_1.0.0     stringr_1.5.1    
- [5] dplyr_1.1.4       purrr_1.0.2       readr_2.1.5       tidyr_1.3.1      
- [9] tibble_3.2.1      tidyverse_2.0.0   ggplot2_3.5.1    
+ [1] data.table_1.17.0           clusterProfiler_4.14.6     
+ [3] lubridate_1.9.4             forcats_1.0.0              
+ [5] stringr_1.5.1               dplyr_1.1.4                
+ [7] purrr_1.0.4                 readr_2.1.5                
+ [9] tidyr_1.3.1                 tibble_3.2.1               
+[11] tidyverse_2.0.0             cowplot_1.1.3              
+[13] EnhancedVolcano_1.24.0      ggrepel_0.9.6              
+[15] GO.db_3.20.0                org.Hs.eg.db_3.20.0        
+[17] org.Mm.eg.db_3.20.0         AnnotationDbi_1.68.0       
+[19] ggplot2_3.5.1               DESeq2_1.46.0              
+[21] SummarizedExperiment_1.36.0 Biobase_2.66.0             
+[23] MatrixGenerics_1.18.1       matrixStats_1.5.0          
+[25] GenomicRanges_1.58.0        GenomeInfoDb_1.42.3        
+[27] IRanges_2.40.1              S4Vectors_0.44.0           
+[29] BiocGenerics_0.52.0        
 
 loaded via a namespace (and not attached):
- [1] bit_4.5.0        gtable_0.3.6     crayon_1.5.3     compiler_4.4.1  
- [5] renv_1.0.11      tidyselect_1.2.1 parallel_4.4.1   scales_1.3.0    
- [9] yaml_2.3.10      R6_2.5.1         generics_0.1.3   knitr_1.48      
-[13] munsell_0.5.1    pillar_1.9.0     tzdb_0.4.0       rlang_1.1.4     
-[17] utf8_1.2.4       stringi_1.8.4    xfun_0.48        bit64_4.5.2     
-[21] timechange_0.3.0 cli_3.6.3        withr_3.0.1      magrittr_2.0.3  
-[25] grid_4.4.1       vroom_1.6.5      hms_1.1.3        lifecycle_1.0.4 
-[29] vctrs_0.6.5      evaluate_1.0.1   glue_1.8.0       fansi_1.0.6     
-[33] colorspace_2.1-1 tools_4.4.1      pkgconfig_2.0.3 
+ [1] DBI_1.2.3               gson_0.1.0              rlang_1.1.5            
+ [4] magrittr_2.0.3          DOSE_4.0.0              compiler_4.4.2         
+ [7] RSQLite_2.3.9           png_0.1-8               vctrs_0.6.5            
+[10] reshape2_1.4.4          pkgconfig_2.0.3         crayon_1.5.3           
+[13] fastmap_1.2.0           XVector_0.46.0          utf8_1.2.4             
+[16] enrichplot_1.26.6       tzdb_0.4.0              UCSC.utils_1.2.0       
+[19] bit_4.5.0.1             xfun_0.51               zlibbioc_1.52.0        
+[22] cachem_1.1.0            aplot_0.2.5             jsonlite_1.9.0         
+[25] blob_1.2.4              DelayedArray_0.32.0     BiocParallel_1.40.0    
+[28] parallel_4.4.2          R6_2.6.1                RColorBrewer_1.1-3     
+[31] stringi_1.8.4           GOSemSim_2.32.0         Rcpp_1.0.14            
+[34] knitr_1.49              ggtangle_0.0.6          R.utils_2.13.0         
+[37] igraph_2.1.4            Matrix_1.7-2            splines_4.4.2          
+[40] timechange_0.3.0        tidyselect_1.2.1        qvalue_2.38.0          
+[43] abind_1.4-8             yaml_2.3.10             codetools_0.2-20       
+[46] lattice_0.22-6          plyr_1.8.9              treeio_1.30.0          
+[49] withr_3.0.2             KEGGREST_1.46.0         evaluate_1.0.3         
+[52] gridGraphics_0.5-1      Biostrings_2.74.1       ggtree_3.14.0          
+[55] pillar_1.10.1           BiocManager_1.30.25     renv_1.1.2             
+[58] ggfun_0.1.8             generics_0.1.3          vroom_1.6.5            
+[61] hms_1.1.3               tidytree_0.4.6          munsell_0.5.1          
+[64] scales_1.3.0            glue_1.8.0              lazyeval_0.2.2         
+[67] tools_4.4.2             fgsea_1.32.2            locfit_1.5-9.11        
+[70] fs_1.6.5                fastmatch_1.1-6         grid_4.4.2             
+[73] ape_5.8-1               colorspace_2.1-1        nlme_3.1-167           
+[76] patchwork_1.3.0         GenomeInfoDbData_1.2.13 cli_3.6.4              
+[79] S4Arrays_1.6.0          gtable_0.3.6            R.methodsS3_1.8.2      
+[82] yulab.utils_0.2.0       digest_0.6.37           ggplotify_0.1.2        
+[85] SparseArray_1.6.2       farver_2.1.2            memoise_2.0.1          
+[88] R.oo_1.27.0             lifecycle_1.0.4         httr_1.4.7             
+[91] bit64_4.6.0-1          
 ```
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
