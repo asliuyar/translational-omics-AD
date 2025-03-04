@@ -18,13 +18,13 @@ carpentry: 'incubator'
 carpentry_description: 'Lesson Description'
 
 # Overall title for pages.
-title: 'Lesson Title' # FIXME
+title: "Translational Omics in Alzheimers Disease"
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: ~ # FIXME
+created: 2024-10-02
 
 # Comma-separated list of keywords for the lesson
-keywords: 'software, data, lesson, The Carpentries' # FIXME
+keywords: "Alzheimers-disease, cross-species-translation, omics, AD-Knowledge-Portal"
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable
@@ -34,13 +34,13 @@ life_cycle: 'pre-alpha' # FIXME
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/carpentries/workbench-template-md' # FIXME
+source: 'https://github.com/asliuyar/translational-omics-AD'
 
 # Default branch of your lesson
 branch: 'main'
 
 # Who to contact if there are any issues
-contact: 'team@carpentries.org' # FIXME
+contact: '' # FIXME
 
 # Navigation ------------------------------------------------
 #
@@ -52,8 +52,6 @@ contact: 'team@carpentries.org' # FIXME
 #
 # episodes:
 # - introduction.md
-# - first-steps.md
-#
 # learners:
 # - setup.md
 #
@@ -67,6 +65,9 @@ contact: 'team@carpentries.org' # FIXME
 # Order of episodes in your lesson
 episodes: 
 - introduction.md
+- exploring-data-in-synapse.Rmd
+- differential-expression-analysis.Rmd
+- mouse-human-alignment.Rmd
 
 # Information for Learners
 learners: 
