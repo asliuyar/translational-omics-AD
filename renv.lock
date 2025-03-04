@@ -2265,7 +2265,7 @@
     },
     "clusterProfiler": {
       "Package": "clusterProfiler",
-      "Version": "4.14.4",
+      "Version": "4.14.6",
       "Source": "Bioconductor",
       "Type": "Package",
       "Title": "A universal enrichment tool for interpreting omics data",
@@ -2316,8 +2316,8 @@
       "RoxygenNote": "7.3.2",
       "git_url": "https://git.bioconductor.org/packages/clusterProfiler",
       "git_branch": "RELEASE_3_20",
-      "git_last_commit": "0be6e3b",
-      "git_last_commit_date": "2024-11-29",
+      "git_last_commit": "43fe72c",
+      "git_last_commit_date": "2025-02-27",
       "Repository": "Bioconductor 3.20",
       "NeedsCompilation": "no",
       "Author": "Guangchuang Yu [aut, cre, cph] (<https://orcid.org/0000-0002-6485-8781>), Li-Gen Wang [ctb], Xiao Luo [ctb], Meijun Chen [ctb], Giovanni Dall'Olio [ctb], Wanqian Wei [ctb], Chun-Hui Gao [ctb] (<https://orcid.org/0000-0002-1445-7939>)"
@@ -2482,7 +2482,7 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.5.1",
+      "Version": "0.5.2",
       "Source": "Repository",
       "Title": "A C++11 Interface for R's C Interface",
       "Authors@R": "c( person(\"Davis\", \"Vaughan\", email = \"davis@posit.co\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0003-4777-038X\")), person(\"Jim\",\"Hester\", role = \"aut\", comment = c(ORCID = \"0000-0002-2739-7082\")), person(\"Romain\", \"François\", role = \"aut\", comment = c(ORCID = \"0000-0002-2444-4226\")), person(\"Benjamin\", \"Kietzman\", role = \"ctb\"), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")) )",
@@ -4310,7 +4310,7 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.9.0",
+      "Version": "1.9.1",
       "Source": "Repository",
       "Title": "A Simple and Robust JSON Parser and Generator for R",
       "License": "MIT + file LICENSE",
@@ -5594,7 +5594,7 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.1.1",
+      "Version": "1.1.2",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Project Environments",
