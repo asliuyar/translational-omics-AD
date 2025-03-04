@@ -31,7 +31,7 @@ These packages will be installed into "~/work/translational-omics-AD/translation
 
 # Installing packages --------------------------------------------------------
 - Installing BiocManager ...                    OK [linked from cache]
-Successfully installed 1 package in 8.4 milliseconds.
+Successfully installed 1 package in 8.1 milliseconds.
 ```
 
 ``` output
@@ -50,8 +50,9 @@ Replacement repositories:
 Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
 ```
 
-``` output
-Installing package(s) 'clusterProfiler'
+``` warning
+Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'clusterProfiler'
 ```
 
 ``` output
@@ -59,10 +60,6 @@ Installation paths not writeable, unable to update packages
   path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
   packages:
     codetools, lattice, MASS, spatial
-```
-
-``` output
-Old packages: 'jsonlite', 'renv'
 ```
 
 ``` output
@@ -94,10 +91,6 @@ Installation paths not writeable, unable to update packages
 ```
 
 ``` output
-Old packages: 'jsonlite', 'renv'
-```
-
-``` output
 'getOption("repos")' replaces Bioconductor standard repositories, see
 'help("repositories", package = "BiocManager")' for details.
 Replacement repositories:
@@ -123,10 +116,6 @@ Installation paths not writeable, unable to update packages
   path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
   packages:
     codetools, lattice, MASS, spatial
-```
-
-``` output
-Old packages: 'jsonlite', 'renv'
 ```
 
 ``` output
@@ -158,10 +147,6 @@ Installation paths not writeable, unable to update packages
 ```
 
 ``` output
-Old packages: 'jsonlite', 'renv'
-```
-
-``` output
 'getOption("repos")' replaces Bioconductor standard repositories, see
 'help("repositories", package = "BiocManager")' for details.
 Replacement repositories:
@@ -187,10 +172,6 @@ Installation paths not writeable, unable to update packages
   path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
   packages:
     codetools, lattice, MASS, spatial
-```
-
-``` output
-Old packages: 'jsonlite', 'renv'
 ```
 
 ``` output
@@ -222,10 +203,6 @@ Installation paths not writeable, unable to update packages
 ```
 
 ``` output
-Old packages: 'jsonlite', 'renv'
-```
-
-``` output
 'getOption("repos")' replaces Bioconductor standard repositories, see
 'help("repositories", package = "BiocManager")' for details.
 Replacement repositories:
@@ -251,10 +228,6 @@ Installation paths not writeable, unable to update packages
   path: /home/runner/.cache/R/renv/sandbox/linux-ubuntu-jammy/R-4.4/x86_64-pc-linux-gnu/9a444a72
   packages:
     codetools, lattice, MASS, spatial
-```
-
-``` output
-Old packages: 'jsonlite', 'renv'
 ```
 
 ``` warning
@@ -1860,7 +1833,7 @@ loaded via a namespace (and not attached):
 [16] utf8_1.2.4              tzdb_0.4.0              enrichplot_1.26.6      
 [19] UCSC.utils_1.2.0        bit_4.5.0.1             xfun_0.51              
 [22] zlibbioc_1.52.0         cachem_1.1.0            aplot_0.2.5            
-[25] jsonlite_1.9.0          blob_1.2.4              DelayedArray_0.32.0    
+[25] jsonlite_1.9.1          blob_1.2.4              DelayedArray_0.32.0    
 [28] BiocParallel_1.40.0     parallel_4.4.2          R6_2.6.1               
 [31] stringi_1.8.4           RColorBrewer_1.1-3      GOSemSim_2.32.0        
 [34] Rcpp_1.0.14             knitr_1.49              ggtangle_0.0.6         

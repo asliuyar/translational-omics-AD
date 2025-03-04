@@ -1543,7 +1543,7 @@ loaded via a namespace (and not attached):
 [13] fastmap_1.2.0           XVector_0.46.0          utf8_1.2.4             
 [16] enrichplot_1.26.6       tzdb_0.4.0              UCSC.utils_1.2.0       
 [19] bit_4.5.0.1             xfun_0.51               zlibbioc_1.52.0        
-[22] cachem_1.1.0            aplot_0.2.5             jsonlite_1.9.0         
+[22] cachem_1.1.0            aplot_0.2.5             jsonlite_1.9.1         
 [25] blob_1.2.4              DelayedArray_0.32.0     BiocParallel_1.40.0    
 [28] parallel_4.4.2          R6_2.6.1                RColorBrewer_1.1-3     
 [31] stringi_1.8.4           GOSemSim_2.32.0         Rcpp_1.0.14            
