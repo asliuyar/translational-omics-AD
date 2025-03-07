@@ -431,7 +431,7 @@ head(dseq_res)
 
 We can save results file into a csv file like this:
 
-```{r}
+```{r, eval=FALSE}
 write.csv(All_res, file="results/All_5xFAD_12months_male.csv")
 write.csv(dseq_res, file="results/DEG_5xFAD_12months_male.csv")
 ```
@@ -734,7 +734,7 @@ at the beginning of the next lesson. We will use R’s `save` command to save th
 objects in compressed, binary format. The `save` command is useful when you want 
 to save multiple objects in one file.
 
-```{r}
+```{r, eval=FALSE}
 save(DE_5xFAD.df, DE_5xFAD.list, file = "results/DEAnalysis_5XFAD.Rdata")
 ```
 
