@@ -360,15 +360,28 @@ any links that you are not going to use.
       The actual schedule may vary slightly depending on the topics and exercises chosen by the instructor.
       </p>
       </section><section id="setup"><p>For this lesson, you will be working in the R programming language
-and the RStudio development environment.</p>
-<section><h2 class="section-heading" id="software-setup">Software Setup<a class="anchor" aria-label="anchor" href="#software-setup"></a></h2>
+and the RStudio development environment on the data analysis and sharing
+platform <a href="https://www.cavatica.org/" class="external-link">CAVATICA</a>.</p>
+<section><h2 class="section-heading" id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a></h2>
 <hr class="half-width"><div class="section level3">
-<h3 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a></h3>
-<p>Please download and install <a href="https://cran.r-project.org/" class="external-link">R</a>. To interact with R, we use <a href="https://posit.co/download/rstudio-desktop/" class="external-link">RStudio</a>. If you
-don’t have administrative rights to your laptop, please ask the IT help
-desk to install software for you. Once you have installed R and RStudio,
-open RStudio to verify that the installation was successful.</p>
-</div>
+<h3 id="access-cavatica">Access CAVATICA<a class="anchor" aria-label="anchor" href="#access-cavatica"></a></h3>
+<ol style="list-style-type: decimal"><li><p><a href="https://cavatica.sbgenomics.com" class="external-link">Sign up for a free
+CAVATICA account</a>. Note that you can also access free cloud credits
+if you so choose.</p></li>
+<li><p><a href="https://docs.cavatica.org/docs/quickstart#create-a-project" class="external-link">Create
+a project</a>. For <strong>Billing group</strong>, select pilot funds if
+you chose free cloud credits in step 1. Read more about projects in the
+<a href="https://docs.cavatica.org/docs/projects-on-cavatica" class="external-link">CAVATICA
+guide</a></p></li>
+<li><p>Run a <a href="https://docs.cavatica.org/docs/run-an-analysis-using-data-cruncher" class="external-link">Data
+Studio analysis</a>. by clicking the <strong>Data Studio</strong>
+tab.</p></li>
+</ol><ul><li>Click <strong>Create new analysis</strong>.</li>
+<li>Select <strong>RStudio</strong>.</li>
+<li>Use the default <strong>Environment Setup</strong>. You can read
+more about default and other available <a href="https://docs.cavatica.org/docs/about-libraries-in-a-data-cruncher-analysis#rstudio" class="external-link">environments
+and libraries for RStudio</a>.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="package-installation">Package Installation<a class="anchor" aria-label="anchor" href="#package-installation"></a></h3>
 <p>Next, install the required packages for this lesson. In RStudio, copy
@@ -585,8 +598,6 @@ specify), and returns nothing.</p>
 <code class="sourceCode R"><span><span class="co"># loop through the column of synIDs and download each file</span></span>
 <span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">walk</span><span class="op">(</span><span class="va">download_table</span><span class="op">$</span><span class="va">id</span>, <span class="op">~</span><span class="fu">synGet</span><span class="op">(</span><span class="va">.x</span>, downloadLocation <span class="op">=</span> <span class="st">"../data/"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Congratulations, you have bulk downloaded files from the AD Knowledge
-Portal!</p>
 <p><strong>An important note</strong>: for situations where you are
 downloading many large files, the R client performs substantially slower
 than the command line client or the Python client. In these cases, you
@@ -645,8 +656,8 @@ any links that you are not going to use.
   "url": "https://asliuyar.github.io/translational-omics-AD/instructor/index.html",
   "identifier": "https://asliuyar.github.io/translational-omics-AD/instructor/index.html",
   "dateCreated": "2024-10-02",
-  "dateModified": "2025-03-04",
-  "datePublished": "2025-03-04"
+  "dateModified": "2025-03-07",
+  "datePublished": "2025-03-07"
 }
 
   </script><script>
