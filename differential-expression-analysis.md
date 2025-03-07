@@ -889,28 +889,7 @@ We can save results file into a csv file like this:
 
 ``` r
 write.csv(All_res, file="results/All_5xFAD_12months_male.csv")
-```
-
-``` warning
-Warning in file(file, ifelse(append, "a", "w")): cannot open file
-'results/All_5xFAD_12months_male.csv': No such file or directory
-```
-
-``` error
-Error in file(file, ifelse(append, "a", "w")): cannot open the connection
-```
-
-``` r
 write.csv(dseq_res, file="results/DEG_5xFAD_12months_male.csv")
-```
-
-``` warning
-Warning in file(file, ifelse(append, "a", "w")): cannot open file
-'results/DEG_5xFAD_12months_male.csv': No such file or directory
-```
-
-``` error
-Error in file(file, ifelse(append, "a", "w")): cannot open the connection
 ```
 
 **Volcano plot** 
@@ -1563,15 +1542,6 @@ to save multiple objects in one file.
 
 ``` r
 save(DE_5xFAD.df, DE_5xFAD.list, file = "results/DEAnalysis_5XFAD.Rdata")
-```
-
-``` warning
-Warning in gzfile(file, "wb"): cannot open compressed file
-'results/DEAnalysis_5XFAD.Rdata', probable reason 'No such file or directory'
-```
-
-``` error
-Error in gzfile(file, "wb"): cannot open the connection
 ```
 
 
