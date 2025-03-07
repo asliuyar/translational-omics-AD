@@ -26,8 +26,6 @@ Author Gregory Cary, Jackson Laboratory
 
 
 
-
-
 ## Aligning Human and Mouse Phenotype
 
 Alzheimer's Disease (AD) is complex, and we can not expect any animal model to 
@@ -47,7 +45,7 @@ anatomical and neuropathological levels is less clear.
 
 ![Aligning Human and Mouse Phenotypes](fig/rmd04-dimensions_of_model_alignment.png)
 
-## Overview of Human cohort data
+## Overview of human cohort data
 
 The Accelerating Medicines Partnership-Alzheimer’s Disease Consortium [(AMP-AD)](https://adknowledgeportal.synapse.org/Explore/Programs/DetailsPage?Program=AMP-AD) 
 has generated extensive sets of 'omics data from a variety of human Alzheimer's 
@@ -106,7 +104,7 @@ co-expression modules related to LOAD pathology. Among the 30 aggregate
 co-expression modules, five consensus clusters were described that span brain 
 region and study cohorts. These consensus clusters consist of subsets of modules 
 which are associated with similar AD related changes across brain regions and 
-cohorts. Wan *et al* looked for enrichment of cell -type signatures within the 
+cohorts. Wan *et al* looked for enrichment of cell-type signatures within the 
 modules using expression-weighted cell type enrichment analysis 
 ([Skene and Grant, 2016](https://doi.org/10.3389/fnins.2016.00016)) and examined 
 enrichment of functional annotations within the modules.
@@ -148,7 +146,8 @@ query <- synTableQuery("SELECT * FROM syn11932957")
 module_table <- read.table(query$filepath, sep = ",",header = TRUE)
 ```
 
-Let's look at module table
+Let's look at module table.
+
 
 ``` r
 head(module_table)
@@ -163,11 +162,13 @@ Here you see 9 columns in this table. Columns we're interested in are:
 
 How many unique modules are in the table?
 
+
 ``` r
 length(unique(module_table$Module))
 ```
 
 What are the names of the modules?
+
 
 ``` r
 unique(module_table$Module)
@@ -175,11 +176,13 @@ unique(module_table$Module)
 
 How many genes are in each module?
 
+
 ``` r
 table(module_table$Module)
 ```
 
 We can visualize this as bar plot using ggplot2 package. 
+
 
 ``` r
 ggplot(module_table,aes(y=Module)) + 
@@ -205,7 +208,8 @@ dplyr::count(module_table, Module)
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-We can also check the total number of unique genes in the table  
+We can also check the total number of unique genes in the table.  
+
 
 ``` r
 length(unique(module_table$GeneID))

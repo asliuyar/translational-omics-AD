@@ -61,19 +61,20 @@ rna_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_assay_RNAseq_metadata.csv",
 
 Let’s examine the data and metadata files a bit before we begin our
 analyses. We start by exploring the `counts` data that we read in using the
-tidyverse `read_tsv()` (*read*_*t*ab-*s*eparated *v*alues) function. This function reads data in as a *tibble*, a
-kind of data table with some nice features that avoid some bad habits of the
-base R `read.csv()` function. Calling a `tibble` object will print the first ten 
-rows in a nice tidy output. Doing the same for a base R dataframe read in with
-`read.csv()` will print the whole thing until it runs out of memory. If you want 
-to inspect a large dataframe, use `head(df)` to view the first several rows 
-only.
+tidyverse `read_tsv()` (*read*_*t*ab-*s*eparated *v*alues) function. This 
+function reads data in as a *tibble*, a kind of data table with some nice 
+features that avoid some bad habits of the base R `read.csv()` function. Calling 
+a `tibble` object will print the first ten rows in a nice tidy output. Doing the 
+same for a base R dataframe read in with `read.csv()` will print the whole thing 
+until it runs out of memory. If you want to inspect a large dataframe, use 
+`head(df)` to view the first several rows only.
 
 
 ``` r
 counts
 ```
 
+``` output
 # A tibble: 55,489 × 73
    gene_id `32043rh` `32044rh` `32046rh` `32047rh` `32048rh` `32049rh` `32050rh`
    <chr>       <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
@@ -94,6 +95,7 @@ counts
 #   `32074rh` <dbl>, `32075rh` <dbl>, `32078rh` <dbl>, `32081rh` <dbl>,
 #   `32088rh` <dbl>, `32640rh` <dbl>, `46105rh` <dbl>, `46106rh` <dbl>,
 #   `46107rh` <dbl>, `46108rh` <dbl>, `46109rh` <dbl>, `46110rh` <dbl>, …
+```
 
 The data file has a column of ENSEMBL `gene_id`s and then a bunch of columns 
 with count data, where the column headers correspond to the `specimenID`s. These 
@@ -419,15 +421,15 @@ command line client for increased speed.
 Once you’ve downloaded all the files in the `id` column, you can link those 
 files to their annotations by the `name` column.
 
+We'll use the "random fastq" that we got annotations for earlier to avoid 
+downloading the whole 3GB file, we'll use synGet with `downloadFile = FALSE` to 
+get only the Synapse entity information, rather than the file. If we downloaded 
+the actual file, we could find it in the directory and search using the 
+filename. Since we're just downloading the Synapse entity wrapper object, we'll 
+use the file name listed in the object properties.
+
 
 ``` r
-# We'll use the "random fastq" that we got annotations for earlier
-# To avoid downloading the whole 3GB file, we'll use synGet with 
-# "downloadFile = FALSE" to get only the Synapse entity information, rather than 
-# the file. If we downloaded the actual file, we could find it in the directory 
-# and search using the filename. Since we're just downloading the Synapse entity
-# wrapper object, we'll use the file name listed in the object properties.
-
 fastq <- synGet(random_fastq, downloadFile = FALSE)
 
 # filter the annotations table to rows that match the fastq filename
@@ -458,11 +460,12 @@ The multispecimen file should contain a row or column of `specimenID`s that
 correspond to the `specimenID`s used in a study’s metadata, as we have seen with 
 the 5XFAD counts file.
 
+In this example, we take a slice of the counts data to reduce computation, 
+transpose it so that each row represents a single specimen, and then join it 
+to the joined metadata by the `specimenID`.
+
 
 ``` r
-# In this example, we take a slice of the counts data to reduce computation, 
-# transpose it so that each row represents a single specimen, and then join it 
-# to the joined metadata by the `specimenID`
 counts %>% 
   slice_head(n = 5) %>% 
   t() %>% 
@@ -493,57 +496,10 @@ counts %>%
 #   nucleicAcidSource <lgl>, cellType <lgl>, fastingState <lgl>, …
 ```
 
-## Session Info
-
-``` r
-sessionInfo()
-```
-
-``` output
-R version 4.4.2 (2024-10-31)
-Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 22.04.5 LTS
-
-Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
-LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
-
-locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
-
-time zone: UTC
-tzcode source: system (glibc)
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
- [1] knitr_1.49      lubridate_1.9.4 forcats_1.0.0   stringr_1.5.1  
- [5] purrr_1.0.4     readr_2.1.5     tidyr_1.3.1     tibble_3.2.1   
- [9] ggplot2_3.5.1   tidyverse_2.0.0 dplyr_1.1.4    
-
-loaded via a namespace (and not attached):
- [1] bit_4.5.0.1         gtable_0.3.6        crayon_1.5.3       
- [4] compiler_4.4.2      BiocManager_1.30.25 renv_1.1.2         
- [7] tidyselect_1.2.1    parallel_4.4.2      scales_1.3.0       
-[10] yaml_2.3.10         R6_2.6.1            generics_0.1.3     
-[13] munsell_0.5.1       pillar_1.10.1       tzdb_0.4.0         
-[16] rlang_1.1.5         utf8_1.2.4          stringi_1.8.4      
-[19] xfun_0.51           bit64_4.6.0-1       timechange_0.3.0   
-[22] cli_3.6.4           withr_3.0.2         magrittr_2.0.3     
-[25] grid_4.4.2          vroom_1.6.5         hms_1.1.3          
-[28] lifecycle_1.0.4     vctrs_0.6.5         evaluate_1.0.3     
-[31] glue_1.8.0          colorspace_2.1-1    tools_4.4.2        
-[34] pkgconfig_2.0.3    
-```
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use your Synapse login credentials to access the Portal.
-- Use Synapser package to download data from the Portal.
+- 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
