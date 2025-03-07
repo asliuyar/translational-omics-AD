@@ -1251,35 +1251,8 @@ ENSMUSG00000038642 30.88640 1.818747e-209 7.294691e-206</code></pre>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">write.csv</span><span class="op">(</span><span class="va">All_res</span>, file<span class="op">=</span><span class="st">"results/All_5xFAD_12months_male.csv"</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="warning" tabindex="0"><code>Warning in file(file, ifelse(append, "a", "w")): cannot open file
-'results/All_5xFAD_12months_male.csv': No such file or directory</code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in file(file, ifelse(append, "a", "w")): cannot open the connection</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb77">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">write.csv</span><span class="op">(</span><span class="va">dseq_res</span>, file<span class="op">=</span><span class="st">"results/DEG_5xFAD_12months_male.csv"</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="warning" tabindex="0"><code>Warning in file(file, ifelse(append, "a", "w")): cannot open file
-'results/DEG_5xFAD_12months_male.csv': No such file or directory</code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in file(file, ifelse(append, "a", "w")): cannot open the connection</code></pre>
+<code class="sourceCode R"><span><span class="fu">write.csv</span><span class="op">(</span><span class="va">All_res</span>, file<span class="op">=</span><span class="st">"results/All_5xFAD_12months_male.csv"</span><span class="op">)</span></span>
+<span><span class="fu">write.csv</span><span class="op">(</span><span class="va">dseq_res</span>, file<span class="op">=</span><span class="st">"results/DEG_5xFAD_12months_male.csv"</span><span class="op">)</span></span></code></pre>
 </div>
 <p><strong>Volcano plot</strong></p>
 <p>We can visualize the differential expression results using the
@@ -1288,7 +1261,7 @@ most basic volcano plot, only a single data frame, data matrix, or
 tibble of test results is required, containing point labels, log2FC, and
 adjusted or unadjusted p-values. The default cut-off for log2FC is
 &gt;|2|; the default cut-off for p-value is 10e-6.</p>
-<div class="codewrapper sourceCode" id="cb80">
+<div class="codewrapper sourceCode" id="cb75">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1318,7 +1291,7 @@ reduces the dimensionality of these large matrixes into a linear
 coordinate system, so that we can more easily visualize what factors are
 contributing the most to variation in the dataset by graphing the
 principal components.</p>
-<div class="codewrapper sourceCode" id="cb82">
+<div class="codewrapper sourceCode" id="cb77">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1332,7 +1305,7 @@ principal components.</p>
 <pre class="warning" tabindex="0"><code>Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
 design formula are characters, converting to factors</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb84">
+<div class="codewrapper sourceCode" id="cb79">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1381,7 +1354,7 @@ design formula are characters, converting to factors</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>fitting model and testing</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb93">
+<div class="codewrapper sourceCode" id="cb88">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1398,7 +1371,7 @@ design formula are characters, converting to factors</code></pre>
 see exactly how they are clustering in this visualization.</p>
 <p>It is also possible to customize the PCA plot using the
 <code>ggplot</code> function.</p>
-<div class="codewrapper sourceCode" id="cb95">
+<div class="codewrapper sourceCode" id="cb90">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1411,7 +1384,7 @@ see exactly how they are clustering in this visualization.</p>
 </h3>
 <pre class="output" tabindex="0"><code>using ntop=500 top features by variance</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb97">
+<div class="codewrapper sourceCode" id="cb92">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1431,7 +1404,7 @@ sex-biased molecular changes in animals.</p>
 <p>Finally, we can build a function for differential analysis that
 consists of all above discussed steps. It will require to input sorted
 raw count matrix, sample metadata and define the reference group.</p>
-<div class="codewrapper sourceCode" id="cb98">
+<div class="codewrapper sourceCode" id="cb93">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1483,7 +1456,7 @@ data.</p>
 <p>First, we add a <code>Group</code> column to our metadata table that
 will combine all variables of interest (<code>genotype</code>,
 <code>sex</code>, and <code>timepoint</code>) for each sample.</p>
-<div class="codewrapper sourceCode" id="cb99">
+<div class="codewrapper sourceCode" id="cb94">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1510,7 +1483,7 @@ that we would like to compare with each other. Here I have made
 comparison groups for age and sex-matched 5xFAD carriers vs
 5xFAD_noncarriers, with carriers as the cases and noncarriers as the
 controls:</p>
-<div class="codewrapper sourceCode" id="cb101">
+<div class="codewrapper sourceCode" id="cb96">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1527,7 +1500,7 @@ controls:</p>
 <span>                                       <span class="st">"5XFAD_carrier-male-12 mo"</span>,</span>
 <span>                                       <span class="st">"5XFAD_carrier-female-12 mo"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb102">
+<div class="codewrapper sourceCode" id="cb97">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1547,7 +1520,7 @@ controls:</p>
 <p>Finally, we implement our <code>DEG</code> function on each
 case/control comparison of interest and store the result table in a list
 and data frame:</p>
-<div class="codewrapper sourceCode" id="cb104">
+<div class="codewrapper sourceCode" id="cb99">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1795,7 +1768,7 @@ design formula are characters, converting to factors</code></pre>
 'select()' returned 1:many mapping between keys and columns</code></pre>
 </div>
 <p>Let’s explore the result stored in our list:</p>
-<div class="codewrapper sourceCode" id="cb147">
+<div class="codewrapper sourceCode" id="cb142">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1811,7 +1784,7 @@ design formula are characters, converting to factors</code></pre>
 <p>We can easily extract the result table for any group of interest by
 using $ and name of group. Let’s check top few rows from
 <code>5XFAD_carrier-male-4 mo</code> group:</p>
-<div class="codewrapper sourceCode" id="cb149">
+<div class="codewrapper sourceCode" id="cb144">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1836,7 +1809,7 @@ ENSMUSG00000000049  0.36554951 0.714701258 0.9999514
 ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567</code></pre>
 </div>
 <p>Let’s check the result stored as dataframe:</p>
-<div class="codewrapper sourceCode" id="cb151">
+<div class="codewrapper sourceCode" id="cb146">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1861,7 +1834,7 @@ ENSMUSG00000000049  0.36554951 0.714701258 0.9999514 5xFAD male 4 mo
 ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre>
 </div>
 <p>Check if result is present for all ages:</p>
-<div class="codewrapper sourceCode" id="cb153">
+<div class="codewrapper sourceCode" id="cb148">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1873,7 +1846,7 @@ ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre
 <pre class="output" tabindex="0"><code>[1] "4 mo"  "6 mo"  "12 mo"</code></pre>
 </div>
 <p>Check if result is present for both sexes:</p>
-<div class="codewrapper sourceCode" id="cb155">
+<div class="codewrapper sourceCode" id="cb150">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1885,7 +1858,7 @@ ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre
 <pre class="output" tabindex="0"><code>[1] "male"   "female"</code></pre>
 </div>
 <p>Check number of genes in each group:</p>
-<div class="codewrapper sourceCode" id="cb157">
+<div class="codewrapper sourceCode" id="cb152">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1904,7 +1877,7 @@ ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre
 </div>
 <p>Check number of genes significantly differentially expressed in all
 cases compared to age and sex-matched controls:</p>
-<div class="codewrapper sourceCode" id="cb159">
+<div class="codewrapper sourceCode" id="cb154">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1953,7 +1926,7 @@ the mice get in both sexes.</p>
 of differentially expressed genes. Here we will test for enrichment of
 KEGG pathways using using the <code>enrichKEGG</code> function in the
 <code>clusterProfiler</code> package.</p>
-<div class="codewrapper sourceCode" id="cb160">
+<div class="codewrapper sourceCode" id="cb155">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1978,7 +1951,7 @@ KEGG pathways using using the <code>enrichKEGG</code> function in the
 </div>
 <p>Let’s plot top enriched functions using the <code>dotplot</code>
 function of the <code>clusterProfiler</code> package.</p>
-<div class="codewrapper sourceCode" id="cb161">
+<div class="codewrapper sourceCode" id="cb156">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1996,22 +1969,11 @@ will load it at the beginning of the next lesson. We will use R’s
 <code>save</code> command to save the objects in compressed, binary
 format. The <code>save</code> command is useful when you want to save
 multiple objects in one file.</p>
-<div class="codewrapper sourceCode" id="cb162">
+<div class="codewrapper sourceCode" id="cb157">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">save</span><span class="op">(</span><span class="va">DE_5xFAD.df</span>, <span class="va">DE_5xFAD.list</span>, file <span class="op">=</span> <span class="st">"results/DEAnalysis_5XFAD.Rdata"</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="warning" tabindex="0"><code>Warning in gzfile(file, "wb"): cannot open compressed file
-'results/DEAnalysis_5XFAD.Rdata', probable reason 'No such file or directory'</code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in gzfile(file, "wb"): cannot open the connection</code></pre>
 </div>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
