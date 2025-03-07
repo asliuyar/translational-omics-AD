@@ -3,17 +3,30 @@ title: Setup
 ---
 
 For this lesson, you will be working in the R programming language and the 
-RStudio development environment.
+RStudio development environment on the data analysis and sharing platform 
+[CAVATICA](https://www.cavatica.org/).
 
-## Software Setup
+## Setup
 
-### R
+### Access CAVATICA
 
-Please download and install [R](https://cran.r-project.org/). To interact with 
-R, we use [RStudio](https://posit.co/download/rstudio-desktop/). If you don't 
-have administrative rights to your laptop, please ask the IT help desk to 
-install software for you. Once you have installed R and RStudio, open RStudio to 
-verify that the installation was successful.
+1. [Sign up for a free CAVATICA account](https://cavatica.sbgenomics.com). Note 
+that you can also access free cloud credits if you so choose.
+
+1. [Create a project](https://docs.cavatica.org/docs/quickstart#create-a-project).
+For **Billing group**, select pilot funds if you chose free cloud credits in 
+step 1. Read more about projects in the 
+[CAVATICA guide](https://docs.cavatica.org/docs/projects-on-cavatica)
+
+1. Run a 
+[Data Studio analysis](https://docs.cavatica.org/docs/run-an-analysis-using-data-cruncher).
+by clicking the **Data Studio** tab.
+  - Click **Create new analysis**.
+  - Select **RStudio**.
+  - Use the default **Environment Setup**. You can read more about default and
+  other available
+  [environments and libraries for RStudio](https://docs.cavatica.org/docs/about-libraries-in-a-data-cruncher-analysis#rstudio).
+
 
 ### Package Installation
 
@@ -235,9 +248,6 @@ specify), and returns nothing.
 # loop through the column of synIDs and download each file
 purrr::walk(download_table$id, ~synGet(.x, downloadLocation = "../data/"))
 ```
-
-Congratulations, you have bulk downloaded files from the AD Knowledge
-Portal!
 
 **An important note**: for situations where you are downloading many large
 files, the R client performs substantially slower than the command line
