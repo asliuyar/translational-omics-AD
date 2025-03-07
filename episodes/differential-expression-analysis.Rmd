@@ -24,14 +24,6 @@ exercises: 10
 # Differential Expression Analysis
 
 ```{r, echo=FALSE}
-install.packages("BiocManager")
-BiocManager::install("clusterProfiler")
-BiocManager::install("DESeq2")
-BiocManager::install("AnnotationDbi")
-BiocManager::install("org.Mm.eg.db")
-BiocManager::install("org.Hs.eg.db")
-BiocManager::install("GO.db")
-BiocManager::install("EnhancedVolcano")
 suppressPackageStartupMessages(library("BiocManager"))
 suppressPackageStartupMessages(library("clusterProfiler"))
 suppressPackageStartupMessages(library("DESeq2"))
@@ -746,15 +738,11 @@ to save multiple objects in one file.
 save(DE_5xFAD.df, DE_5xFAD.list, file = "results/DEAnalysis_5XFAD.Rdata")
 ```
 
-## Session Info
-```{r}
-sessionInfo()
-```
+
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use your Synapse login credentials to access the Portal.
-- Use Synapser package to download data from the Portal.
+- 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

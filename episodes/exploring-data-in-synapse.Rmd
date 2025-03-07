@@ -63,15 +63,15 @@ rna_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_assay_RNAseq_metadata.csv",
 
 Let’s examine the data and metadata files a bit before we begin our
 analyses. We start by exploring the `counts` data that we read in using the
-tidyverse `read_tsv()` (*read*_*t*ab-*s*eparated *v*alues) function. This function reads data in as a *tibble*, a
-kind of data table with some nice features that avoid some bad habits of the
-base R `read.csv()` function. Calling a `tibble` object will print the first ten 
-rows in a nice tidy output. Doing the same for a base R dataframe read in with
-`read.csv()` will print the whole thing until it runs out of memory. If you want 
-to inspect a large dataframe, use `head(df)` to view the first several rows 
-only.
+tidyverse `read_tsv()` (*read*_*t*ab-*s*eparated *v*alues) function. This 
+function reads data in as a *tibble*, a kind of data table with some nice 
+features that avoid some bad habits of the base R `read.csv()` function. Calling 
+a `tibble` object will print the first ten rows in a nice tidy output. Doing the 
+same for a base R dataframe read in with `read.csv()` will print the whole thing 
+until it runs out of memory. If you want to inspect a large dataframe, use 
+`head(df)` to view the first several rows only.
 
-```{r, counts_tibble, results='asis'}
+```{r, counts_tibble}
 counts
 ```
 
@@ -289,14 +289,14 @@ command line client for increased speed.
 Once you’ve downloaded all the files in the `id` column, you can link those 
 files to their annotations by the `name` column.
 
-```{r, eval=FALSE}
-# We'll use the "random fastq" that we got annotations for earlier
-# To avoid downloading the whole 3GB file, we'll use synGet with 
-# "downloadFile = FALSE" to get only the Synapse entity information, rather than 
-# the file. If we downloaded the actual file, we could find it in the directory 
-# and search using the filename. Since we're just downloading the Synapse entity
-# wrapper object, we'll use the file name listed in the object properties.
+We'll use the "random fastq" that we got annotations for earlier to avoid 
+downloading the whole 3GB file, we'll use synGet with `downloadFile = FALSE` to 
+get only the Synapse entity information, rather than the file. If we downloaded 
+the actual file, we could find it in the directory and search using the 
+filename. Since we're just downloading the Synapse entity wrapper object, we'll 
+use the file name listed in the object properties.
 
+```{r, eval=FALSE}
 fastq <- synGet(random_fastq, downloadFile = FALSE)
 
 # filter the annotations table to rows that match the fastq filename
@@ -326,10 +326,11 @@ The multispecimen file should contain a row or column of `specimenID`s that
 correspond to the `specimenID`s used in a study’s metadata, as we have seen with 
 the 5XFAD counts file.
 
+In this example, we take a slice of the counts data to reduce computation, 
+transpose it so that each row represents a single specimen, and then join it 
+to the joined metadata by the `specimenID`.
+
 ```{r, warning=FALSE}
-# In this example, we take a slice of the counts data to reduce computation, 
-# transpose it so that each row represents a single specimen, and then join it 
-# to the joined metadata by the `specimenID`
 counts %>% 
   slice_head(n = 5) %>% 
   t() %>% 
@@ -337,15 +338,10 @@ counts %>%
   left_join(joined_meta, by = "specimenID")
 ```
 
-## Session Info
-```{r}
-sessionInfo()
-```
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use your Synapse login credentials to access the Portal.
-- Use Synapser package to download data from the Portal.
+- 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

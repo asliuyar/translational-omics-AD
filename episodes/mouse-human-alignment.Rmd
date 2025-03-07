@@ -36,15 +36,8 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(clusterProfiler))
 suppressPackageStartupMessages(library(data.table))
-#suppressPackageStartupMessages(library(synapser))
-#synLogin(silent=TRUE)
-#setwd("/Users/pandera/Library/CloudStorage/Box-Box/Ravi Pandey Workspace/Miscellaneous/AD_Workshop2023/")
 ```
 
-
-```{r, echo = FALSE, eval=FALSE}
-synLogin(authToken = "eyJ0eXAiOiJKV1QiLCJraWQiOiJXN05OOldMSlQ6SjVSSzpMN1RMOlQ3TDc6M1ZYNjpKRU9VOjY0NFI6VTNJWDo1S1oyOjdaQ0s6RlBUSCIsImFsZyI6IlJTMjU2In0.eyJhY2Nlc3MiOnsic2NvcGUiOlsidmlldyIsImRvd25sb2FkIiwibW9kaWZ5Il0sIm9pZGNfY2xhaW1zIjp7fX0sInRva2VuX3R5cGUiOiJQRVJTT05BTF9BQ0NFU1NfVE9LRU4iLCJpc3MiOiJodHRwczovL3JlcG8tcHJvZC5wcm9kLnNhZ2ViYXNlLm9yZy9hdXRoL3YxIiwiYXVkIjoiMCIsIm5iZiI6MTcyMTc4OTUyNywiaWF0IjoxNzIxNzg5NTI3LCJqdGkiOiIxMDMxNSIsInN1YiI6IjMzNDc1MjgifQ.sr1euDKwv-U8PPj36ej7Kfo_Fne9KZOzu-fWZ2qeka8SsLwAs26z6623QyVUGHK2RoF_LeZ479d465BXxW3z47kbUUAJguzTVLlrB7pRHrvl7fFEAEq0fC6pQzv-WYYHuys7mB6HfAICJXpL2zHWA32OjKUjfI3_eIRZw9yyBFmrDHo8OSLH3PED6E_CNs2Ydhl_V8F9lsN5UTOLWyc6Rz-UR--JdzW7nLFGlKScwb0YxJyw15K0MMjNg8yBxZCxPCsD18AWGZNh4nI7ppod7wMaJG3J1akujRqNqYPJftPKN7BT_0hpgISsY3I8djbFzMVy7MlfUIRgkPfmp68GBQ")
-```
 
 ## Aligning Human and Mouse Phenotype
 
@@ -65,7 +58,7 @@ anatomical and neuropathological levels is less clear.
 
 ![Aligning Human and Mouse Phenotypes](fig/rmd04-dimensions_of_model_alignment.png)
 
-## Overview of Human cohort data
+## Overview of human cohort data
 
 The Accelerating Medicines Partnership-Alzheimer’s Disease Consortium [(AMP-AD)](https://adknowledgeportal.synapse.org/Explore/Programs/DetailsPage?Program=AMP-AD) 
 has generated extensive sets of 'omics data from a variety of human Alzheimer's 
@@ -124,7 +117,7 @@ co-expression modules related to LOAD pathology. Among the 30 aggregate
 co-expression modules, five consensus clusters were described that span brain 
 region and study cohorts. These consensus clusters consist of subsets of modules 
 which are associated with similar AD related changes across brain regions and 
-cohorts. Wan *et al* looked for enrichment of cell -type signatures within the 
+cohorts. Wan *et al* looked for enrichment of cell-type signatures within the 
 modules using expression-weighted cell type enrichment analysis 
 ([Skene and Grant, 2016](https://doi.org/10.3389/fnins.2016.00016)) and examined 
 enrichment of functional annotations within the modules.
@@ -165,7 +158,8 @@ query <- synTableQuery("SELECT * FROM syn11932957")
 module_table <- read.table(query$filepath, sep = ",",header = TRUE)
 ```
 
-Let's look at module table
+Let's look at module table.
+
 ```{r, eval=FALSE}
 head(module_table)
 ```
@@ -178,21 +172,25 @@ Here you see 9 columns in this table. Columns we're interested in are:
 - column 9: `external_gene_name` are gene symbols  
 
 How many unique modules are in the table?
+
 ```{r, eval=FALSE}
 length(unique(module_table$Module))
 ```
 
 What are the names of the modules?
+
 ```{r, eval=FALSE}
 unique(module_table$Module)
 ```
 
 How many genes are in each module?
+
 ```{r, eval=FALSE}
 table(module_table$Module)
 ```
 
 We can visualize this as bar plot using ggplot2 package. 
+
 ```{r module_nGenes, fig.width=7, eval=FALSE}
 ggplot(module_table,aes(y=Module)) + 
   geom_bar() + 
@@ -217,7 +215,8 @@ dplyr::count(module_table, Module)
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-We can also check the total number of unique genes in the table  
+We can also check the total number of unique genes in the table.  
+
 ```{r, eval=FALSE}
 length(unique(module_table$GeneID))
 ```
