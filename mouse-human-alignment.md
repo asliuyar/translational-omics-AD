@@ -1501,7 +1501,7 @@ relationships between the biological processes affected in each context.
 
 ``` r
 sessionInfo()
-R version 4.4.2 (2024-10-31)
+R version 4.4.3 (2025-02-28)
 Platform: x86_64-pc-linux-gnu
 Running under: Ubuntu 22.04.5 LTS
 
@@ -1541,7 +1541,7 @@ other attached packages:
 
 loaded via a namespace (and not attached):
  [1] DBI_1.2.3               gson_0.1.0              rlang_1.1.5            
- [4] magrittr_2.0.3          DOSE_4.0.0              compiler_4.4.2         
+ [4] magrittr_2.0.3          DOSE_4.0.0              compiler_4.4.3         
  [7] RSQLite_2.3.9           png_0.1-8               vctrs_0.6.5            
 [10] reshape2_1.4.4          pkgconfig_2.0.3         crayon_1.5.3           
 [13] fastmap_1.2.0           XVector_0.46.0          utf8_1.2.4             
@@ -1549,10 +1549,10 @@ loaded via a namespace (and not attached):
 [19] bit_4.5.0.1             xfun_0.51               zlibbioc_1.52.0        
 [22] cachem_1.1.0            aplot_0.2.5             jsonlite_1.9.1         
 [25] blob_1.2.4              DelayedArray_0.32.0     BiocParallel_1.40.0    
-[28] parallel_4.4.2          R6_2.6.1                RColorBrewer_1.1-3     
+[28] parallel_4.4.3          R6_2.6.1                RColorBrewer_1.1-3     
 [31] stringi_1.8.4           GOSemSim_2.32.0         Rcpp_1.0.14            
 [34] knitr_1.49              ggtangle_0.0.6          R.utils_2.13.0         
-[37] igraph_2.1.4            Matrix_1.7-2            splines_4.4.2          
+[37] igraph_2.1.4            Matrix_1.7-2            splines_4.4.3          
 [40] timechange_0.3.0        tidyselect_1.2.1        qvalue_2.38.0          
 [43] abind_1.4-8             yaml_2.3.10             codetools_0.2-20       
 [46] lattice_0.22-6          plyr_1.8.9              treeio_1.30.0          
@@ -1562,8 +1562,8 @@ loaded via a namespace (and not attached):
 [58] ggfun_0.1.8             generics_0.1.3          vroom_1.6.5            
 [61] hms_1.1.3               tidytree_0.4.6          munsell_0.5.1          
 [64] scales_1.3.0            glue_1.8.0              lazyeval_0.2.2         
-[67] tools_4.4.2             fgsea_1.32.2            locfit_1.5-9.11        
-[70] fs_1.6.5                fastmatch_1.1-6         grid_4.4.2             
+[67] tools_4.4.3             fgsea_1.32.2            locfit_1.5-9.11        
+[70] fs_1.6.5                fastmatch_1.1-6         grid_4.4.3             
 [73] ape_5.8-1               colorspace_2.1-1        nlme_3.1-167           
 [76] patchwork_1.3.0         GenomeInfoDbData_1.2.13 cli_3.6.4              
 [79] S4Arrays_1.6.0          gtable_0.3.6            R.methodsS3_1.8.2      
