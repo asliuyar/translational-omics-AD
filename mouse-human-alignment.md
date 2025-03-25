@@ -1558,7 +1558,7 @@ loaded via a namespace (and not attached):
 [46] lattice_0.22-6          plyr_1.8.9              treeio_1.30.0          
 [49] withr_3.0.2             KEGGREST_1.46.0         evaluate_1.0.3         
 [52] gridGraphics_0.5-1      Biostrings_2.74.1       ggtree_3.14.0          
-[55] pillar_1.10.1           BiocManager_1.30.25     renv_1.1.2             
+[55] pillar_1.10.1           BiocManager_1.30.25     renv_1.1.4             
 [58] ggfun_0.1.8             generics_0.1.3          vroom_1.6.5            
 [61] hms_1.1.3               tidytree_0.4.6          munsell_0.5.1          
 [64] scales_1.3.0            glue_1.8.0              lazyeval_0.2.2         
