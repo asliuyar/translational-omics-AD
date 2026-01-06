@@ -6,16 +6,16 @@ exercises: 10
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to work with Synapse R client?
-- How to work with data in AD Knowledge Portal?
+- How can we work with the Synapse R client?
+- How can we work with data in AD Knowledge Portal?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use Synapser Package.
-- Demonstrate how to locate data and metadata in the Portal.
-- Demonstrate how to download data from the Portal programmatically.
+- Explain how to use `Synapser` Package.
+- Demonstrate how to locate data and metadata in the AD Knowledge Portal.
+- Demonstrate how to download data from the AD Knowledge Portal programmatically.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

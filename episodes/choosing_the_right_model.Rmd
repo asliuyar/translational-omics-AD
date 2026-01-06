@@ -342,7 +342,7 @@ head(ns_effects)
 
 You can save the results for future use.
 ```{r eval=FALSE, echo=FALSE}
-save(effects,ns_effects,file="results/ns.effects.RData")
+save(effects,ns_effects, file="results/ns.effects.RData")
 ```
 
 We will use these values to perform correlation analyses with human AD Data.
@@ -712,10 +712,8 @@ dd.subtype_PS$Background <- factor(dd.subtype_PS$Background,levels = c("Female",
 ```
 
 
-```{r eval=FALSE,echo=FALSE,fig.width =12,fig.height=8}
-
+```{r eval=FALSE,echo=FALSE,fig.width=12,fig.height=8}
 subtype_variant_corrplot(dd.subtype_PS,0.5)
-
 ```
 
 
