@@ -31,21 +31,21 @@ Author: Gregory Cary, Jackson Laboratory
 
 First, let's install the necessary packages into the workspace, starting with the annotation packages:  
 
-```{r}
+```{r, eval=FALSE}
 # Mouse and Human annotation databses
 BiocManager::install(c('org.Mm.eg.db','org.Hs.eg.db', 'GO.db'))
 ```
 
 Next we'll install the `fgsea` and `clusterProfiler` packages, which will be used for GO term enrichment.  
 
-```{r}
+```{r, eval=FALSE}
 # fgsea package
 BiocManager::install(c('fgsea', 'clusterProfiler'))
 ```
 
 Finally we can instally the `synapseclient` python package using the `reticulate` R package, this will enable us comand-line access to objects in the Synapse data repository.   
 
-```{r}
+```{r, eval=FALSE}
 # synapseclient python package
 reticulate::py_install('synapseclient')
 ```
@@ -60,7 +60,7 @@ synToken <- 'eyJ0eXAiOiJKV1QiLCJraWQiOiJXN05OOldMSlQ6SjVSSzpMN1RMOlQ3TDc6M1ZYNjp
 
 Now we should be able to login to Synapse through our R session using the following commands:  
 
-```{r}
+```{r, eval=FALSE}
 # import the synapseclient python package
 syn.client <- reticulate::import('synapseclient')
 syn <- syn.client$Synapse()
@@ -71,7 +71,7 @@ syn$login('greg.cary@jax.org', authToken = synToken)
 
 Finally, let's load the R packages we'll need for today's lesson:  
 
-```{r libs, warning=FALSE}
+```{r libs, warning=FALSE, eval=FALSE}
 # load necessary libraries for the analysis
 suppressPackageStartupMessages( library(DESeq2) )
 suppressPackageStartupMessages( library(org.Mm.eg.db) )
@@ -122,7 +122,7 @@ But what **else** can the RNA-seq data tell us about the transcriptomic response
 ### read 5xFAD RNA-seq count data
 
 First, let's re-access the RNA-seq data and metadata from Synapse
-```{r}
+```{r, eval=FALSE}
 # RNA-seq counts
 counts <- syn$get('syn22108847') %>% .$path %>% read_tsv()
 
@@ -137,7 +137,7 @@ meta <- syn$get('syn22103212') %>% .$path %>% read_csv() %>%
 ```
 
 We can modify the metadata to only include covariates we'll need for this analysis
-```{r}
+```{r, eval=FALSE}
 # order rows that have corresponding IDs in the counts table
 covars <- meta %>% slice( match(colnames(counts[,-1]), specimenID) ) 
 
@@ -159,12 +159,12 @@ head(covars)
 ```
 
 First, let's make sure we have all relevant metadata
-```{r}
+```{r, eval=FALSE}
 all(colnames(counts[,-1])==covars$specimenID)
 ```
 
 How many animals do we have in each group?
-```{r}
+```{r, eval=FALSE}
 covars %>% group_by(group, age, sex) %>% summarise(n = n())
 ```
 
@@ -176,7 +176,7 @@ The 5xFAD model has two copies each of the APP and PSEN1 genes - one endogenous 
 
 Ultimately we are going to sum the counts from both ortholgous genes (human APP and mouse App; human PSEN1 and mouse Psen1). But first, let's look at the expression of each of these genes in the different groups. To start we'll filter the counts down to just those four relevant gene IDs and join the counts up with the covariates to explore the expression of these genes.  
 
-```{r}
+```{r, eval=FALSE}
 tg.counts <- counts %>%
   filter(gene_id %in% c("ENSG00000080815","ENSMUSG00000019969",
                         "ENSG00000142192","ENSMUSG00000022892")) %>% 
@@ -187,7 +187,7 @@ head(tg.counts)
 ```
 
 Let's do a little data housekeeping:
-```{r}
+```{r, eval=FALSE}
 # make an age column that is a factor and re-order the levels
 tg.counts <- tg.counts %>% 
   mutate(
@@ -208,7 +208,7 @@ tg.counts <- tg.counts %>%
 ```
 
 Okay, now let's plot the counts for each gene across the samples:
-```{r}
+```{r, eval=FALSE}
 ggplot(tg.counts, aes(x=age.m, y=counts, color=group, shape = sex)) +
   geom_boxplot() + 
   geom_point(position=position_jitterdodge())+
@@ -220,7 +220,7 @@ The human transgenes all have a counts of zero in the WT animals (where the tran
 
 Let's combine the expression of corresponding human and mouse genes by summing the expression and saving the summed expression as expression of mouse genes, respectively to match with gene names in control mice. 
 
-```{r}
+```{r, eval=FALSE}
 # move the gene_id column to rownames, to enable summing across rows
 counts <- counts %>% column_to_rownames("gene_id") 
 
@@ -240,7 +240,7 @@ counts <- counts[!rownames(counts) %in% c("ENSG00000080815"),]
 ```
 
 We can confirm that the human genes are now absent from the counts table:
-```{r}
+```{r, eval=FALSE}
 counts[,1:6] %>% filter(!str_detect(rownames(.), "MUS"))
 ```
 
@@ -249,19 +249,19 @@ counts[,1:6] %>% filter(!str_detect(rownames(.), "MUS"))
 Next we'll prepare the data for differential expression analysis. We'll use DESeq2 today, though there are other approaches. Another disclaimer: there are multiple steps to a DESeq2 analysis and we're not going to get into nitty-gritty details here. We'll briefly cover some of the basics, but for more information, please refer to the [DESeq2 vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 Let's perform this analysis stratified by age group while controlling for the sex of the animals as a covariate. We can start with the youngest animals (4 months old). Let's sub-set the data and covariates to these data:
-```{r}
+```{r, eval=FALSE}
 covars.4m <- covars %>% filter(age == 4)
 counts.4m <- counts[,colnames(counts) %in% covars.4m$specimenID]
 ```
 
 Next we'll build the DESeq object
-```{r}
+```{r, eval=FALSE}
 ddsHTSeq <- DESeqDataSetFromMatrix(countData=counts.4m, 
                                    colData=covars.4m, 
                                    design = ~group+sex)
 ```
 
-```{r}
+```{r, eval=FALSE}
 ddsHTSeq
 ```
 
@@ -269,13 +269,13 @@ Now we have a `DESeqDataSet` object covering counts data for 55k genes across 24
 
 Let's take a closer look at the counts that go into this object
 
-```{r}
+```{r, eval=FALSE}
 counts.4m[1:5,1:5]
 ```
 
 You can see that ENSMUSG00000000003 has `0` reads across the samples listed here. Let's find out how many genes are `0 counts` across all samples. 
 
-```{r}
+```{r, eval=FALSE}
 gene_sums <- data.frame(gene_id = rownames(counts),
                         sums    = Matrix::rowSums(counts))
 sum(gene_sums$sums == 0)
@@ -284,7 +284,7 @@ sum(gene_sums$sums == 0)
 We can see that 9691 (17.5%) genes have no reads at all. Let's filter these out. While it is not necessary to pre-filter low count genes before running the DESeq2 functions, there are two reasons which make pre-filtering useful: by removing rows in which there are very few reads, we reduce the memory size of the dds data object, and we increase the speed of the transformation and testing functions within DESeq2. It can also improve visualizations, as features with no information for differential expression are not plotted.
 
 Here we perform a minimal pre-filtering to keep only rows that have at least 10 reads in at least 6 separate samples.
-```{r}
+```{r, eval=FALSE}
 ddsHTSeq <- ddsHTSeq[rowSums(counts(ddsHTSeq) >= 10) >= 6,]
 ```
 
@@ -307,41 +307,41 @@ There are 24765 genes, or 44.6% (24765/55487).
 :::::::::::::::::::::::::::::::::::::::::
 
 Let's also make sure DESeq knows which group is our control or "reference" group. By default this is arbitrarily assigned to the first group in the factor. We can use the `relevel` function to set the reference group to "WT" (wild type). 
-```{r}
+```{r, eval=FALSE}
 ddsHTSeq$group <- relevel(ddsHTSeq$group,ref="WT")  
 ```
 
 Now we're ready to run the differential expression analysis; it'll take a few seconds to process this step:
-```{r}
+```{r, eval=FALSE}
 dds <- DESeq(ddsHTSeq, parallel = TRUE)
 ```
 
 What are the results that have been computed:
-```{r}
+```{r, eval=FALSE}
 resultsNames(dds)
 ```
 
 Because we specified `design = ~ group + sex` when setting up the DESeq object, we now have the results from these two contrasts. We can pull the results specifically for the 5xFAD vs WT comparison using the `results` function. The results table contains the log2 fold change, p-value, and adjusted p-value for each gene in the analysis.
 
-```{r}
+```{r, eval=FALSE}
 res <- results(dds, contrast = c('group','5xFAD','WT'), alpha=0.05)  
 fad.res.4m <- as.data.frame(res)
 ```
 
 We can get a summary of the DE results using the `summary` function:
-```{r}
+```{r, eval=FALSE}
 summary(res)
 ```
 
 Ok, there are a total of 425 significantly differentially expressed genes at 4 months of age when comparing 5xFAD to WT brain tissue. The vast majority of these (392) are expressed at higher levels in 5xFAD mice relative to WT. Let's take a look at the most significantly DE genes by ordering the results table by the adjusted p-value:
 
-```{r}
+```{r, eval=FALSE}
 fad.res.4m %>% arrange(padj) %>% select(log2FoldChange, padj) %>% head()
 ```
 
 This is a little difficult to interpret given all genes are identified by their ENSEMBL IDs. Let's map in the gene symbols using the `org.Mm.eg.db` package. This package contains a mapping of ENSEMBL IDs to gene symbols, and we can use the `AnnotationDbi::mapIds` function to get the gene symbols for our results table.
 
-```{r}
+```{r, eval=FALSE}
 fad.res.4m$symbol <- AnnotationDbi::mapIds(
   org.Mm.eg.db::org.Mm.eg.db,
   keys = rownames(fad.res.4m),
@@ -355,7 +355,7 @@ fad.res.4m %>% arrange(padj) %>% select(symbol, log2FoldChange, padj) %>% head()
 
 Ok! Now we can see that among the most significantly up-regulated genes in 5xFAD mice brains at 4 months of age are Psen1 and App (which we saw previously), along with Thy1, Cst7, Ccl6, and Clec7a. Let's plot all DE genes:
 
-```{r}
+```{r, eval=FALSE}
 ggplot(fad.res.4m, aes(log2FoldChange, -log10(padj)))+
   geom_vline(xintercept = 0, lwd = .1)+
   geom_point(alpha = .3, aes(color = (padj < 0.05 & abs(log2FoldChange) > log2(1.2)) ), show.legend = F)+
@@ -368,7 +368,7 @@ ggplot(fad.res.4m, aes(log2FoldChange, -log10(padj)))+
 
 Let's put it all together and compute results for each age group. This code does all of the steps outlined above for each age cohort. The input data, `DESeq` objects, and result tables are stored in columns of a data frame. Feel free to copy and paste this code, but investigate it and be sure you understand what each part is doing. It may take about a minute or two to complete.
 
-```{r}
+```{r, eval=FALSE}
 st = Sys.time()
   
 fad.deg = tibble(
@@ -405,7 +405,7 @@ print(ed)
 ```
 
 What information does the `fad.r` tibble contain? Let's take a look:
-```{r}
+```{r, eval=FALSE}
 glimpse(fad.deg)
 ```
 
@@ -413,7 +413,7 @@ The first column is the age brackets in integers. The second and third columns a
 
 So by running:
 
-```{r}
+```{r, eval=FALSE}
 summary(fad.deg$res[[2]])
 ```
 
@@ -492,7 +492,7 @@ It looks like there are 22, 22, and 424 overlapping down-regulated genes, respec
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 This is a good point to save these data before we move on.
-```{r}
+```{r, eval=FALSE}
 saveRDS(fad.deg, here::here("5xFAD_DESeq_analysis.rds"))
 ```
 
@@ -535,7 +535,7 @@ The first module block (consensus cluster A) is enriched for signatures of astro
 
 These AMP-AD co-expression modules are very useful for making comparisons between animal models and the human cohorts. In order to use these modules to make the comparisons, we'll need to download data pertaining to the 30 co-expression modules. These data are available from the Synapse data repository ([syn11932957](https://www.synapse.org/Synapse:syn11932957)); let's download and take a closer look at the data. 
 
-```{r AMP-AD1, warning=FALSE, message=FALSE}
+```{r AMP-AD1, warning=FALSE, message=FALSE, eval=FALSE}
 query <- syn$tableQuery("SELECT * FROM syn11932957")
 module_table <- read_csv(query$filepath)
 
@@ -550,22 +550,22 @@ Here you see 9 columns in this table. Columns we're interested in are:
 - column 9: `external_gene_name` are gene symbols  
 
 How many unique modules are in the table?
-```{r}
+```{r, eval=FALSE}
 length(unique(module_table$Module))
 ```
 
 What are the names of the modules?
-```{r}
+```{r, eval=FALSE}
 unique(module_table$Module)
 ```
 
 How many genes are in each module?
-```{r}
+```{r, eval=FALSE}
 table(module_table$Module)
 ```
 
 We can visualize this as bar plot using ggplot2 package. 
-```{r module_nGenes, fig.width=7}
+```{r module_nGenes, fig.width=7, eval=FALSE}
 ggplot(module_table,aes(y=Module)) + 
   geom_bar() + 
   theme_bw() 
@@ -591,7 +591,7 @@ dplyr::count(module_table ,Module)
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 We can also check the total number of unique genes in the table  
-```{r}
+```{r, eval=FALSE}
 length(unique(module_table$GeneID))
 ```
 
@@ -601,14 +601,14 @@ In the module table we've downloaded we have human ENSEMBL ids and human gene sy
 
 Orthology mapping can be tricky, but thankfully Wan *et al* have already identified mouse orthologs for each of the human genes using the HGNC Comparison of Orthology Predictions ([HCOP](https://www.genenames.org/tools/hcop/)) tool. While there are a variety of different ways to get data about gene orthology, for the sake of simplicity we are going to read that table from Synapse ([syn17010253](https://doi.org/10.7303/syn17010253.1)).   
 
-```{r AMP-AD2, warning=FALSE, message=FALSE}
+```{r AMP-AD2, warning=FALSE, message=FALSE, eval=FALSE}
 mouse.human.ortho <- syn$get("syn17010253")$path %>% read_tsv()
 
 head(mouse.human.ortho)
 ```
 
 There are 15 columns with various gene identifiers for each species. We'll add mouse gene symbols from the ortholog table to the module table by matching the human ENSEMBL IDs from both tables (i.e. `GeneID` from the module table and `human_ensembl_gene` from the orthology table).  
-```{r , warning=FALSE, message=FALSE}
+```{r , warning=FALSE, message=FALSE, eval=FALSE}
 module_table$Mouse_gene_symbol <-
   mouse.human.ortho$mouse_symbol[
     match(module_table$GeneID,mouse.human.ortho$human_ensembl_gene)
@@ -616,19 +616,19 @@ module_table$Mouse_gene_symbol <-
 ```
 
 Taking a look at the module table, we can see the new column of mouse orthologs we just added.  
-```{r}
+```{r, eval=FALSE}
 head(module_table)
 ```
 
 Some genes don't have identified orthologs. Also there's some redundant information. Let's only keep the columns of interest and rows that contain a mouse ortholog mapping:  
-```{r}
+```{r, eval=FALSE}
 ampad_modules <- module_table %>%
   distinct(tissue = brainRegion, module = Module, gene = GeneID, Mouse_gene_symbol) %>%
   filter(Mouse_gene_symbol != "")
 ```
 
 Take a look at this new data table: 
-```{r}
+```{r, eval=FALSE}
 head(ampad_modules)
 ```
 
@@ -661,13 +661,13 @@ Now we know the genes that are in each AMP-AD co-expression cluster, along with 
 
 We'll download the results from differential expression analysis of reprocessed AMP-AD RNA-seq data (all 7 brain regions). Log fold change values for human transcripts can be obtained from Synapse ([syn14237651](https://www.synapse.org/#!Synapse:syn14237651)).  
 
-```{r AMP-AD3, warning=FALSE, message=FALSE}
+```{r AMP-AD3, warning=FALSE, message=FALSE, eval=FALSE}
 ampad_modules_raw <- read_tsv(syn$get("syn14237651")$path)
 head(ampad_modules_raw)
 ```
 
 Data from which tissues are in this table?  
-```{r}
+```{r, eval=FALSE}
 unique(ampad_modules_raw$Tissue)
 ```
 
@@ -675,13 +675,13 @@ All 7 brain regions are represented.
 
 The AMP-AD data has been processed many ways and using different models and comparisons. Let's take a look at how many ways the data have been analyzed:  
 
-```{r}
+```{r, eval=FALSE}
 ampad_modules_raw %>% select(Model, Comparison) %>% distinct()
 ```
 
 For our analyses we'll use data from the "Diagnosis" model and comparisons between AD cases vs controls. We'll filter the table for these conditions and only keep the three columns we'll need: `Tissue`, `Gene` and `logFC`.  
 
-```{r AMP-AD4, warning=FALSE, message=FALSE}
+```{r AMP-AD4, warning=FALSE, message=FALSE, eval=FALSE}
 ampad_fc <- ampad_modules_raw %>%
   as_tibble() %>%
   filter(Model == "Diagnosis", Comparison == "AD-CONTROL") %>%
@@ -694,7 +694,7 @@ ampad_fc <- ampad_modules_raw %>%
 
 Next, we will combine the fold change table we just downloaded (`ampad_fc`) and module table from before (`ampad_modules`). First, let's look at both tables to check how can we merge them together?
 
-```{r}
+```{r, eval=FALSE}
 head(ampad_fc)
 head(ampad_modules)
 ```
@@ -702,20 +702,20 @@ The columns common to both tables are `gene` (the human Ensembl gene IDs) and `t
 
 **Reminder**: Each gene can be present in multiple brain regions, but should only be in one module per brain region. Let's double check using the first gene in the table:
 
-```{r}
+```{r, eval=FALSE}
 ampad_modules[ampad_modules$gene %in% "ENSG00000168439",]
 ```
 
 This gene is present in six different co-expression modules all from different brain regions. You can do this for any other gene as well.
 
 We'll merge the two tables using the `dplyr::inner_join` function:
-```{r AMP-AD5, warning=FALSE, message=FALSE}
+```{r AMP-AD5, warning=FALSE, message=FALSE, eval=FALSE}
 ampad_modules_fc <- inner_join(ampad_modules, ampad_fc, by = c("gene", "tissue")) %>% 
   dplyr::select(symbol = Mouse_gene_symbol, module, ampad_fc) 
 ```
 
 Take a look at the new table we just made:  
-```{r}
+```{r, eval=FALSE}
 head(ampad_modules_fc)
 ```
 
@@ -724,7 +724,7 @@ We will use the data in `ampad_modules_fc` to compare with log fold change data 
 #### Preparing module information for correlation plots 
 
 Let's package up these data and save this progress so far. This is some manual book-keeping to arrange the modules into consensus clusters for plotting later. You can just copy-paste this code into your `Rstudio` session.
-```{r module}
+```{r module, eval=FALSE}
 cluster_a <- tibble(
   module = c("TCXblue", "PHGyellow", "IFGyellow"),
   cluster = "Consensus Cluster A (ECM organization)",
@@ -1151,7 +1151,7 @@ gene.list <- fad.deg %>%
 
 We'll also need a list of GO terms and the genes annotated. We can get this from the `org.Mm.eg.db` annotation package using the `AnnotationDbi::select` function
 
-```{r}
+```{r, eval=FALSE}
 # Get GO annotations
 go.terms <- AnnotationDbi::select(
     org.Mm.eg.db, 
@@ -1171,7 +1171,7 @@ go.sets.filtered <- go.gene.sets[sapply(go.gene.sets, function(x) length(x) >= m
 
 Now we'll test for enrichment:  
 
-```{r warning=FALSE, message=FALSE}
+```{r warning=FALSE, message=FALSE, eval=FALSE}
 gse.enr <- fgsea::fgseaMultilevel( 
     pathways = go.sets.filtered,
     stats = gene.list, 
@@ -1182,13 +1182,13 @@ gse.enr <- fgsea::fgseaMultilevel(
 
 Let's take a look
 
-```{r}
+```{r, eval=FALSE}
 gse.enr %>% arrange(padj) %>% head(n = 10)
 ```
 
 This isn't especially informative without the GO term names. Let's pull those in
 
-```{r}
+```{r, eval=FALSE}
 # get term names from the GO.db package
 go_term_map <- AnnotationDbi::select(
     GO.db::GO.db,
@@ -1208,7 +1208,7 @@ This is more helpful. We can see that the GO terms associated with up-regulated 
 
 How many significant terms are identified:  
 
-```{r}
+```{r, eval=FALSE}
 gse.enr %>% filter(padj <= 0.05) %>% pull(pathway) %>% unique() %>% length()
 ```
 
@@ -1245,7 +1245,7 @@ Increasing the `nPermSimple` parameter increases the number of permutations perf
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 Let's compute the enriched terms for all age groups:
-```{r}
+```{r, eval=FALSE}
 fad.enr <- fad.deg %>%
   filter(!is.na(symbol)
           , padj <= 0.05
@@ -1315,7 +1315,7 @@ The ESSJ TREAT-AD center has developed approaches to group terms within each bio
 ### Download and explore the biological domain annotations
 
 First let's download the biodomain definition file from synapse.  
-```{r}
+```{r, eval=FALSE}
 # biodomain definitions
 biodom <- readRDS(syn$get('syn25428992')$path)
 
@@ -1324,14 +1324,14 @@ dom.lab <- read_csv(syn$get('syn26856828')$path)
 ```
 
 What is in the `dom.lab` file?
-```{r}
+```{r, eval=FALSE}
 glimpse(dom.lab)
 ```
 
 This file contains some useful standardized abbreviations and colors that will be useful as we work with and plot domain information later.
 
 What is in the `biodom` file?
-```{r}
+```{r, eval=FALSE}
 glimpse(biodom)
 ```
 
@@ -1339,7 +1339,7 @@ You can see the file is a list of GO term accessions (`GO_ID`) and names (`GOter
 
 We can see how many GO terms are annotated to each biodomain: 
 
-```{r}
+```{r, eval=FALSE}
 biodom %>% 
   group_by(Biodomain) %>% 
   summarise(n_term = length(unique(GO_ID))) %>% 
@@ -1350,7 +1350,7 @@ The biodomains range in size from `Tau Homeostasis` (10 terms) up to `Synapse` (
 
 What about the size of the subdomains? For simplicity let's focus on the Subdomains within the `Synapse` domain.
 
-```{r}
+```{r, eval=FALSE}
 biodom %>% 
   filter(Biodomain == 'Synapse') %>% 
   group_by(Subdomain) %>% 
@@ -1362,7 +1362,7 @@ There are 8 subdomains within the `Synapse` biodomain, plus a set of terms that 
 
 We can also investigate the individual genes annotated to each biodomain GO term.
 
-```{r}
+```{r, eval=FALSE}
 biodom %>% filter(GOterm_Name == 'amyloid-beta formation') %>% pull(symbol) %>% unlist()
 ```
 
@@ -1372,7 +1372,7 @@ So the genes associated with `amyloid-beta formation` within the `APP Metabolism
 
 Let's re-characterize the 5xFAD functional enrichments we computed previously with the biological domain annotations and see if we can get more context about what is changing in that model. We'll focus on the GSEA results and start by annotating the results with biodomain groupings.  
 
-```{r}
+```{r, eval=FALSE}
 gse.enr.bd = gse.enr %>% 
   left_join(., biodom %>% select(Biodomain, pathway = GO_ID), by = 'pathway') %>% 
   relocate(Biodomain)
@@ -1382,14 +1382,14 @@ head(gse.enr.bd %>% select(pathway, TERM, Biodomain, padj, NES), n = 10)
 
 Not all of the enriched terms are annotated to a biological domain. Some terms are too broad and not specific (e.g. 'cell mophogenesis' or 'MAPK cascade'), while others may not have been captured by a biological domain annotation yet (e.g. 'transcription cis-regulatory region binding'). *Remember* that the conception of the biodomains involved a requirement that they be modifiable, and these terms may be added to the biodomain definintions in the future. Let's modify the `Biodomain` value for terms that aren't annotated to a domain to 'none'.  
 
-```{r}
+```{r, eval=FALSE}
 gse.enr.bd$Biodomain[is.na(gse.enr.bd$Biodomain)] <- 'no domain'
 head(gse.enr.bd %>% select(pathway, TERM, Biodomain, padj, NES), n = 10)
 ```
 
 How many terms are enriched from each domain?
 
-```{r}
+```{r, eval=FALSE}
 bd.tally = tibble(domain = c(unique(biodom$Biodomain), 'no domain')) %>% 
   rowwise() %>% 
   mutate(
@@ -1403,7 +1403,7 @@ Many enriched terms don't map to a domain (`r bd.tally %>% filter(domain == 'no 
 
 We can plot the enrichment results, stratified by biodomain:  
 
-```{r biodom_plot_1, fig.width=7, fig.height=5, fig.show='hide', warning=F}
+```{r biodom_plot_1, fig.width=7, fig.height=5, fig.show='hide', warning=F, eval=FALSE}
 enr.bd_plot <- full_join(gse.enr.bd, dom.lab, by = c('Biodomain' = 'domain')) %>% 
   filter(!is.na(Biodomain)) %>% 
   mutate(Biodomain = factor(Biodomain, levels = arrange(bd.tally, n_sig_term) %>% pull(domain))) %>% 
@@ -1424,7 +1424,7 @@ ggplot(enr.bd_plot, aes(NES, Biodomain)) +
 This makes it really clear that in the 6 month old 5xFAD mice, the enriched `Immune Response` domain terms are all associated with up-regulated genes, while the enriched `Synapse` domain terms are associated with a mix of up- and down-regulated genes. It also highlights the several other domains with significantly enriched terms (e.g.  `Proteostasis`, `Structural Stabilization`, `Lipid Metabolism`, `Endolysosome`, etc; even `APP Metabolism`). 
 
 Now let's look across age groups to see how domain enrichments change:
-```{r biodom_plot_2, warning=F, fig.width=12, fig.height=4, fig.show='hide'}
+```{r biodom_plot_2, warning=F, fig.width=12, fig.height=4, fig.show='hide', eval=FALSE}
 enr.bd_plot <- fad.enr %>% select(age, res) %>% unnest(res) %>% 
   full_join(., biodom %>% select(pathway = GO_ID, Biodomain, Subdomain)) %>% 
   full_join(., dom.lab, by = c('Biodomain' = 'domain')) %>% 
@@ -1454,7 +1454,7 @@ ggplot(enr.bd_plot, aes(NES, Biodomain)) +
 The earliest transcriptomic changes in the 5xFAD animals are associated with `Immune Response` and `Lipid Metabolism` domain terms. By 6 months, there are enrichments for several other domains (as above), and by 10 months the term enrichments are even more exaggerated (i.e. *more* significance, larger NES values, etc). 
 
 We can also break down these results by sub-domain to get a more clear idea of the processes affected in each case
-```{r biodom_plot_3, warning=F, fig.width=12, fig.height=10, fig.show='hide'}
+```{r biodom_plot_3, warning=F, fig.width=12, fig.height=10, fig.show='hide', eval=FALSE}
 enr.bd_plot <- fad.enr %>% select(age, res) %>% unnest(res) %>% 
   full_join(., biodom %>% select(pathway = GO_ID, Biodomain, Subdomain)) %>% 
   full_join(., dom.lab, by = c('Biodomain' = 'domain')) %>% 
@@ -1577,7 +1577,7 @@ Now we know which domain processes are affected in the mouse model, let's consid
 
 First let's get the human GO set gene annotations
 
-```{r}
+```{r, eval=FALSE}
 # Get GO annotations
 hs.go.terms <- AnnotationDbi::select(
     org.Hs.eg.db, 
@@ -1597,7 +1597,7 @@ hs.go.sets.filtered <- hs.go.gene.sets[sapply(hs.go.gene.sets, function(x) lengt
 
 Now we can run the enrichments
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
 hs.gsea <- ampad_modules_raw %>% 
   filter(
     Model == "Diagnosis", 
@@ -1635,7 +1635,7 @@ hs.gsea <- ampad_modules_raw %>%
 
 Let's map the biodomains onto the enriched GO terms, and plot the results
 
-```{r biodom_plot_hs, fig.width=9, fig.height=5, fig.show='hide'}
+```{r biodom_plot_hs, fig.width=9, fig.height=5, fig.show='hide', eval=FALSE}
 enr.bd_plot <- hs.gsea %>% select(Study, res) %>% unnest(res) %>% 
   left_join(., biodom %>% select(Biodomain, Subdomain, pathway = GO_ID), by = 'pathway') %>% 
   full_join(., dom.lab, by = c('Biodomain' = 'domain')) %>% 
@@ -1664,7 +1664,7 @@ We can see fairly similar domain term enrichments from the transcriptomic data a
 
 Now lets compare enrichments between species. First we'll combine the enrichment results for both species and plot them side-by-side:
 
-```{r  fig.width=12, fig.height=4, warning=F}
+```{r  fig.width=12, fig.height=4, warning=F, eval=FALSE}
 enr.bd_plot <-  
   bind_rows(
     fad.enr %>% mutate(model = str_c('5xFAD, ',age)) %>% select(model, res) %>% unnest(res),
@@ -1695,7 +1695,7 @@ ggplot(enr.bd_plot, aes(NES, Biodomain)) +
 
 Ok, there's definitely similarity in terms of the direction of enrichment for domain terms between the human and mouse data. But how can we assess if the same processes are affected in both mouse and human? Well, let's take a look at `Immune Response` terms more specifically. 
 
-```{r fig.width=8, fig.height=3}
+```{r fig.width=8, fig.height=3, eval=FALSE}
 comb.gsea <- fad.enr %>% mutate(model = str_c('5xFAD, ',age)) %>% select(model, res) %>% unnest(res) %>% 
   inner_join(., hs.gsea$res[[1]] %>% select(pathway, hs.NES = NES, hs.padj = padj)) %>% 
   left_join(., biodom %>% select(Biodomain, Subdomain, pathway = GO_ID), by = 'pathway') %>% 
@@ -1710,7 +1710,7 @@ ggplot(
 
 In this case, there are several `Immune Response` terms that are significantly enriched in both datasets and all overlapping terms are enriched with a positive NES value, indicating they are up-regulated processes in both AD vs Control and the 5xFAD vs WT. We can more systematically compare enriched terms within each Biodomain. First, lets generate a list of GO terms that is specific to each Biodomain and each Subdomain. 
 
-```{r}
+```{r, eval=FALSE}
 # curate biodomain and sub-domain gene lists
 bd.terms <- tibble( set = unique(biodom$Biodomain) ) %>%
   mutate( terms = map(set, ~ biodom %>% filter(Biodomain == .x) %>% pull(GO_ID)) )
@@ -1734,7 +1734,7 @@ rm(bd.terms, sd.terms)
 
 Next let's combine all of the human GSEA results with each of the 5xFAD age-stratified GSEA results. Any term that is enriched with an adjusted p-value > 0 we will set the NES value to 0 and the p-value to 1.
 
-```{r}
+```{r, eval=FALSE}
 fad.vs.amp <- crossing(fad = str_c('5xFAD, ', fad.enr$age), 
                        amp = str_c(hs.gsea$Study,', ', hs.gsea$Tissue) ) %>%
   mutate(data = map2(fad, amp, ~ {
@@ -1753,14 +1753,14 @@ fad.vs.amp <- crossing(fad = str_c('5xFAD, ', fad.enr$age),
 ```
 
 Then we can go through each of the GO term lists and perform the correlation analysis. First we'll make a list combining all mouse comparisons and each GO term list to test using the `crossing` function:
-```{r}
+```{r, eval=FALSE}
 comp <- crossing(fad.vs.amp, set = bd.term.list$set) 
 
 head(comp)
 ```
 
 Now we can add a column for the term sub-set to consider for each correlation:
-```{r}
+```{r, eval=FALSE}
 comp <- comp %>% 
     mutate( data = map2(data, set, ~ .x %>% filter(GOID %in% bd.term.list$terms[[which(bd.term.list$set == .y)]])),
             n.terms = map_dbl(data, ~nrow(.x)),
@@ -1774,7 +1774,7 @@ For several term sets there aren't many terms enriched. We won't be able to comp
 
 For the correlation we'll use a nonparametric, rank-based Kendall correlation. Given that we don't expect NES values to be normally distributed, and that all we're really care to know is whether the terms are enriched in the same direction or opposite directions between mouse and human, this will do the job. 
 
-```{r}
+```{r, eval=FALSE}
 comp <- comp %>% 
   filter(n.terms > 2) %>% 
   mutate(
@@ -1788,7 +1788,7 @@ head(comp)
 
 Ok, now let's take a look at the correlation among enriched Biodomain terms (without an `_` character in the `set` name):
 
-```{r fig.height=6}
+```{r fig.height=6, eval=FALSE}
 tmp <- comp %>% 
   filter(grepl('_',set)==F) %>% 
   mutate(fad = factor(fad, c('5xFAD, 10m','5xFAD, 6m','5xFAD, 4m')))
@@ -1826,7 +1826,7 @@ The largest overlap is with the `Immune Response` domain terms, which are positi
 
 We can also look at the subdomains to get a more specific picture. Let's filter to only include significant correlations or any correlation with a tau statistic with an absolute value > 0.2:
 
-```{r fig.width=8, fig.height=10}
+```{r fig.width=8, fig.height=10, eval=FALSE}
 l <- comp %>% 
   filter(
     grepl('_',set)==T, 
@@ -1876,7 +1876,7 @@ ggplot(tmp, aes(fad,set1)) +
 This tells us that the positive correlations in `Immune Response` are primarily due to terms within "cytokine production", "neuroinflammatory response", and "behavioral defense response", while the correlations in the `Apoptosis` domain are primarily related to "NF-kappaB signaling", and the late `Vasculature` correlations have to do with "angiogenesis". 
 
 Are the phagocytosis subdomain terms really negatively correlated?
-```{r}
+```{r, eval=FALSE}
 comp %>% filter(set == 'IR_phagocytosis', amp == 'MAYO, TCX', fad == '5xFAD, 10m') %>% pull(data) %>% .[[1]]
 ```
 
@@ -2104,6 +2104,6 @@ Overall, by aligning human and mouse omics signatures through the lens of domain
 
 ## Session Info
 
-```{r session_info,collapse=TRUE}
+```{r session_info, collapse=TRUE}
 sessionInfo()
 ```
