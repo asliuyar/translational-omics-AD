@@ -24,14 +24,14 @@ exercises: 10
 # Differential Expression Analysis
 
 ```{r, echo=FALSE}
-suppressPackageStartupMessages(library("BiocManager"))
-suppressPackageStartupMessages(library("clusterProfiler"))
+#suppressPackageStartupMessages(library("BiocManager"))
+#suppressPackageStartupMessages(library("clusterProfiler"))
 suppressPackageStartupMessages(library("DESeq2"))
-suppressPackageStartupMessages(library("AnnotationDbi"))
-suppressPackageStartupMessages(library("org.Mm.eg.db"))
-suppressPackageStartupMessages(library("org.Hs.eg.db"))
-suppressPackageStartupMessages(library("GO.db"))
-suppressPackageStartupMessages(library("EnhancedVolcano"))
+#suppressPackageStartupMessages(library("AnnotationDbi"))
+#suppressPackageStartupMessages(library("org.Mm.eg.db"))
+#suppressPackageStartupMessages(library("org.Hs.eg.db"))
+#suppressPackageStartupMessages(library("GO.db"))
+#suppressPackageStartupMessages(library("EnhancedVolcano"))
 suppressPackageStartupMessages(library("tidyverse"))
 suppressPackageStartupMessages(library("dplyr"))
 ```
@@ -267,7 +267,8 @@ meta.12M.Male
 ```
 
 ```{r}
-dat <- as.matrix(rawdata[ , colnames(rawdata) %in% rownames(meta.12M.Male)])
+dat <- as.matrix(rawdata[ , colnames(rawdata) %in%
+                            rownames(meta.12M.Male)])
 colnames(dat)
 ```
 
@@ -370,7 +371,7 @@ We’ll use a package to translate mouse ENSEMBL IDS to gene names. Run this
 function and they will be called up when assembling results from the 
 differential expression analysis.
 
-```{r}
+```{r, eval=FALSE}
 map_function.df <- function(x, inputtype, outputtype) {
                             mapIds( org.Mm.eg.db,
                                     keys      = row.names(x),
@@ -386,7 +387,7 @@ Here we will call the function to get the `symbol` names of the genes
 incorporated into the results table, along with the columns we are most 
 interested in.
 
-```{r}
+```{r, eval=FALSE}
 All_res <- as.data.frame(res) %>% 
            
            # run map_function to add symbol of gene corresponding to ENSEMBL ID
@@ -410,18 +411,18 @@ head(All_res)
 
 Let's subset all the genes with a p-value < 0.05.
 
-```{r}
+```{r, eval=FALSE}
 dseq_res <- subset(All_res[order(All_res$padj), ], padj < 0.05)
 ```
 
 Wow! We have a lot of genes with apparently very strong statistically
 significant differences between the control and 5xFAD carrier.
 
-```{r}
+```{r, eval=FALSE}
 dim(dseq_res)
 ```
 
-```{r}
+```{r, eval=FALSE}
 head(dseq_res)
 ```
 
@@ -444,7 +445,7 @@ single data frame, data matrix, or tibble of test results is required,
 containing point labels, log2FC, and adjusted or unadjusted p-values. The 
 default cut-off for log2FC is \>\|2\|; the default cut-off for p-value is 10e-6.
 
-```{r}
+```{r, eval=FALSE}
 EnhancedVolcano(All_res,
                 lab            = (All_res$symbol),
                 x              = 'log2FoldChange',
@@ -693,7 +694,7 @@ We may wish to look for enrichment of biological pathways in a list of
 differentially expressed genes. Here we will test for enrichment of KEGG 
 pathways using using the `enrichKEGG` function in the `clusterProfiler` package.
 
-```{r}
+```{r, eval=FALSE}
 dat <- list(FAD_M_4 = subset(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`[order(DE_5xFAD.list$`5XFAD_carrier-male-4 mo`$padj), ],
                              padj < 0.05) %>% 
             pull(EntrezGene),
@@ -717,7 +718,7 @@ enrich_pathway@compareClusterResult$Description <-
 Let’s plot top enriched functions using the `dotplot` function of the
 `clusterProfiler` package.
 
-```{r}
+```{r, eval=FALSE}
 clusterProfiler::dotplot(enrich_pathway,
                          showCategory = 10,
                          font.size    = 14,
