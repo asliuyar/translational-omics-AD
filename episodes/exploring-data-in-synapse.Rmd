@@ -23,9 +23,9 @@ exercises: 10
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(knitr))
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install()
+# if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+# BiocManager::install()
 ```
 
 ## Working with AD Portal metadata 
@@ -205,7 +205,7 @@ head(covars_5XFAD)
 
 We will save `joined_meta` for the next lesson.
 
-```{r}
+```{r, eval=FALSE}
 saveRDS(covars_5XFAD, file = "data/covars_5XFAD.rds")
 ```
 
