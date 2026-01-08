@@ -24,7 +24,7 @@ exercises: 10
 # Differential Expression Analysis
 
 ```{r, echo=FALSE}
-#suppressPackageStartupMessages(library("BiocManager"))
+suppressPackageStartupMessages(library("BiocManager"))
 #suppressPackageStartupMessages(library("clusterProfiler"))
 suppressPackageStartupMessages(library("DESeq2"))
 #suppressPackageStartupMessages(library("AnnotationDbi"))
@@ -481,7 +481,6 @@ dds <- DESeq(ddsHTSeq, parallel = TRUE)
 
 ```{r}
 vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
-
 plotPCA(vsd, intgroup = c("genotype", "sex", "timepoint"))
 ```
 
@@ -573,7 +572,6 @@ metadata$Group <- paste0(metadata$genotype,
                          metadata$sex,
                          "-",
                          metadata$timepoint)
-
 unique(metadata$Group)
 ```
 

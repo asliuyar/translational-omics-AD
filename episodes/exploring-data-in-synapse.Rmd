@@ -23,6 +23,7 @@ exercises: 10
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(lubridate))
 # if (!require("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
 # BiocManager::install()
@@ -179,8 +180,6 @@ every study in the AD Knowledge Portal, allowing you to filter
 individuals and specimens as needed based on your analysis criteria!
 
 ```{r}
-library(lubridate)
-
 # convert columns of strings to month-date-year format
 joined_meta_time <- joined_meta %>% 
   mutate(dateBirth = mdy(dateBirth), dateDeath = mdy(dateDeath)) %>% 
@@ -278,8 +277,8 @@ Portal query. Opening that file lets us see which specimens are associated with
 which files:
 
 ```{r, eval=FALSE}
-annotations_table <- read_csv(query$filepath, show_col_types = FALSE)
-
+annotations_table <- read_csv(query$filepath, 
+                              show_col_types = FALSE)
 annotations_table
 ```
 
