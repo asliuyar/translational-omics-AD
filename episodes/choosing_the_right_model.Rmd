@@ -31,18 +31,18 @@ Authors: Ravi Pandey & Greg Cary, Jackson Laboratory
 ### Load required libraries
 
 ```{r libs, warning=FALSE, include=FALSE}
-suppressPackageStartupMessages(library(synapser))
+#suppressPackageStartupMessages(library(synapser))
 suppressPackageStartupMessages(library("ggplot2"))
-suppressPackageStartupMessages(library("AnnotationDbi"))
-suppressPackageStartupMessages(library("org.Mm.eg.db"))
-suppressPackageStartupMessages(library("org.Hs.eg.db"))
-suppressPackageStartupMessages(library("GO.db"))
-suppressPackageStartupMessages(library("cowplot"))
+#suppressPackageStartupMessages(library("AnnotationDbi"))
+#suppressPackageStartupMessages(library("org.Mm.eg.db"))
+#suppressPackageStartupMessages(library("org.Hs.eg.db"))
+#suppressPackageStartupMessages(library("GO.db"))
+#suppressPackageStartupMessages(library("cowplot"))
 suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(clusterProfiler))
+#suppressPackageStartupMessages(library(clusterProfiler))
 suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(tidyverse))
-synLogin(silent=TRUE)
+#synLogin(silent=TRUE)
 theme_set(theme_bw())
 #setwd("/Users/pandera/Library/CloudStorage/Box-Box/Ravi Pandey Workspace/Miscellaneous/AD_Workshop2023/")
 ```
@@ -50,7 +50,7 @@ theme_set(theme_bw())
 ```{r libs}
 library(dplyr)
 library(tibble)
-library(limma)
+#library(limma)
 library(corrplot)
 library(ggplot2)
 library(tidyr)
@@ -141,7 +141,7 @@ The Synapse command line client is implemented in Python and comes with the Syna
 
 
 First, Define the data directory:
-```{r}
+```{r, eval=FALSE}
 datadir <- "/sbgenomics/projects/asliuyar/asliuyar/ad-omics/data/7_ADsubtypes_Pandey_Cary/"
 ```
 
@@ -165,18 +165,20 @@ synapse get syn59479928
 Above command will download the relevent file in your working directory.
 
 Now, let's read the downloaded file
-```{r}
-NS.INTENSITY <- read.csv(paste0(datadir,"Nanostringdata_logNormalized_BatchCorrected_MergedTg_LOAD1_PrimaryScreenPaper.csv"),check.names = F,row.names=1)
+```{r eval=FALSE}
+NS.INTENSITY <- read.csv(paste0(datadir,                            "Nanostringdata_logNormalized_BatchCorrected_MergedTg_LOAD1_PrimaryScreenPaper.csv"),
+                         check.names = F,
+                         row.names=1)
 ```
 
 Let’s examine the data,
-```{r}
+```{r eval=FALSE}
 NS.INTENSITY [1:5,1:9]
 ```
 
 Here, row's represent gene names and columns are all mouse samples.
 
-```{r}
+```{r eval=FALSE}
 dim(NS.INTENSITY)
 ```
 
@@ -216,11 +218,13 @@ ind_meta_nano <- bio_meta_nano.df %>% left_join(ind_meta, by= "individualID") %>
 ```
 
 
-```{r}
-metadata <- read.csv(paste0(datadir,"metadata_NSdata.csv"),check.names = F)
+```{r eval=FALSE}
+metadata <- read.csv(paste0(datadir,
+                            "metadata_NSdata.csv"),
+                     check.names = F)
 ```
 
-```{r}
+```{r eval=FALSE}
 head(metadata)
 ```
 
@@ -231,30 +235,37 @@ Binding density can be influenced by several factors, including RNA input mass, 
 
 
 We can modify the metadata to only include covariates we'll need for this analysis
-```{r}
-metadata <- metadata %>% dplyr::select(Sample, Sex=SEX, Age=AGE,Genotype,BD=BindingDensity)
+```{r eval=FALSE}
+metadata <- metadata %>% 
+  dplyr::select(Sample, Sex=SEX, Age=AGE,
+                Genotype, BD=BindingDensity)
 ```
 
-```{r}
+```{r eval=FALSE}
 head(metadata)
 ```
 
 Using `pivot_longer()` function to "lengthens" data i.e. increasing the number of rows and decreasing the number of columns.
-```{r}
-NS.INTENSITY.long <- NS.INTENSITY %>% tibble::rownames_to_column(.,"symbol") %>% pivot_longer(cols=-symbol,names_to="Sample",values_to="value")
+```{r eval=FALSE}
+NS.INTENSITY.long <- NS.INTENSITY %>%
+  tibble::rownames_to_column(., "symbol") %>%
+  pivot_longer(cols=-symbol,
+               names_to="Sample",
+               values_to="value")
 ```
 
-```{r}
+```{r eval=FALSE}
 head(NS.INTENSITY.long)
 ```
 
 Next, we will join the countdata with metadata by `Sample` column  
-```{r}
-mydat_with_metadata <- NS.INTENSITY.long %>% left_join(metadata,by="Sample")
+```{r eval=FALSE}
+mydat_with_metadata <- NS.INTENSITY.long %>%
+  left_join(metadata,by="Sample")
 ```
 
 Let's check the joined data table
-```{r}
+```{r eval=FALSE}
 head(mydat_with_metadata)
 ```
 
@@ -262,7 +273,7 @@ head(mydat_with_metadata)
 
 Let's create design matrix for multiple regression analyses. In this formulation, B6J will be used as the control for the 5xFAD and LOAD1 mouse models, whereas LOAD1 served as controls for GWAS-based models in order to estimate the effects of individual variants. 
 
-```{r}
+```{r eval=FALSE}
 mydat_with_design <- mydat_with_metadata %>% 
   mutate(sex = ifelse(Sex %in% "M",1,0))  %>% 
   mutate(APOE4.Trem2.R47H=ifelse(Genotype %in% c("APOE4Trem2","LOAD1","A/T.MIXED-WT","A/T.IL1RAP-KO","A/T.CR1<B>","LOAD1.Shc2","LOAD1.Slc6a17","LOAD1.Erc2","A/T.SNX1-KI","A/T.CLASP2-KI","A/T.MTHFR-KI","A/T.ABCA7-KI","A/T.CEACAM1-KO","A/T.PLCG2.M28L","hATA","HFD.A/T.MIXED-WT","HFD.A/T.MTHFR-KI","HFD.hATA","HFD.A/T.PLCG2.M28L","A/T.SORL1","A/T.MTMR4","A/T.MEOX2"),1,0)) %>%
@@ -280,7 +291,7 @@ mydat_with_design <- mydat_with_metadata %>%
   dplyr::select(-Sex,-Genotype)
 ```
 
-```{r}
+```{r eval=FALSE}
 head(mydat_with_design)
 ```
 
@@ -290,7 +301,7 @@ Now, we will determine the effects of each factor (sex and genetic variants) by 
 
 **We are going to focus on only 12 months old mice data.**
 
-```{r}
+```{r eval=FALSE}
 lm.results <- mydat_with_design %>% filter(Age == 12) %>% split(.$symbol) %>% 
   map(
     ~ lm(
@@ -303,40 +314,62 @@ lm.results <- mydat_with_design %>% filter(Age == 12) %>% split(.$symbol) %>%
 Results of regression analysis for each gene for each factor is stored in `lm.results`. 
 
 Let's check the result:
-```{r}
+```{r eval=FALSE}
 lm.results[1]
 ```
 
 
 Now, we will extract effect i.e. regression coefficients for each gene for each factor from output and will store in a data frame.
-```{r}
-effects <- as.data.frame(bind_rows( lapply(lm.results, function(x) x$coefficients[,"Estimate"] ))) %>% mutate(names = names(lm.results)) %>% column_to_rownames(.,var="names")
+```{r eval=FALSE}
+effects <- as.data.frame(bind_rows( 
+  lapply(lm.results, function(x) x$coefficients[,"Estimate"] ))
+  ) %>% 
+  mutate(names = names(lm.results)) %>%
+  column_to_rownames(.,var="names")
 ```
 
 let's see few entries of this data
-```{r}
+```{r eval=FALSE}
 head(effects)
 ```
 
 rename columns for clear annotation
-```{r}
-colnames(effects) <- c("(Intercept)", "Sex (Male)", "BD", "LOAD1","5xFAD",
-                                          "Mthfr*677C>T", "Abca7*A1527G", "Ceacam1 KO", "Snx1*D465N", "Clasp2*L163P", 
-                                          "Plcg2*M28L","Sorl1*A528T" ,"Mtmr4*V297G","Shc2*V433M","Meox2 KO (HET)","Slc6a17*P61P")
+```{r eval=FALSE}
+colnames(effects) <- c("(Intercept)", 
+                       "Sex (Male)", 
+                       "BD", 
+                       "LOAD1",
+                       "5xFAD",
+                       "Mthfr*677C>T", 
+                       "Abca7*A1527G", 
+                       "Ceacam1 KO", 
+                       "Snx1*D465N", 
+                       "Clasp2*L163P", 
+                       "Plcg2*M28L",
+                       "Sorl1*A528T",
+                       "Mtmr4*V297G",
+                       "Shc2*V433M",
+                       "Meox2 KO (HET)",
+                       "Slc6a17*P61P"
+                       )
 ```
 
-```{r}
+```{r eval=FALSE}
 head(effects)
 ```
 
 we will only keep factor of interest.
-```{r}
-ns_effects <- effects %>% tibble::rownames_to_column(.,"symbol") %>%   dplyr::select(-"(Intercept)",-"BD") %>% 
-  pivot_longer(cols=-symbol,names_to="Variant",values_to="value")
+```{r eval=FALSE}
+ns_effects <- effects %>% 
+  tibble::rownames_to_column(.,"symbol") %>%
+  dplyr::select(-"(Intercept)", -"BD") %>% 
+  pivot_longer(cols=-symbol,
+               names_to="Variant",
+               values_to="value")
 ```
 
 
-```{r}
+```{r eval=FALSE}
 head(ns_effects)
 ```
 
@@ -361,49 +394,54 @@ Log2FC values for human transcripts were obtained through the AD Knowledge Porta
 Let's start!
 
 #### Loading AMP-AD module data
-```{r}
+```{r eval=FALSE}
 lnames = load(paste0(datadir,"AMPADModuleData_Correlation.RData"))
 ```
 
 Let's check AMP-AD data
-```{r}
+```{r eval=FALSE}
 lnames
 ```
 
-```{r}
+```{r eval=FALSE}
 head(ampad_modules_fc)
 ```
 
 
 First, we will join regression coefficients  and human ampad_modules_fc log fold change datasets for all genes. 
-```{r}
-ns_vs_ampad_fc <- ns_effects  %>% inner_join(ampad_modules_fc, by = c("symbol"))
+```{r eval=FALSE}
+ns_vs_ampad_fc <- ns_effects  %>% 
+  inner_join(ampad_modules_fc, 
+             by = c("symbol")
+             )
 ```
 
-```{r}
+```{r eval=FALSE}
 head(ns_vs_ampad_fc)
 ```
 
 Now, we will create a list-columns of data frame using nest function of tidyverse package. Nesting is implicitly a summarising operation: you get one row for each group defined by the non-nested columns. 
-```{r}
+```{r eval=FALSE}
 df  <- ns_vs_ampad_fc %>%
   group_by(module,Variant) %>%
   nest(data = c(symbol, value, ampad_fc))
 ```
 
-```{r}
+```{r eval=FALSE}
 head(df)
 ```
 
-```{r}
+```{r eval=FALSE}
 head(df[1,]$data)
 ```
 
 Next, we compute correlation coefficients using cor.test function built in R as following:
-```{r}
+```{r eval=FALSE}
 cor.df <- df %>%
   mutate(
-    cor_test = map(data, ~ cor.test(.x[["value"]], .x[["ampad_fc"]], method = "pearson")),
+    cor_test = map(data, ~ cor.test(.x[["value"]], 
+                                    .x[["ampad_fc"]], 
+                                    method = "pearson")),
     estimate = map_dbl(cor_test, "estimate"),
     p_value = map_dbl(cor_test, "p.value")
   ) %>%
@@ -411,14 +449,14 @@ cor.df <- df %>%
   dplyr::select(-cor_test)
 ```
 
-```{r}
+```{r eval=FALSE}
 head(cor.df)
 ```
 
 We will do some data wrangling to convert it into usable format for plotting.
 
 First, label correlations significant based on p-value, then join module cluster information to correlation table
-```{r fig.width=12,fig.height=10}
+```{r eval=FALSE fig.width=12,fig.height=10}
 variant_module.df <- cor.df %>%
   mutate(significant = p_value < 0.05,age_group="12 Months") %>%
   left_join(module_clusters, by = "module") %>%
@@ -426,7 +464,7 @@ variant_module.df <- cor.df %>%
 ```
 
 
-```{r fig.width=12,fig.height=10}
+```{r eval=FALSE fig.width=12,fig.height=10}
 ordered.variant <- c("Sex (Male)", "5xFAD", "LOAD1",  
                      "Abca7*A1527G", "Ceacam1 KO", "Mthfr*677C>T","Shc2*V433M","Slc6a17*P61P","Clasp2*L163P","Sorl1*A528T",
                      "Meox2 KO (HET)","Snx1*D465N" ,"Plcg2*M28L","Mtmr4*V297G")
@@ -443,7 +481,7 @@ correlation_for_plot <- variant_module.df %>%
 ```
 
 
-```{r fig.width=12,fig.height=10}
+```{r eval=FALSE fig.width=12,fig.height=10}
 plot.12M = correlation_for_plot %>% 
   mutate(Background = ifelse(Variant %in% c("Sex (Male)"),"Female",
   ifelse(Variant %in% c("5xFAD", "LOAD1"), "B6", "LOAD1")
@@ -455,7 +493,7 @@ range(plot.12M$correlation)
 
 ##### Visualizing the Correlation plot
 Now, we will use above matrix and visualize the correlation results using ggplot2 package.
-```{r fig.width=14,fig.height=10}
+```{r eval=FALSE fig.width=14,fig.height=10}
 data <- plot.12M
 
   ggplot2::ggplot() +
@@ -516,26 +554,30 @@ synapse get syn59500201
 ```
 
 
-```{r}
+```{r eval=FALSE}
 load(paste0(datadir,"Nikhil_SubtypeData.RData"))
 ```
 
 This data object contains 3 files: `ampad_subtype_fc`, `module_cohort`, `subtypes`
 
 Let's briefly check the data objects:
-```{r}
+```{r eval=FALSE}
 head(ampad_subtype_fc)
 head(module_cohort)
 head(subtypes)
 ```
 
 
-```{r }
-ns_effects <- effects %>% tibble::rownames_to_column(.,"Gene") %>% dplyr::select(-"(Intercept)",-"BD") %>% pivot_longer(cols=-Gene,names_to="Variant",values_to="value")
+```{r eval=FALSE}
+ns_effects <- effects %>% tibble::rownames_to_column(., "Gene") %>%
+  dplyr::select(-"(Intercept)", -"BD") %>%
+  pivot_longer(cols=-Gene,
+               names_to="Variant",
+               values_to="value")
 ```
 
 
-```{r }
+```{r eval=FALSE}
 model_vs_subtype_fc <- ns_effects  %>%
   inner_join(ampad_subtype_fc, by = c("Gene")) %>%
   group_by(subtype,Variant) %>%
@@ -547,13 +589,11 @@ model_vs_subtype_fc <- ns_effects  %>%
   ) %>%
   ungroup() %>%
   dplyr::select(-cor_test)
-
-
 ```
 
 Process data for plotting ----
 Flag for significant results, add cluster information to modules
-```{r }
+```{r eval=FALSE}
 df <- model_vs_subtype_fc %>%
   mutate(significant = p_value < 0.05,age_group="12 Months") %>%
   left_join(module_cohort, by = "subtype") %>%
@@ -566,7 +606,7 @@ df <- model_vs_subtype_fc %>%
 ```
 
 Create a version of the data for plotting - clean up naming, order factors, etc
-```{r }
+```{r eval=FALSE}
 ordered.variant <- c("Sex (Male)", "5xFAD", "LOAD1",  
                      "Abca7*A1527G", "Ceacam1 KO", "Mthfr*677C>T","Shc2*V433M","Slc6a17*P61P","Erc2*N542S","Clasp2*L163P","Sorl1*A528T" ,
                      "Meox2 KO (HET)","Snx1*D465N", "Plcg2*M28L","Mtmr4*V297G")
@@ -580,7 +620,7 @@ subtype_nanostring_for_plot.12M <- df %>%
 ```
 
 
-```{r }
+```{r eval=FALSE}
 range(subtype_nanostring_for_plot.12M$correlation)
 
 
@@ -591,7 +631,7 @@ dd.subtype_PS$Background <- factor(dd.subtype_PS$Background,levels = c("Female",
 ```
 
 Function for creating correlation plot
-```{r}
+```{r eval=FALSE}
 subtype_variant_corrplot <- function(data,ran) {
   
   ggplot2::ggplot() +
@@ -622,7 +662,7 @@ subtype_variant_corrplot <- function(data,ran) {
 ```
 
 Let's plot the results
-```{r fig.width =14,fig.height=8}
+```{r eval=FALSE fig.width =14,fig.height=8}
 subtype_variant_corrplot(dd.subtype_PS,0.4)
 ```
 
@@ -644,11 +684,11 @@ synapse get syn59500200
 # It returns "neff_subtype_fc" object.
 ```
 
-```{r}
+```{r eval=FALSE}
 load(paste0(datadir,"Neff_Subtype.RData"))
 ```
 
-```{r}
+```{r eval=FALSE}
 head(neff_subtype_fc)
 ```
 
@@ -739,7 +779,7 @@ We can also use the gene sub-sets defined by the AD Biodomains and Subdomains to
 
 First, we'll download the Biodomain definitions. However, this time there's something different. What's different between this table and the one we used in the earlier session?
 
-```{r}
+```{r, eval=FALSE}
 # biodomain definitions
 biodom <- readRDS(synGet('syn26592124')$path)
 
@@ -769,7 +809,7 @@ To perform the correlation on subsets of genes defined by the domains, we need t
 
 Let's collect the gene lists:
 
-```{r}
+```{r eval=FALSE}
  # first set up the list of genes associated with each biodomain
 bd.genes <- tibble( set = unique(biodom$Biodomain) ) %>%
   mutate( genes = map(set, ~ biodom %>% filter(Biodomain == .x) %>% pull(symbol) %>% unlist) )
@@ -794,7 +834,7 @@ rm(bd.genes, sd.genes)
 
 We'll also need the cohort data fold change data, and to map the orthologous mouse genes. 
 
-```{r}
+```{r eval=FALSE}
 # ortholog map between human and mouse provided by Wan et al
 mouse.human.ortho <- read_tsv(synapser::synGet("syn17010253")$path)
 
@@ -809,7 +849,7 @@ We'll start by examining how the LOAD1 strain effects (β) correlate with the hu
 
 First we can generate a nested table with the AMP-AD data, but filtering for the appropriate contrasts and tissues (DLPFC = ROSMAP, TCX = MAYO, and PHG = MSSM).
 
-```{r}
+```{r eval=FALSE}
 hs.lfc <- ampad_modules_raw %>% 
   filter(
     Model == "Diagnosis", 
@@ -827,7 +867,7 @@ head(hs.lfc)
 ```
 
 And look at one of those nested tables:
-```{r}
+```{r eval=FALSE}
 head(hs.lfc$data[[1]])
 ```
 
@@ -840,12 +880,12 @@ You'll notice in the table above that there are two **identical** logFC values f
 ::::::::::::::::::::
 
 We can prepare the LOAD1 mouse effects in an analogous way:
-```{r}
+```{r eval=FALSE}
 load1.effects <- ns_effects %>% rename(mm.beta = value) %>% nest(data = c(symbol, mm.beta))
 ```
 
 Now join the two datasets based on the mouse gene symbols. If we perform an `inner_join` we'll get only the genes that are present in both datasets
-```{r}
+```{r eval=FALSE}
 load1.vs.amp <- crossing(load1 = load1.effects$Variant, amp = hs.lfc$Study) %>%
   mutate(data = map2(load1, amp, ~ {
     mm = load1.effects %>% filter(Variant == .x) %>% pull(data) %>% .[[1]]
@@ -857,7 +897,7 @@ head(load1.vs.amp)
 ```
 
 One last piece of information -- let's add in the biodomain/subdomain gene lists and subset each mouse X human data table for the genes in each subset:
-```{r}
+```{r eval=FALSE}
 cor.df <- crossing(load1.vs.amp, set = bd.gene.lists$set) %>% 
   mutate(
     data = map2(
@@ -870,7 +910,7 @@ head(cor.df)
 ```
 
 Finally, we can perform a correlation analysis for each comparison. We'll filter to remove any comparison that contains < 3 genes. Also, since we're running so many comparisons (~150 for each mouse-human pair), we should correct for multiple hypothesis testing. The way this is set up is extreme (i.e. against **all** comparisons, not just those within a mouse-human pairing), but it will help us to narrow down to the most significant results.
-```{r}
+```{r eval=FALSE}
 cor.df <- cor.df %>% 
   filter(n.genes > 3) %>% 
   mutate(
@@ -883,7 +923,7 @@ cor.df <- cor.df %>%
 ```
 
 Let's plot the results of the correlation. We'll start at the biodomain level by filtering the gene set for those that don't include an underscore ("_") in their name.  
-```{r fig.width=8, fig.height=12}
+```{r eval=FALSE fig.width=8, fig.height=12}
 tmp <- cor.df %>% filter(grepl('_',set)==F) 
 
 ggplot(data = tmp, aes(set, load1))+
@@ -915,7 +955,7 @@ ggplot(data = tmp, aes(set, load1))+
 
 We can also take a look at the subdomains. Let's focus on just one cohort here - MSSM - to simplify the plot. 
 
-```{r fig.width=12, fig.height=6}
+```{r eval=FALSE fig.width=12, fig.height=6}
 # the list of subdomains to plot
 l <- cor.df %>% 
   filter(
@@ -995,7 +1035,7 @@ Are there different subdomains that have significant correlations for the other 
 
 Now we've seen how the effects from each variant from the LOAD1 study (mouse β) compare to the expression in the whole cohorts, let's explore how the mouse effects correlate with sub-type vs control LogFC. We'll start with Millind's MAYO subtypes. So let's join together the mouse effects and human LogFCs into one table for each comparison.
 
-```{r}
+```{r eval=FALSE}
 # some variable renaming
 stype.effects <- ampad_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
 neff.effects <- neff_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
@@ -1019,7 +1059,7 @@ load1.vs.stype <- crossing(load1 = load1.effects$Variant, stype = stype.effects.
 
 Now let's create a subset for each of the gene sets defined by the biodomains and subdomains. Then we can compute a correlation for each.
 
-```{r}
+```{r eval=FALSE}
 cor.df <- crossing(load1.vs.stype, set = bd.gene.lists$set) %>% 
   mutate(
     data = map2(
@@ -1039,7 +1079,7 @@ cor.df <- crossing(load1.vs.stype, set = bd.gene.lists$set) %>%
 
 And plot the correlation result for the biodomain gene sets
 
-```{r fig.width=8, fig.height=12}
+```{r eval=FALSE fig.width=8, fig.height=12}
 tmp <- cor.df %>% filter(grepl('_',set)==F) 
 
 ggplot(data = tmp, aes(set, stype))+
@@ -1071,7 +1111,7 @@ ggplot(data = tmp, aes(set, stype))+
 
 And for the subdomains, we'll focus on only those that are significant and have at least 10 genes
 
-```{r fig.width=18, fig.height=10}
+```{r eval=FALSE fig.width=18, fig.height=10}
 # the list of subdomains to plot
 l <- cor.df %>% 
   filter(
@@ -1127,7 +1167,7 @@ Our ability to use the domains to assess the LOAD1 primary screen study is const
 We've talked about the [Wan, et al.](https://doi.org/10.1016/j.celrep.2020.107908) study already this week in the context of the consensus co-expression module generation for AMP-AD cohorts. **Another** useful resource that this study generated is a compendium of mouse model RNA-seq data from various sources. We can use these data as another dataset to use to explore correlations between mouse and human. The data are part of the `AD_CrossSpecies` study which can be accessed on Synapse at [syn16779040](https://www.synapse.org/Synapse:syn16779040).   
 
 First, let's list the files in the `Analysis > Differential Expression` folder for the study ([syn17009951](https://www.synapse.org/Synapse:syn17009951)):
-```{r}
+```{r eval=FALSE}
 synapser::synLogin()
 f <- synapser::synGetChildren('syn17009951')$asList() %>% 
   tibble(entries = .) %>% 
@@ -1140,12 +1180,12 @@ head(f)
 This shows the files in the synapse directory along with the filename and the synapse ID for each.
 
 How many are there?
-```{r}
+```{r eval=FALSE}
 dim(f)
 ```
 
 There are 234 results files in this directory! Let's not work with all of them, but instead focus on a subset. To know which ones to use we'll need more information about these data. So let's read the metadata file for DEG analyses:
-```{r}
+```{r eval=FALSE}
 m <- read_tsv( synapser::synGet('syn17023327')$path ) %>% 
   left_join(., f, by = c('Filename'='study'))
 
@@ -1168,7 +1208,7 @@ This file gives information about each of the DEG results listed in the director
 Great! These annotation fields will help us to filter for the data that we want.
 
 Let's do a little processing and join these files together:
-```{r}
+```{r eval=FALSE}
 # Join the list of files from Synapse with the metadata
 wan_mice <- f %>% 
   select(id, study)  %>% 
@@ -1197,23 +1237,23 @@ wan_mice <- left_join(wan_mice, anno.cols) %>% relocate(category:transgene, .aft
 ```
 
 So how many of these studies are categorized as AD models?
-```{r}
+```{r eval=FALSE}
 wan_mice %>% group_by(category) %>% summarise(n = length(unique(study)))
 ```
 
 Only 43 are considered AD models. Let's take a closer look at the AD mice category:
-```{r}
+```{r eval=FALSE}
 wan_mice %>% filter(category == 'AD') %>% group_by(transgene) %>% summarise(n = length(unique(study)))
 ```
 
 Over half of the AD mouse model datasets are related to mice carrying an APP transgene, there are 10 related to mice carrying a Tau transgene, and 7 in the "other" category. What's in this other category?
 
-```{r}
+```{r eval=FALSE}
 wan_mice %>% filter(category == 'AD', transgene == 'other') %>% select(exptCondition, sex, age, brainRegion)
 ```
 
 Let's select a subset to work with. You can choose your own here, but I'm going to pick the neurodegenerative disease models (AD, PD, HD, FTD-ALS, SCA, and CJD). I'm going to filter to only include studies that look at brain expression (i.e. not sampling cell types), and I'm going to exclude a couple of other categories (e.g. "spinal cord" and "motor neurons"). I encourage you to choose your own adventure here.
-```{r}
+```{r eval=FALSE}
 wan.data <- wan_mice %>%
   filter(
     category %in% c('AD', 'HD', 'FTD-ALS', 'PD', 'SCA', 'CJD', 'Rett'),
@@ -1224,12 +1264,12 @@ wan.data <- wan_mice %>%
 ```
 
 So this should be far fewer than 234 studies
-```{r}
+```{r eval=FALSE}
 nrow(wan.data)
 ```
 
 Ok, 87 seems like a more manageable number. Now let's read in the data from Synapse. Each DEG results table has similarly labelled columns -- let's grab the gene IDs, log2FoldChange values, and padj significance values for each. This step can take a little while.
-```{r}
+```{r eval=FALSE}
 st = Sys.time()
 wan.data$d <- map(
   1:nrow(wan.data),
@@ -1243,7 +1283,7 @@ print(ed)
 
 Like with the LOAD1 study we can start with the correlation to the co-expression module data. [Wan, et al.](https://doi.org/10.1016/j.celrep.2020.107908) included similar analyses in their results. 
 
-```{r}
+```{r eval=FALSE}
 # prepare the module table 
 mod.lfc <- ampad_modules_fc %>% nest(data = c(symbol, ampad_fc))
 
@@ -1266,7 +1306,7 @@ wan.vs.mod <- crossing(wan.lfc, mod = mod.lfc$module) %>%
 
 Compute the correlation
 
-```{r}
+```{r eval=FALSE}
 cor.df <- wan.vs.mod %>% 
   mutate(
     cor = map(data, ~ cor.test(.x[['ampad_fc']], .x[['log2FoldChange']], method = 'pearson')),
@@ -1280,7 +1320,7 @@ cor.df <- wan.vs.mod %>%
 
 Plot the correlation
 
-```{r fig.width=15, fig.height=20}
+```{r eval=FALSE fig.width=15, fig.height=20}
 tmp <- cor.df %>% ungroup() %>% 
   mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
 
@@ -1333,7 +1373,7 @@ Some things I notice:
 
 We can also perform the correlation by biodomain genes. Here we join up the whole cohort
 
-```{r}
+```{r eval=FALSE}
 hs.lfc <- ampad_modules_raw %>% 
   filter(
     Model == "Diagnosis", 
@@ -1364,7 +1404,7 @@ wan.vs.amp <- crossing(wan.lfc, amp = hs.lfc$Study) %>%
 ```
 
 
-```{r}
+```{r eval=FALSE}
 cor.df <- crossing(wan.vs.amp, set = bd.gene.lists$set) %>% 
   mutate(
     data = map2(
@@ -1383,7 +1423,7 @@ cor.df <- crossing(wan.vs.amp, set = bd.gene.lists$set) %>%
 ```
 
 
-```{r fig.width=12, fig.height=20}
+```{r eval=FALSE fig.width=12, fig.height=20}
 tmp <- cor.df %>% filter(grepl('_',set)==F, amp == 'MSSM') %>% 
   mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
 
@@ -1420,7 +1460,7 @@ ggplot(data = tmp, aes(set, model_name))+
 
 #### subtypes
 
-```{r}
+```{r eval=FALSE}
 # some variable renaming
 stype.effects <- ampad_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
 neff.effects <- neff_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
@@ -1454,7 +1494,7 @@ cor.df <- crossing(wan.lfc, stype = stype.effects.RM$subtype) %>%
 
 
 
-```{r fig.width=8, fig.height=20}
+```{r eval=FALSE fig.width=8, fig.height=20}
 tmp <- cor.df %>% 
   mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
 
