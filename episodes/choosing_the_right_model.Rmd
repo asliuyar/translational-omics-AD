@@ -33,13 +33,13 @@ Authors: Ravi Pandey & Greg Cary, Jackson Laboratory
 ```{r libs, warning=FALSE, include=FALSE}
 #suppressPackageStartupMessages(library(synapser))
 suppressPackageStartupMessages(library("ggplot2"))
-#suppressPackageStartupMessages(library("AnnotationDbi"))
-#suppressPackageStartupMessages(library("org.Mm.eg.db"))
-#suppressPackageStartupMessages(library("org.Hs.eg.db"))
-#suppressPackageStartupMessages(library("GO.db"))
-#suppressPackageStartupMessages(library("cowplot"))
+suppressPackageStartupMessages(library("AnnotationDbi"))
+suppressPackageStartupMessages(library("org.Mm.eg.db"))
+suppressPackageStartupMessages(library("org.Hs.eg.db"))
+suppressPackageStartupMessages(library("GO.db"))
+suppressPackageStartupMessages(library("cowplot"))
 suppressPackageStartupMessages(library(dplyr))
-#suppressPackageStartupMessages(library(clusterProfiler))
+suppressPackageStartupMessages(library(clusterProfiler))
 suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(tidyverse))
 #synLogin(silent=TRUE)
@@ -456,7 +456,7 @@ head(cor.df)
 We will do some data wrangling to convert it into usable format for plotting.
 
 First, label correlations significant based on p-value, then join module cluster information to correlation table
-```{r eval=FALSE fig.width=12,fig.height=10}
+```{r eval=FALSE, fig.width=12,fig.height=10}
 variant_module.df <- cor.df %>%
   mutate(significant = p_value < 0.05,age_group="12 Months") %>%
   left_join(module_clusters, by = "module") %>%
@@ -464,7 +464,7 @@ variant_module.df <- cor.df %>%
 ```
 
 
-```{r eval=FALSE fig.width=12,fig.height=10}
+```{r eval=FALSE, fig.width=12,fig.height=10}
 ordered.variant <- c("Sex (Male)", "5xFAD", "LOAD1",  
                      "Abca7*A1527G", "Ceacam1 KO", "Mthfr*677C>T","Shc2*V433M","Slc6a17*P61P","Clasp2*L163P","Sorl1*A528T",
                      "Meox2 KO (HET)","Snx1*D465N" ,"Plcg2*M28L","Mtmr4*V297G")
@@ -481,7 +481,7 @@ correlation_for_plot <- variant_module.df %>%
 ```
 
 
-```{r eval=FALSE fig.width=12,fig.height=10}
+```{r eval=FALSE, fig.width=12,fig.height=10}
 plot.12M = correlation_for_plot %>% 
   mutate(Background = ifelse(Variant %in% c("Sex (Male)"),"Female",
   ifelse(Variant %in% c("5xFAD", "LOAD1"), "B6", "LOAD1")
@@ -493,7 +493,7 @@ range(plot.12M$correlation)
 
 ##### Visualizing the Correlation plot
 Now, we will use above matrix and visualize the correlation results using ggplot2 package.
-```{r eval=FALSE fig.width=14,fig.height=10}
+```{r eval=FALSE, fig.width=14,fig.height=10}
 data <- plot.12M
 
   ggplot2::ggplot() +
@@ -662,7 +662,7 @@ subtype_variant_corrplot <- function(data,ran) {
 ```
 
 Let's plot the results
-```{r eval=FALSE fig.width =14,fig.height=8}
+```{r eval=FALSE, fig.width =14,fig.height=8}
 subtype_variant_corrplot(dd.subtype_PS,0.4)
 ```
 
@@ -923,7 +923,7 @@ cor.df <- cor.df %>%
 ```
 
 Let's plot the results of the correlation. We'll start at the biodomain level by filtering the gene set for those that don't include an underscore ("_") in their name.  
-```{r eval=FALSE fig.width=8, fig.height=12}
+```{r eval=FALSE, fig.width=8, fig.height=12}
 tmp <- cor.df %>% filter(grepl('_',set)==F) 
 
 ggplot(data = tmp, aes(set, load1))+
@@ -955,7 +955,7 @@ ggplot(data = tmp, aes(set, load1))+
 
 We can also take a look at the subdomains. Let's focus on just one cohort here - MSSM - to simplify the plot. 
 
-```{r eval=FALSE fig.width=12, fig.height=6}
+```{r eval=FALSE, fig.width=12, fig.height=6}
 # the list of subdomains to plot
 l <- cor.df %>% 
   filter(
@@ -1079,7 +1079,7 @@ cor.df <- crossing(load1.vs.stype, set = bd.gene.lists$set) %>%
 
 And plot the correlation result for the biodomain gene sets
 
-```{r eval=FALSE fig.width=8, fig.height=12}
+```{r eval=FALSE, fig.width=8, fig.height=12}
 tmp <- cor.df %>% filter(grepl('_',set)==F) 
 
 ggplot(data = tmp, aes(set, stype))+
@@ -1111,7 +1111,7 @@ ggplot(data = tmp, aes(set, stype))+
 
 And for the subdomains, we'll focus on only those that are significant and have at least 10 genes
 
-```{r eval=FALSE fig.width=18, fig.height=10}
+```{r eval=FALSE, fig.width=18, fig.height=10}
 # the list of subdomains to plot
 l <- cor.df %>% 
   filter(
@@ -1320,7 +1320,7 @@ cor.df <- wan.vs.mod %>%
 
 Plot the correlation
 
-```{r eval=FALSE fig.width=15, fig.height=20}
+```{r eval=FALSE, fig.width=15, fig.height=20}
 tmp <- cor.df %>% ungroup() %>% 
   mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
 
@@ -1423,7 +1423,7 @@ cor.df <- crossing(wan.vs.amp, set = bd.gene.lists$set) %>%
 ```
 
 
-```{r eval=FALSE fig.width=12, fig.height=20}
+```{r eval=FALSE, fig.width=12, fig.height=20}
 tmp <- cor.df %>% filter(grepl('_',set)==F, amp == 'MSSM') %>% 
   mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
 
@@ -1494,7 +1494,7 @@ cor.df <- crossing(wan.lfc, stype = stype.effects.RM$subtype) %>%
 
 
 
-```{r eval=FALSE fig.width=8, fig.height=20}
+```{r eval=FALSE, fig.width=8, fig.height=20}
 tmp <- cor.df %>% 
   mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
 
