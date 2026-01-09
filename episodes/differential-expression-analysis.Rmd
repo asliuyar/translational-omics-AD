@@ -25,13 +25,13 @@ exercises: 10
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages(library("BiocManager"))
-#suppressPackageStartupMessages(library("clusterProfiler"))
+suppressPackageStartupMessages(library("clusterProfiler"))
 suppressPackageStartupMessages(library("DESeq2"))
-#suppressPackageStartupMessages(library("AnnotationDbi"))
-#suppressPackageStartupMessages(library("org.Mm.eg.db"))
-#suppressPackageStartupMessages(library("org.Hs.eg.db"))
-#suppressPackageStartupMessages(library("GO.db"))
-#suppressPackageStartupMessages(library("EnhancedVolcano"))
+suppressPackageStartupMessages(library("AnnotationDbi"))
+suppressPackageStartupMessages(library("org.Mm.eg.db"))
+suppressPackageStartupMessages(library("org.Hs.eg.db"))
+suppressPackageStartupMessages(library("GO.db"))
+suppressPackageStartupMessages(library("EnhancedVolcano"))
 suppressPackageStartupMessages(library("tidyverse"))
 suppressPackageStartupMessages(library("dplyr"))
 ```
