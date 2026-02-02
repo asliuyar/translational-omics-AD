@@ -63,7 +63,7 @@ Now we should be able to login to Synapse through our R session using the follow
 ```{r, eval=FALSE}
 # import the synapseclient python package
 syn.client <- reticulate::import('synapseclient')
-syn <- syn.client$Synapse()
+syn        <- syn.client$Synapse()
 
 # log in to Synapse
 syn$login('greg.cary@jax.org', authToken = synToken)
