@@ -30,7 +30,7 @@ Authors: Ravi Pandey & Greg Cary, Jackson Laboratory
 
 ### Load required libraries
 
-```{r libs, warning=FALSE, include=FALSE}
+```{r libs1, warning=FALSE, include=FALSE}
 #suppressPackageStartupMessages(library(synapser))
 suppressPackageStartupMessages(library("ggplot2"))
 suppressPackageStartupMessages(library("AnnotationDbi"))
@@ -47,7 +47,7 @@ theme_set(theme_bw())
 #setwd("/Users/pandera/Library/CloudStorage/Box-Box/Ravi Pandey Workspace/Miscellaneous/AD_Workshop2023/")
 ```
 
-```{r libs}
+```{r libs2}
 library(dplyr)
 library(tibble)
 #library(limma)
