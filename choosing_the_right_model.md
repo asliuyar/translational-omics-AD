@@ -1,0 +1,2120 @@
+---
+title: "Choosing the right animal models"
+output: html_document
+teaching: 90
+exercises: 90
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- What are some approaches that have been used to reduce the heterogeneity in human AD patient populations?
+- How well do the changes we observe in AD mouse models align with human AD data?
+- How do we perform corss-species comparison?
+- Which animal models best capture features of human AD subtypes?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Approaches to align mouse data to human data
+- Review the human AD co-expression modules
+- Understand the data from AD mouse models
+- Perform correlation analysis between mouse models and human modules
+- Perform correlation analysis using the human subtypes
+- Understand the biological domains and subdomains of AD
+- Use domain annotations to compare between species
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Authors: Ravi Pandey & Greg Cary, Jackson Laboratory
+
+### Load required libraries
+
+
+
+
+``` r
+library(dplyr)
+library(tibble)
+#library(limma)
+library(corrplot)
+```
+
+``` output
+corrplot 0.95 loaded
+```
+
+``` r
+library(ggplot2)
+library(tidyr)
+library(purrr)
+library(forcats)
+library(gt)
+```
+
+``` output
+
+Attaching package: 'gt'
+```
+
+``` output
+The following object is masked from 'package:cowplot':
+
+    as_gtable
+```
+
+Mouse models of AD serve as indispensable platforms for comprehensively characterizing AD pathology, disease progression, and biological mechanisms. However, selection of the right model in preclinical research and translation of findings to clinical populations are intricate processes that require identification of pathophysiological resemblance between model organisms and humans. Many existing clinical trials that showed promising efficacy in one particular mouse model later do not align with human trial results, assuming that study had consisted of a heterogeneous group of participants, and individual animal models may only recapitulate features of a subgroup of human cases. 
+
+<img src="../figures/subtype_intro.png" width="1000px" align="center" alt="Heterogenetiy in Alzheimer's Disease" >
+
+To improve interspecies translation, it is necessary to comprehensively compare molecular signatures in mouse models with subgroup of human AD cases with distinct molecular signatures.
+
+Through omics approaches, we can assess how genetic perturbations in mice align with changes observed in human LOAD study cohorts. This allows us to identify mouse models and genetic factors that correspond to specific subsets of human AD subtypes. Within these subtypes, genesets are highly co-expressed and represent distinct molecular pathways.
+
+
+## Overview of Human AD Data
+Three independent human brain transcriptome studies ROSMAP [Religious Orders Study and the Memory and Aging Project], MSSM [Mount Sinai School of Medicine], and Mayo collected human postmortem brain RNA-seq data from seven distinct regions: dorsolateral prefrontal cortex (DLPFC), temporal cortex (TCX), inferior frontal gyrus (IFG), superior temporal gyrus (STG), frontal pole (FP), parahippocampal gyrus (PHG), and cerebellum (CBE).
+
+### AMP-AD Modules
+[Wan, et al.](https://doi.org/10.1016/j.celrep.2020.107908) performed multi method co-expression network analysis  followed by differential analysis and found 30 co-expression modules related LOAD pathology from human cohort study. Among the 30 aggregate co-expression modules, five consensus clusters have been described by Wan, et al. These consensus clusters consist of a subset of modules which are associated with similar AD related changes across the multiple studies and brain regions.
+
+
+<img src="../figures/Picture1.png" width="1000px" align="center" alt="Transcriptomic of Alzheimer's Disease" >
+
+Here we are showing matrix view of gene content overlap between these  module, and you can see few strongly overlapping group of modules, implicating similar pathology in different studies in different brain regions.
+
+
+### AD Subtypes
+Post mortem transcriptomics from AMP-AD and similar studies have enabled the partitioning of AD cases into potential disease subtypes. These studies have often stratified AD subjects into inflammatory and non-inflammatory subtypes.
+
+<!--html_preserve--><div id="meunwmbjmp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#meunwmbjmp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#meunwmbjmp thead, #meunwmbjmp tbody, #meunwmbjmp tfoot, #meunwmbjmp tr, #meunwmbjmp td, #meunwmbjmp th {
+  border-style: none;
+}
+
+#meunwmbjmp p {
+  margin: 0;
+  padding: 0;
+}
+
+#meunwmbjmp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#meunwmbjmp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#meunwmbjmp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#meunwmbjmp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#meunwmbjmp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#meunwmbjmp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#meunwmbjmp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#meunwmbjmp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#meunwmbjmp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#meunwmbjmp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#meunwmbjmp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#meunwmbjmp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#meunwmbjmp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#meunwmbjmp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#meunwmbjmp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#meunwmbjmp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#meunwmbjmp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#meunwmbjmp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#meunwmbjmp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#meunwmbjmp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#meunwmbjmp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#meunwmbjmp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#meunwmbjmp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#meunwmbjmp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#meunwmbjmp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#meunwmbjmp .gt_left {
+  text-align: left;
+}
+
+#meunwmbjmp .gt_center {
+  text-align: center;
+}
+
+#meunwmbjmp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#meunwmbjmp .gt_font_normal {
+  font-weight: normal;
+}
+
+#meunwmbjmp .gt_font_bold {
+  font-weight: bold;
+}
+
+#meunwmbjmp .gt_font_italic {
+  font-style: italic;
+}
+
+#meunwmbjmp .gt_super {
+  font-size: 65%;
+}
+
+#meunwmbjmp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#meunwmbjmp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#meunwmbjmp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#meunwmbjmp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#meunwmbjmp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#meunwmbjmp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#meunwmbjmp .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#meunwmbjmp .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#meunwmbjmp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Study">Study</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Cohort">Cohort</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Tissue">Tissue</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="DataTypes">DataTypes</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Methods">Methods</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Subtypes">Subtypes</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="Study" class="gt_row gt_left">Milind et al.,2020</td>
+<td headers="Cohort" class="gt_row gt_left">ROS/MAP, MSBB, MAYO</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC, PHG, FP,TCX</td>
+<td headers="DataTypes" class="gt_row gt_left">RNASEQ</td>
+<td headers="Methods" class="gt_row gt_left">Iterative WGCNA followed by NbClust R package</td>
+<td headers="Subtypes" class="gt_row gt_left">2,2, 3</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Neff et al., 2021</td>
+<td headers="Cohort" class="gt_row gt_left">MSBB &amp; ROSMAP</td>
+<td headers="Tissue" class="gt_row gt_left">PHG,DLPFC</td>
+<td headers="DataTypes" class="gt_row gt_left">RNASEQ</td>
+<td headers="Methods" class="gt_row gt_left">WSCNA, Hierarchical and K-means clustering</td>
+<td headers="Subtypes" class="gt_row gt_left">5</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Yasser et al.,2022</td>
+<td headers="Cohort" class="gt_row gt_left">ROSMAP</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC</td>
+<td headers="DataTypes" class="gt_row gt_left">Multi-Omics</td>
+<td headers="Methods" class="gt_row gt_left">Novel ML framework mcTI</td>
+<td headers="Subtypes" class="gt_row gt_left">3</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Mukherjee et al., 2020</td>
+<td headers="Cohort" class="gt_row gt_left">ROS/MAP &amp; MAYO</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC &amp; TCX</td>
+<td headers="DataTypes" class="gt_row gt_left">RNASEQ</td>
+<td headers="Methods" class="gt_row gt_left">DDRTree manifold learning approach using Monocle 2 R package</td>
+<td headers="Subtypes" class="gt_row gt_left">6</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Laura Heath et al.(unpublished)</td>
+<td headers="Cohort" class="gt_row gt_left">ROS/MAP</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC</td>
+<td headers="DataTypes" class="gt_row gt_left">RNASEQ, PROTEOMICS, METABOLOMICS</td>
+<td headers="Methods" class="gt_row gt_left">DDRTree manifold learning approach</td>
+<td headers="Subtypes" class="gt_row gt_left">~7</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Zheng et al. 2021</td>
+<td headers="Cohort" class="gt_row gt_left">ROS/MAP</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC</td>
+<td headers="DataTypes" class="gt_row gt_left">RNASEQ</td>
+<td headers="Methods" class="gt_row gt_left">Non-negative Matrix (NMF)</td>
+<td headers="Subtypes" class="gt_row gt_left">2</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Yang et al., 2023</td>
+<td headers="Cohort" class="gt_row gt_left">ROS/MAP</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC</td>
+<td headers="DataTypes" class="gt_row gt_left">Multi-Omics</td>
+<td headers="Methods" class="gt_row gt_left">Similarity Network Fusion</td>
+<td headers="Subtypes" class="gt_row gt_left">2 and 5</td></tr>
+    <tr><td headers="Study" class="gt_row gt_left">Lee et al., 2023</td>
+<td headers="Cohort" class="gt_row gt_left">ROS/MAP</td>
+<td headers="Tissue" class="gt_row gt_left">DLPFC, AC, PCC</td>
+<td headers="DataTypes" class="gt_row gt_left">RNASEQ</td>
+<td headers="Methods" class="gt_row gt_left">CCA, k-means clustering, NMF</td>
+<td headers="Subtypes" class="gt_row gt_left">2</td></tr>
+  </tbody>
+  
+</table>
+</div><!--/html_preserve-->
+
+For this workshop, we will work with Milind's and Neff's subtype.
+
+#### Milind's AD Subtype
+[Milind et al.](https://pubmed.ncbi.nlm.nih.gov/32492070/) integrated post mortem brain co-expression data from the frontal cortex, temporal cortex, and hippocampus brain regions and stratified patients into different molecular subtypes based on molecular profiles in three independent human LOAD cohorts (ROS/MAP, Mount Sinai Brain Bank, and Mayo Clinic).
+
+Two distinct LOAD subtypes were identified in the ROSMAP cohort, three LOAD subtypes were identified in the Mayo cohort, and two distinct LOAD
+subtypes were identified in the MSBB cohort. Similar subtype results were observed in each cohort, with LOAD subtypes found to primarily differ in their inflammatory response based on differential expression analysis.
+
+<img src="../figures/milindsubtype.png" width="1000px" align="center" alt="Transcriptomic of Alzheimer's Disease" >
+
+
+#### Neff's AD Subtype
+[Neff et al.](https://pubmed.ncbi.nlm.nih.gov/33523961/) investigated molecular subtypes of AD in the MSBB-AD study and replicated findings in the ROSMAP. They have adopted weighted sample gene network analysis (WSCNA) clustering algorithm to identify subgrups of AD patients. WSCNA identifies five subtypes in the MSBB-AD (clusters A, B1, B2, C1, and C2) across all 151 participants with PHG transcriptomic data. These subtypes were classified into three larger classes: typical AD (subtype C1 & C2), intermediate (subtype B1 & B2), or atypical AD (subtype A), by molecular presentation when compared to the Blalock signatures of AD.
+
+<img src="../figures/neff_fig2.png" width="1000px" align="center" alt="Transcriptomic of Alzheimer's Disease" >
+
+<img src="../figures/Neff6.png" width="1000px" align="center" alt="Transcriptomic of Alzheimer's Disease" >
+
+
+## Overview of Mouse Model
+
+We are going to utilize transcriptomics data from mouse models expressing human risk variants created on a more LOAD-susceptible genetic background expressing humanized APOE with the ε4 variant and the R47H mutation in Trem2, two of the strongest genetic risk factors for LOAD. Chracaterization of these mouse models is publsihed here: [In vivo validation of late-onset Alzheimer's disease genetic risk factors](https://alz-journals.onlinelibrary.wiley.com/doi/full/10.1002/alz.13840)
+
+<img src="../figures/table1.png" width="1000px" align="center" alt="Transcriptomic of Alzheimer's Disease" >
+
+
+In this session, we are going to reproduce some of the results published in the paper
+
+## Mouse Data
+
+The [NanoString Mouse AD gene expression panel](https://link.springer.com/article/10.1186/s13024-020-00412-5) was used for gene expression profiling on the nCounter platform (NanoString, Seattle, WA, USA). NanoString gene expression panels are comprised of 770 probes. Mouse NanoString gene expression data were collected from brain hemisphere homogenates at 4 and 12 months of age for both sexes. The nSolver software was used for generating NanoString gene expression counts.
+
+Normalization was done by dividing counts within a lane by geometric mean of the designated housekeeping genes from the same lane. Next, normalized count values were log-transformed and corrected for potential batch effects using ComBat.
+
+You can find data associated with this study on synapse: https://www.synapse.org/Synapse:syn21595258
+
+
+### Synapse Data Download
+You can download the data from Synapse data repository. API clients provide a way to use Synapse programmatically. Installation instructions are available at [Synapse API Documentation Site](https://help.synapse.org/docs/Installing-Synapse-API-Clients.1985249668.html). 
+
+The Synapse command line client is implemented in Python and comes with the Synapse Python package. To install the Synapse command line client, make sure that you have Python and pip installed. For more information, see the [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/) installation instructions.
+
+
+First, Define the data directory:
+
+``` r
+datadir <- "/sbgenomics/projects/asliuyar/asliuyar/ad-omics/data/7_ADsubtypes_Pandey_Cary/"
+```
+
+
+#### Count matrix
+
+You can access the data from synapse
+
+``` r
+NS.INTENSITY <- fread(synapser::synGet("syn59479928")$path,check.names = F,header=T)
+```
+
+
+
+Above command will download the relevent file in your working directory.
+
+Now, let's read the downloaded file
+
+``` r
+NS.INTENSITY <- read.csv(paste0(datadir,                            "Nanostringdata_logNormalized_BatchCorrected_MergedTg_LOAD1_PrimaryScreenPaper.csv"),
+                         check.names = F,
+                         row.names=1)
+```
+
+Let’s examine the data,
+
+``` r
+NS.INTENSITY [1:5,1:9]
+```
+
+Here, row's represent gene names and columns are all mouse samples.
+
+
+``` r
+dim(NS.INTENSITY)
+```
+
+Total 763 genes were quantified for 718 mouse samples.
+
+
+#### Metadata
+
+You can access the biospecimen and individual metadata file associated with this study from synapse. 
+
+``` r
+# biospecimen metadata
+bio_meta <- fread(synapser::synGet("syn58614964")$path,check.names = F,header=T)
+
+# individual metadata
+ind_meta <- fread(synapser::synGet("syn59479967")$path,check.names = F,header=T)
+```
+
+You can process and join these files to create final metadata file as discussed earlier in this course. 
+
+To expedite the analysis, we'll utilize the metadata file provided in the session's data folder for subsequent analyses.
+
+
+
+
+
+``` r
+metadata <- read.csv(paste0(datadir,
+                            "metadata_NSdata.csv"),
+                     check.names = F)
+```
+
+
+``` r
+head(metadata)
+```
+
+You might be familiar with most of the co-variates beside Binding Density. Briefly, In NanoString nCounter technology, binding density refers to the number of fluorescent spots (reporter probes) per square micron on the imaging surface of a sample in the nCounter cartridge. 
+
+Binding density can be influenced by several factors, including RNA input mass, number of targets and expression of targets.Highly expressed genes and/or higher RNA mass result in higher binding density. Low binding density amy indicate that the assay is not sensitive enough to detect the target molecules, while high binding density can  indicate over-saturation where multiple probes might be overlapping, potentially leading to underestimation of target molecule counts.
+
+
+
+We can modify the metadata to only include covariates we'll need for this analysis
+
+``` r
+metadata <- metadata %>% 
+  dplyr::select(Sample, Sex=SEX, Age=AGE,
+                Genotype, BD=BindingDensity)
+```
+
+
+``` r
+head(metadata)
+```
+
+Using `pivot_longer()` function to "lengthens" data i.e. increasing the number of rows and decreasing the number of columns.
+
+``` r
+NS.INTENSITY.long <- NS.INTENSITY %>%
+  tibble::rownames_to_column(., "symbol") %>%
+  pivot_longer(cols=-symbol,
+               names_to="Sample",
+               values_to="value")
+```
+
+
+``` r
+head(NS.INTENSITY.long)
+```
+
+Next, we will join the countdata with metadata by `Sample` column  
+
+``` r
+mydat_with_metadata <- NS.INTENSITY.long %>%
+  left_join(metadata,by="Sample")
+```
+
+Let's check the joined data table
+
+``` r
+head(mydat_with_metadata)
+```
+
+#### Create design matrix
+
+Let's create design matrix for multiple regression analyses. In this formulation, B6J will be used as the control for the 5xFAD and LOAD1 mouse models, whereas LOAD1 served as controls for GWAS-based models in order to estimate the effects of individual variants. 
+
+
+``` r
+mydat_with_design <- mydat_with_metadata %>% 
+  mutate(sex = ifelse(Sex %in% "M",1,0))  %>% 
+  mutate(APOE4.Trem2.R47H=ifelse(Genotype %in% c("APOE4Trem2","LOAD1","A/T.MIXED-WT","A/T.IL1RAP-KO","A/T.CR1<B>","LOAD1.Shc2","LOAD1.Slc6a17","LOAD1.Erc2","A/T.SNX1-KI","A/T.CLASP2-KI","A/T.MTHFR-KI","A/T.ABCA7-KI","A/T.CEACAM1-KO","A/T.PLCG2.M28L","hATA","HFD.A/T.MIXED-WT","HFD.A/T.MTHFR-KI","HFD.hATA","HFD.A/T.PLCG2.M28L","A/T.SORL1","A/T.MTMR4","A/T.MEOX2"),1,0)) %>%
+  mutate(FADX5=ifelse(Genotype %in% c("Tg","5xFAD"),1,0)) %>% 
+  mutate(MTHFR.KI=ifelse(Genotype %in% c("A/T.MTHFR-KI","HFD.A/T.MTHFR-KI"),1, 0)) %>% 
+  mutate(PLCG2.M28L=ifelse(Genotype %in% c("A/T.PLCG2.M28L","HFD.A/T.PLCG2.M28L"),1, 0)) %>% 
+  mutate(ABCA7.KI=ifelse(Genotype %in% c("A/T.ABCA7-KI"),1, 0)) %>% 
+  mutate(CEACAM1.KO=ifelse(Genotype %in% c("A/T.CEACAM1-KO"),1, 0)) %>% 
+  mutate(SNX1=ifelse(Genotype %in% c("A/T.SNX1-KI"),1, 0)) %>% 
+  mutate(CLASP2=ifelse(Genotype %in% c("A/T.CLASP2-KI"),1, 0)) %>%
+  mutate(SORL1=ifelse(Genotype %in% c("A/T.Sorl1"),1, 0)) %>% 
+  mutate(MTMR4=ifelse(Genotype %in% c("A/T.Mtmr4"),1, 0)) %>%
+  mutate(MEOX2=ifelse(Genotype %in% c("A/T.MEOX2"),1, 0)) %>% mutate(SHC2=ifelse(Genotype %in% c("LOAD1.Shc2"),1, 0)) %>%
+  mutate(SLC6A17=ifelse(Genotype %in% c("LOAD1.Slc6a17"),1, 0)) %>%
+  dplyr::select(-Sex,-Genotype)
+```
+
+
+``` r
+head(mydat_with_design)
+```
+
+#### Determine the effects of each factor in mouse models
+
+Now, we will determine the effects of each factor (sex and genetic variants) by fitting a multiple regression model using the lm function in R. 
+
+**We are going to focus on only 12 months old mice data.**
+
+
+``` r
+lm.results <- mydat_with_design %>% filter(Age == 12) %>% split(.$symbol) %>% 
+  map(
+    ~ lm(
+    value ~ sex + BD +  APOE4.Trem2.R47H + FADX5 + MTHFR.KI + ABCA7.KI + CEACAM1.KO + SNX1 + CLASP2 + PLCG2.M28L + SORL1 + MTMR4 + SHC2 + MEOX2 + SLC6A17,
+    data = .x
+  )
+) %>% map(summary)
+```
+
+Results of regression analysis for each gene for each factor is stored in `lm.results`. 
+
+Let's check the result:
+
+``` r
+lm.results[1]
+```
+
+
+Now, we will extract effect i.e. regression coefficients for each gene for each factor from output and will store in a data frame.
+
+``` r
+effects <- as.data.frame(bind_rows( 
+  lapply(lm.results, function(x) x$coefficients[,"Estimate"] ))
+  ) %>% 
+  mutate(names = names(lm.results)) %>%
+  column_to_rownames(.,var="names")
+```
+
+let's see few entries of this data
+
+``` r
+head(effects)
+```
+
+rename columns for clear annotation
+
+``` r
+colnames(effects) <- c("(Intercept)", 
+                       "Sex (Male)", 
+                       "BD", 
+                       "LOAD1",
+                       "5xFAD",
+                       "Mthfr*677C>T", 
+                       "Abca7*A1527G", 
+                       "Ceacam1 KO", 
+                       "Snx1*D465N", 
+                       "Clasp2*L163P", 
+                       "Plcg2*M28L",
+                       "Sorl1*A528T",
+                       "Mtmr4*V297G",
+                       "Shc2*V433M",
+                       "Meox2 KO (HET)",
+                       "Slc6a17*P61P"
+                       )
+```
+
+
+``` r
+head(effects)
+```
+
+we will only keep factor of interest.
+
+``` r
+ns_effects <- effects %>% 
+  tibble::rownames_to_column(.,"symbol") %>%
+  dplyr::select(-"(Intercept)", -"BD") %>% 
+  pivot_longer(cols=-symbol,
+               names_to="Variant",
+               values_to="value")
+```
+
+
+
+``` r
+head(ns_effects)
+```
+
+You can save the results for future use.
+
+
+We will use these values to perform correlation analyses with human AD Data.
+
+## Correlation between mouse models and human AD modules
+
+* Compare Human AD to mouse genetic effects for each orthologous gene in a given module
+    + h = human gene expression (Log2 RNA-seq Fold Change control/AD)
+    + β = mouse gene expression effect from linear regression model (Log2 RNA-seq TPM)
+    $$cor.test(LogFC(h), β)$$
+
+These appraoches allow us to assess directional coherence between AMP-AD modules and the effects of genetic perturbations in mice. In this lesson, we are going to use second approach. 
+
+Log2FC values for human transcripts were obtained through the AD Knowledge Portal55 (https://www.synapse.org/#!Synapse:syn14237651).
+
+Let's start!
+
+#### Loading AMP-AD module data
+
+``` r
+lnames = load(paste0(datadir,"AMPADModuleData_Correlation.RData"))
+```
+
+Let's check AMP-AD data
+
+``` r
+lnames
+```
+
+
+``` r
+head(ampad_modules_fc)
+```
+
+
+First, we will join regression coefficients  and human ampad_modules_fc log fold change datasets for all genes. 
+
+``` r
+ns_vs_ampad_fc <- ns_effects  %>% 
+  inner_join(ampad_modules_fc, 
+             by = c("symbol")
+             )
+```
+
+
+``` r
+head(ns_vs_ampad_fc)
+```
+
+Now, we will create a list-columns of data frame using nest function of tidyverse package. Nesting is implicitly a summarising operation: you get one row for each group defined by the non-nested columns. 
+
+``` r
+df  <- ns_vs_ampad_fc %>%
+  group_by(module,Variant) %>%
+  nest(data = c(symbol, value, ampad_fc))
+```
+
+
+``` r
+head(df)
+```
+
+
+``` r
+head(df[1,]$data)
+```
+
+Next, we compute correlation coefficients using cor.test function built in R as following:
+
+``` r
+cor.df <- df %>%
+  mutate(
+    cor_test = map(data, ~ cor.test(.x[["value"]], 
+                                    .x[["ampad_fc"]], 
+                                    method = "pearson")),
+    estimate = map_dbl(cor_test, "estimate"),
+    p_value = map_dbl(cor_test, "p.value")
+  ) %>%
+  ungroup() %>%
+  dplyr::select(-cor_test)
+```
+
+
+``` r
+head(cor.df)
+```
+
+We will do some data wrangling to convert it into usable format for plotting.
+
+First, label correlations significant based on p-value, then join module cluster information to correlation table
+
+``` r
+variant_module.df <- cor.df %>%
+  mutate(significant = p_value < 0.05,age_group="12 Months") %>%
+  left_join(module_clusters, by = "module") %>%
+  dplyr::select(cluster, cluster_label, module,Variant,age_group, correlation = estimate, p_value, significant)
+```
+
+
+
+``` r
+ordered.variant <- c("Sex (Male)", "5xFAD", "LOAD1",  
+                     "Abca7*A1527G", "Ceacam1 KO", "Mthfr*677C>T","Shc2*V433M","Slc6a17*P61P","Clasp2*L163P","Sorl1*A528T",
+                     "Meox2 KO (HET)","Snx1*D465N" ,"Plcg2*M28L","Mtmr4*V297G")
+
+ordered.variant <- (ordered.variant)
+# Create a version of the data for plotting - clean up naming, order factors, etc
+correlation_for_plot <- variant_module.df %>%
+  arrange(cluster) %>%
+  mutate(
+    Variant =factor(Variant,levels=ordered.variant),
+    Variant = fct_rev(Variant),
+    module = factor(module,levels=mod),
+  )
+```
+
+
+
+``` r
+plot.12M = correlation_for_plot %>% 
+  mutate(Background = ifelse(Variant %in% c("Sex (Male)"),"Female",
+  ifelse(Variant %in% c("5xFAD", "LOAD1"), "B6", "LOAD1")
+))
+
+plot.12M$Background <- factor(plot.12M$Background, levels = c("Female", "B6", "LOAD1"))
+range(plot.12M$correlation)
+```
+
+##### Visualizing the Correlation plot
+Now, we will use above matrix and visualize the correlation results using ggplot2 package.
+
+``` r
+data <- plot.12M
+
+  ggplot2::ggplot() +
+    ggplot2::geom_tile(data = data, ggplot2::aes(x = .data$module, y = .data$Variant), colour = "black", fill = "white") +
+    ggplot2::geom_point(data = dplyr::filter(data), ggplot2::aes(x = .data$module, y = .data$Variant, colour = .data$correlation, size = abs(.data$correlation))) +
+    ggplot2::geom_point(data = dplyr::filter(data, .data$significant),aes(x=.data$module,y=.data$Variant, colour = .data$correlation),color="black",shape=0,size=9) +
+    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::scale_size(guide = "none", limits = c(0, 0.6)) +
+    ggplot2::scale_color_gradient2(limits = c(-0.6, 0.6), breaks = c(-0.6, 0, 0.6), low = "#85070C", high = "#164B6E", name = "Correlation", guide = ggplot2::guide_colorbar(ticks = FALSE)) +
+    ggplot2::labs(x = NULL, y = NULL) +
+    ggplot2::ggtitle(label= "12 months",subtitle= "Perturbation  | Control") +
+    ggplot2::facet_grid(rows = dplyr::vars(.data$Background),cols = dplyr::vars(.data$cluster_label), scales = "free", space = "free",switch="y") +
+    ggplot2::theme(
+      strip.text.x = ggplot2::element_text(size = 11),
+      strip.text.y.left = ggplot2::element_text(angle = 0,size = 12),
+      strip.background.y = ggplot2::element_rect(fill="grey95"),
+      axis.ticks = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_text(angle = 90, hjust = 0,size=16),
+      axis.text.y = ggplot2::element_text(size=14,face="italic"),
+      plot.title = ggplot2::element_text(angle = 0, vjust = -56, hjust = 0.066,size=14,face="bold"),
+      plot.subtitle = ggplot2::element_text(angle = 0, vjust = -65, hjust = 0.03,size=12,face="bold"),
+      panel.background = ggplot2::element_blank(),
+      plot.title.position = "plot",
+      panel.grid = ggplot2::element_blank(),
+      legend.position = "right"
+    )
+```
+
+In above plot, top row represent 30 AMP-AD modules grouped into 5 consensus clusters describing the major functional groups of AD-related alterations and left column represent mouse models. Positive correlations are shown in blue and negative correlations in red. Color intensity and size of the circles are proportional to the correlation coefficient. Black square around dots represent significant correlation at p-value=0.05 and non-significant correlations are left blank.
+
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 1
+
+**What can you conclude from the plot?**
+**Which variants capture effect of neurodegeneration **
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+
+## Correlation between mouse models and Milind's AD Subtypes
+
+### Milind's subtype data
+
+Briefly, Synapse repository [syn23660885](https://www.synapse.org/#!Synapse:syn23660885) contains code, data, and analyses for Milind's LOAD subtypes. Subtype assignment of each patient for each cohort are here on synpase: https://www.synapse.org/Synapse:syn23660969. Using patient's ID from these files and normalized expression from AMP-AD cohorts (https://www.synapse.org/Synapse:syn30821562), you can calculate change in gene expression for subtype patients vs controls. These matrix can be used to perform correlation analysis with mouse models.
+
+Here, we have provided final processed data that is stored in project's data folder.
+
+
+
+
+
+``` r
+load(paste0(datadir,"Nikhil_SubtypeData.RData"))
+```
+
+This data object contains 3 files: `ampad_subtype_fc`, `module_cohort`, `subtypes`
+
+Let's briefly check the data objects:
+
+``` r
+head(ampad_subtype_fc)
+head(module_cohort)
+head(subtypes)
+```
+
+
+
+``` r
+ns_effects <- effects %>% tibble::rownames_to_column(., "Gene") %>%
+  dplyr::select(-"(Intercept)", -"BD") %>%
+  pivot_longer(cols=-Gene,
+               names_to="Variant",
+               values_to="value")
+```
+
+
+
+``` r
+model_vs_subtype_fc <- ns_effects  %>%
+  inner_join(ampad_subtype_fc, by = c("Gene")) %>%
+  group_by(subtype,Variant) %>%
+  nest(data = c(Gene, value, ampad_fc)) %>%
+  mutate(
+    cor_test = map(data, ~ cor.test(.x[["value"]], .x[["ampad_fc"]], method = "pearson")),
+    estimate = map_dbl(cor_test, "estimate"),
+    p_value = map_dbl(cor_test, "p.value")
+  ) %>%
+  ungroup() %>%
+  dplyr::select(-cor_test)
+```
+
+Process data for plotting ----
+Flag for significant results, add cluster information to modules
+
+``` r
+df <- model_vs_subtype_fc %>%
+  mutate(significant = p_value < 0.05,age_group="12 Months") %>%
+  left_join(module_cohort, by = "subtype") %>%
+  dplyr::select(cluster, cluster_label, subtype,Variant,age_group, correlation = estimate, p_value, significant)
+
+
+#ordered.variant <- rev(ordered.variant)
+```
+
+Create a version of the data for plotting - clean up naming, order factors, etc
+
+``` r
+ordered.variant <- c("Sex (Male)", "5xFAD", "LOAD1",  
+                     "Abca7*A1527G", "Ceacam1 KO", "Mthfr*677C>T","Shc2*V433M","Slc6a17*P61P","Erc2*N542S","Clasp2*L163P","Sorl1*A528T" ,
+                     "Meox2 KO (HET)","Snx1*D465N", "Plcg2*M28L","Mtmr4*V297G")
+
+subtype_nanostring_for_plot.12M <- df %>%
+  arrange(cluster) %>%
+  mutate(
+    Variant =factor(Variant,levels=ordered.variant),
+    Variant =fct_rev(Variant)
+  )
+```
+
+
+
+``` r
+range(subtype_nanostring_for_plot.12M$correlation)
+
+
+dd.subtype_PS = subtype_nanostring_for_plot.12M %>% mutate(Background = ifelse(Variant %in% c("Sex (Male)"),"Female",ifelse(Variant %in% c("5xFAD","LOAD1"),"B6","LOAD1")))
+
+dd.subtype_PS$Background <- factor(dd.subtype_PS$Background,levels = c("Female","B6","LOAD1"))
+```
+
+Function for creating correlation plot
+
+``` r
+subtype_variant_corrplot <- function(data,ran) {
+  
+  ggplot2::ggplot() +
+    ggplot2::geom_tile(data = data, ggplot2::aes(x = .data$subtype, y = .data$Variant), colour = "black", fill = "white") +
+    ggplot2::geom_point(data = dplyr::filter(data), ggplot2::aes(x = .data$subtype, y = .data$Variant, colour = .data$correlation, size = abs(.data$correlation))) +
+    ggplot2::geom_point(data = dplyr::filter(data, .data$significant),aes(x=.data$subtype,y=.data$Variant, colour = .data$correlation),color="black",shape=0,size=9) +
+    ggplot2::scale_x_discrete(position = "top") + 
+    ggplot2::scale_size(guide = "none", limits = c(0, ran)) + 
+    ggplot2::scale_color_gradient2(limits = c(-ran, ran), breaks = c(-ran, 0, ran), low = "#85070C", high = "#164B6E", name = "Correlation", guide = ggplot2::guide_colorbar(ticks = FALSE)) +
+    ggplot2::labs(x = NULL, y = NULL) +
+    ggplot2::ggtitle(label= "12 months",subtitle= "Perturbation  | Control") +
+    ggplot2::facet_grid(rows = dplyr::vars(.data$Background),cols = dplyr::vars(.data$cluster_label), scales = "free", space = "free",switch="y") + theme(strip.placement.x = "outside") + 
+    ggplot2::theme(
+      strip.text.x = ggplot2::element_text(size = 11),
+      strip.text.y.left = ggplot2::element_text(angle = 0,size = 12),
+      strip.background.y = ggplot2::element_rect(fill="grey95"),
+      axis.ticks = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_text(angle = 0, hjust = 0.5,size=11),
+      axis.text.y = ggplot2::element_text(face = "italic",size=12),
+      plot.title = ggplot2::element_text(angle = 0, vjust = -15, hjust = 0.05,size=13,face="bold"),
+      plot.subtitle = ggplot2::element_text(angle = 0, vjust = -16, hjust = 0.03,size=11,face="bold"),
+      panel.background = ggplot2::element_blank(),
+      plot.title.position = "plot",
+      panel.grid = ggplot2::element_blank(),
+      legend.position = "bottom"
+    )
+}
+```
+
+Let's plot the results
+
+``` r
+subtype_variant_corrplot(dd.subtype_PS,0.4)
+```
+
+We can see that mouse model of AD may match to a particular subset of human AD subtypes but not all subtypes simultaneously, and that risk for these subtypes may be influenced by distinct AD genetic factors. 
+
+We can see that mouse model of AD may match to a particular subset of human AD subtypes but not all subtypes simultaneously, and that risk for these subtypes may be influenced by distinct AD genetic factors. 
+
+### Neff's subtype data
+
+Synapse repository [syn25944417](https://www.synapse.org/Synapse:syn25944417) contains code, data, and analyses for Neff's LOAD subtypes for MSBB cohort. Subtype assignments from the Neff Synapse project here: https://www.synapse.org/Synapse:syn25944448. You can use the MSBB biospecimen metadata file from [syn21893059](https://www.synapse.org/Synapse:syn21893059) to curate the subtypes with RNA-Seq IDs and individual IDs. 
+
+Next, you can (if have permission) extract normalized expression of all human genes for these individuals (https://www.synapse.org/Synapse:syn16795937) and perform differential analysis to calculate log fold change expression. 
+
+Here, we have provided final processed data that is stored in project's data folder.
+
+
+
+
+``` r
+load(paste0(datadir,"Neff_Subtype.RData"))
+```
+
+
+``` r
+head(neff_subtype_fc)
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 2
+
+*You all should create correlation plot for mouse data compared with Neff's subtype data. Identify mouse variants significantly positive correlated with subtype C1 and subtype A.*
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
+
+
+#### Milind's vs Neff's Subtype
+
+Finally, Let' see how does AD subtypes corresponds to each other. 
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 3
+
+Using data from Milind's and Neff's AD subtypes perform correlation analysis to see how AD subtypes corresponds to each other. 
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+## Biodomain Correlations
+
+We can also use the gene sub-sets defined by the AD Biodomains and Subdomains to frame these correlations. Let's see how that works, starting with how the LOAD1 mouse strain effects correlate with the logFC values from AMP-AD cohorts.
+
+First, we'll download the Biodomain definitions. However, this time there's something different. What's different between this table and the one we used in the earlier session?
+
+
+``` r
+# biodomain definitions
+biodom <- readRDS(synGet('syn26592124')$path)
+
+# biodomain labels and colors
+dom.lab <- read_csv(synGet('syn26856828')$path)
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 4
+
+What's different about this `biodom` table? 
+
+:::::::::::::::::::::::: solution 
+
+```r
+biodom %>% filter(GOterm_Name == 'amyloid-beta formation') %>% pull(symbol) %>% unlist()
+```
+
+This table contains mouse gene IDs!
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+To perform the correlation on subsets of genes defined by the domains, we need to specify the genes in each biodomain and subdomain. For each subdomain we'll prefix the subdomain name with the biodomain abbreviation. This is because some subdomains are shared between two different domains. For example, both the `Autophagy` and `Immune Response` domains have a subdomain called "phagocytosis". In each case there are slightly different sets of terms contained within the subdomain. We'll keep track by adding a domain prefix, e.g.  "IR_phagocytosis" and "Au_phagocytosis".
+
+Let's collect the gene lists:
+
+
+``` r
+ # first set up the list of genes associated with each biodomain
+bd.genes <- tibble( set = unique(biodom$Biodomain) ) %>%
+  mutate( genes = map(set, ~ biodom %>% filter(Biodomain == .x) %>% pull(symbol) %>% unlist) )
+
+# then the list of genes associated with each subdomain 
+sd.genes <- full_join( biodom, dom.lab, by = c('Biodomain'='domain') )  %>%
+  mutate( Subdomain = if_else(is.na(Subdomain), 'none', Subdomain) ) %>%
+  select(Biodomain, abbr, Subdomain, subdomain_idx) %>% distinct() %>%
+  rowwise() %>%
+  mutate(
+    set = paste0(abbr,'_',Subdomain),
+    bd = Biodomain, sdi = subdomain_idx,
+    genes = biodom %>% filter(Biodomain == bd, subdomain_idx == sdi) %>% pull(symbol) %>% unlist %>% list()
+    )
+
+# now combine the two lists
+bd.gene.lists = bind_rows(bd.genes, sd.genes %>% select(set, genes)) %>%
+  filter(set != 'NA_none')
+
+rm(bd.genes, sd.genes)
+```
+
+We'll also need the cohort data fold change data, and to map the orthologous mouse genes. 
+
+
+``` r
+# ortholog map between human and mouse provided by Wan et al
+mouse.human.ortho <- read_tsv(synapser::synGet("syn17010253")$path)
+
+# AMP-AD cohort differential expression table
+ampad_modules_raw <- read_tsv(synapser::synGet("syn14237651")$path) %>% 
+  inner_join(., mouse.human.ortho %>% select(hgnc_symbol = human_symbol, mouse_symbol))
+```
+
+#### AMP-AD Cohort Correlation
+
+We'll start by examining how the LOAD1 strain effects (β) correlate with the human AMP-AD cohort logFC values, like we did above with the co-expression modules. This time we'll use the biodomain and subdomain gene lists to sub-set the genes for correlation analysis. We'll compute correlations to one tissu for each cohort. 
+
+First we can generate a nested table with the AMP-AD data, but filtering for the appropriate contrasts and tissues (DLPFC = ROSMAP, TCX = MAYO, and PHG = MSSM).
+
+
+``` r
+hs.lfc <- ampad_modules_raw %>% 
+  filter(
+    Model == "Diagnosis", 
+    Comparison == "AD-CONTROL",
+    Tissue %in% c('PHG','TCX','DLPFC'),
+    !is.na(mouse_symbol)
+    ) %>%
+  rename(symbol = mouse_symbol) %>% 
+  nest(
+    data = c(hgnc_symbol, symbol, logFC, adj.P.Val), 
+    .by = c(Study, Tissue)
+  )
+
+head(hs.lfc)
+```
+
+And look at one of those nested tables:
+
+``` r
+head(hs.lfc$data[[1]])
+```
+
+:::::::::::: callout
+
+## A note about gene homology
+
+You'll notice in the table above that there are two **identical** logFC values for the human gene ANGPT1. This is because it aligns with two separate mouse genes: Angpt1 and Angpt2. Each of these mouse genes are paralogs of each other and they form an orthogroup with the human ANGPT1 gene. There are even more mouse genes for SLC7A2! There are other ways to map orthologous genes between sepecies (such as the `gprofiler2::gorth` function), and I encourage you to try them out. This is a non-trivial task and care should be given to how to structure these relationships to best address the questions of your research.
+
+::::::::::::::::::::
+
+We can prepare the LOAD1 mouse effects in an analogous way:
+
+``` r
+load1.effects <- ns_effects %>% rename(mm.beta = value) %>% nest(data = c(symbol, mm.beta))
+```
+
+Now join the two datasets based on the mouse gene symbols. If we perform an `inner_join` we'll get only the genes that are present in both datasets
+
+``` r
+load1.vs.amp <- crossing(load1 = load1.effects$Variant, amp = hs.lfc$Study) %>%
+  mutate(data = map2(load1, amp, ~ {
+    mm = load1.effects %>% filter(Variant == .x) %>% pull(data) %>% .[[1]]
+    hs = hs.lfc %>% filter(Study == .y) %>% pull(data) %>% .[[1]]
+    inner_join(mm, hs, by = 'symbol', na_matches = 'never')
+  }))
+
+head(load1.vs.amp)
+```
+
+One last piece of information -- let's add in the biodomain/subdomain gene lists and subset each mouse X human data table for the genes in each subset:
+
+``` r
+cor.df <- crossing(load1.vs.amp, set = bd.gene.lists$set) %>% 
+  mutate(
+    data = map2(
+      data, set, 
+      ~ .x %>% filter( symbol %in% bd.gene.lists$genes[[which(bd.gene.lists$set == .y)]] ) ),
+    n.genes = map_dbl(data, ~nrow(.x))
+  ) 
+
+head(cor.df)
+```
+
+Finally, we can perform a correlation analysis for each comparison. We'll filter to remove any comparison that contains < 3 genes. Also, since we're running so many comparisons (~150 for each mouse-human pair), we should correct for multiple hypothesis testing. The way this is set up is extreme (i.e. against **all** comparisons, not just those within a mouse-human pairing), but it will help us to narrow down to the most significant results.
+
+``` r
+cor.df <- cor.df %>% 
+  filter(n.genes > 3) %>% 
+  mutate(
+    cor = map(data, ~ cor.test(.x[['logFC']], .x[['mm.beta']], method = 'pearson')),
+    correlation = map_dbl(cor, ~broom::tidy(.x) %>% pull(estimate)),
+    p.value = map_dbl(cor, ~broom::tidy(.x) %>% pull(p.value)),
+    p.adj = p.adjust(p.value, method = 'BH'),
+    significant = p.adj < 0.05
+  )
+```
+
+Let's plot the results of the correlation. We'll start at the biodomain level by filtering the gene set for those that don't include an underscore ("_") in their name.  
+
+``` r
+tmp <- cor.df %>% filter(grepl('_',set)==F) 
+
+ggplot(data = tmp, aes(set, load1))+
+  facet_grid(rows = vars(amp), switch = 'y')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), 
+             stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'right')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    # strip.text.x = element_text(angle = 90, size = 10,colour = c("black")),
+    strip.text.y.left = element_text(angle = 0,size = 12),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 0, vjust = 0, size = 12),
+    axis.text.y = element_text(angle = 0, size = 12),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+We can also take a look at the subdomains. Let's focus on just one cohort here - MSSM - to simplify the plot. 
+
+
+``` r
+# the list of subdomains to plot
+l <- cor.df %>% 
+  filter(
+    amp == 'ROSMAP',
+    grepl('_',set)==T, 
+     (p.adj < 5e-2) ) %>% 
+  pull(set)
+
+# prepare the cor.df for plotting
+tmp <- cor.df %>% ungroup() %>% 
+  filter(amp == 'ROSMAP') %>% 
+  mutate(max.n = max(n.genes), .by = set) %>% 
+  filter(set %in% l) %>% 
+  mutate(
+    set1 = str_split_fixed(set, '_', 2)[,2] %>% 
+      str_trunc(., 40) %>% 
+      str_c('[',max.n,'] ',.),
+    abbr = str_split_fixed(set, '_', 2)[,1]
+  )
+
+# plot
+ggplot(data = tmp, aes(set1, load1))+
+  facet_grid(cols = vars(abbr), #rows = vars(amp), 
+             scales = 'free', space = 'free', switch = 'y')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'left')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    # strip.text.x.top = element_text(angle = 90, size = 10,colour = c("black")),
+    strip.text.y.left = element_text(angle = 0),
+    axis.ticks = element_blank(),
+    axis.text.x.top = element_text(angle = 90, hjust = 0),
+    axis.text.y = element_text(angle = 0),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "left",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 5
+
+How do these correlation results compare with those above when considering the co-expression modules? What is similar? What is different?
+
+:::::::::::::::::::::::: solution 
+
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 6
+
+Are there different subdomains that have significant correlations for the other AMP-AD cohorts?
+
+:::::::::::::::::::::::: solution 
+
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+#### AMP-AD Subtype Correlation
+
+Now we've seen how the effects from each variant from the LOAD1 study (mouse β) compare to the expression in the whole cohorts, let's explore how the mouse effects correlate with sub-type vs control LogFC. We'll start with Millind's MAYO subtypes. So let's join together the mouse effects and human LogFCs into one table for each comparison.
+
+
+``` r
+# some variable renaming
+stype.effects <- ampad_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
+neff.effects <- neff_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
+
+# Just the ROSMAPs
+stype.effects.RM <- stype.effects %>% filter(grepl('MSBB', subtype))
+# stype.effects.RM <- neff.effects
+
+# Join the tables together for each comparison
+load1.vs.stype <- crossing(load1 = load1.effects$Variant, stype = stype.effects.RM$subtype) %>% 
+  mutate(
+    data = map2(load1, stype,
+                ~ { 
+                  mm = load1.effects %>% filter(Variant == .x) %>% pull(data) %>% .[[1]] 
+                  hs = stype.effects.RM %>% filter(subtype == .y) %>% pull(data) %>% .[[1]] 
+                  inner_join(mm, hs, by = 'symbol', na_matches = 'never') 
+                }
+            )
+  )
+```
+
+Now let's create a subset for each of the gene sets defined by the biodomains and subdomains. Then we can compute a correlation for each.
+
+
+``` r
+cor.df <- crossing(load1.vs.stype, set = bd.gene.lists$set) %>% 
+  mutate(
+    data = map2(
+      data, set, 
+      ~ .x %>% filter( symbol %in% bd.gene.lists$genes[[which(bd.gene.lists$set == .y)]] ) ),
+    n.genes = map_dbl(data, ~nrow(.x))
+  ) %>% 
+  filter(n.genes > 3) %>% 
+  mutate(
+    cor = map(data, ~ cor.test(.x[['ampad_fc']], .x[['mm.beta']], method = 'pearson')),
+    correlation = map_dbl(cor, ~broom::tidy(.x) %>% pull(estimate)),
+    p.value = map_dbl(cor, ~broom::tidy(.x) %>% pull(p.value)),
+    p.adj = p.adjust(p.value, method = 'BH'),
+    significant = p.adj < 0.05
+  )
+```
+
+And plot the correlation result for the biodomain gene sets
+
+
+``` r
+tmp <- cor.df %>% filter(grepl('_',set)==F) 
+
+ggplot(data = tmp, aes(set, stype))+
+  facet_grid(rows = vars(load1), switch = 'y')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), 
+             stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'right')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    # strip.text.x = element_text(angle = 90, size = 10,colour = c("black")),
+    strip.text.y.left = element_text(angle = 0,size = 12),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 0, vjust = 0, size = 12),
+    axis.text.y = element_text(angle = 0, size = 12),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+And for the subdomains, we'll focus on only those that are significant and have at least 10 genes
+
+
+``` r
+# the list of subdomains to plot
+l <- cor.df %>% 
+  filter(
+    grepl('_',set)==T, 
+     (p.adj < 5e-2) ) %>% 
+  pull(set)
+
+# prepare the cor.df for plotting
+tmp <- cor.df %>% ungroup() %>% 
+  mutate(max.n = max(n.genes), .by = set) %>% 
+  filter(set %in% l, max.n > 10) %>% 
+  mutate(any.sig = any(p.adj < 5e-2), .by = load1) %>% 
+  filter( any.sig ) %>% 
+  mutate(
+    set1 = str_split_fixed(set, '_', 2)[,2] %>% 
+      str_trunc(., 40) %>% 
+      str_c('[',max.n,'] ',.),
+    abbr = str_split_fixed(set, '_', 2)[,1]
+  )
+         
+# plot!
+ggplot(data = tmp, aes(set1, stype))+
+  facet_grid(rows = vars(load1), cols = vars(abbr), 
+             scales = 'free', space = 'free', switch = 'y')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'right')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    strip.text.y.left = element_text(angle = 0),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 0),
+    axis.text.y = element_text(angle = 0),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "left",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+
+# Wan et al mouse model compendium
+
+Our ability to use the domains to assess the LOAD1 primary screen study is constrained because the mice were only assessed for the expression of the 770 genes that contained probes in the Nanostring probe set. This is well suited for the module-level correlation analysis, because the Nanostring genes were selected based on coverage of the co-expression modules. However we can also perform these analyses with RNA-seq data.
+
+We've talked about the [Wan, et al.](https://doi.org/10.1016/j.celrep.2020.107908) study already this week in the context of the consensus co-expression module generation for AMP-AD cohorts. **Another** useful resource that this study generated is a compendium of mouse model RNA-seq data from various sources. We can use these data as another dataset to use to explore correlations between mouse and human. The data are part of the `AD_CrossSpecies` study which can be accessed on Synapse at [syn16779040](https://www.synapse.org/Synapse:syn16779040).   
+
+First, let's list the files in the `Analysis > Differential Expression` folder for the study ([syn17009951](https://www.synapse.org/Synapse:syn17009951)):
+
+``` r
+synapser::synLogin()
+f <- synapser::synGetChildren('syn17009951')$asList() %>% 
+  tibble(entries = .) %>% 
+  unnest_wider(entries) %>% 
+  mutate( study = str_split_fixed(name, '_', 2)[,1] ) 
+
+head(f)
+```
+
+This shows the files in the synapse directory along with the filename and the synapse ID for each.
+
+How many are there?
+
+``` r
+dim(f)
+```
+
+There are 234 results files in this directory! Let's not work with all of them, but instead focus on a subset. To know which ones to use we'll need more information about these data. So let's read the metadata file for DEG analyses:
+
+``` r
+m <- read_tsv( synapser::synGet('syn17023327')$path ) %>% 
+  left_join(., f, by = c('Filename'='study'))
+
+head(m)
+```
+
+This file gives information about each of the DEG results listed in the directory above. This information includes the following critical deails:
+
+- `Study_name`: GSE or Syn ID denoting the original RNAseq or microarray data source.  
+- `Annotation`: The unique, manually-curated annotation for the DEG set, following the convention: `category_experimental condition_sex_age_brain region_cell type_ transgene`. Let's break down each of these pieces of information:     
+    + `category` denotes the human disease being modeled or “other” (e.g. AD, HD, SCA, ALS)
+    + `experimental condition` denotes the specific mouse genotype or treatment condition
+    + `sex`, male or female mice
+    + `age`, in months of the animals
+    + `brain region` sampled (e.g. hippocampus, spinal cord)
+    + `cell type` sampled (e.g. neuron, microglia)
+    + `transgene` for AD models only “APP” vs. “tau” is noted
+    + If unknown or not applicable for a given analysis, the above fields are replaced with “na”   
+
+Great! These annotation fields will help us to filter for the data that we want.
+
+Let's do a little processing and join these files together:
+
+``` r
+# Join the list of files from Synapse with the metadata
+wan_mice <- f %>% 
+  select(id, study)  %>% 
+  left_join(
+    ., 
+    m %>% select(Filename, Study_name, Annotation, Experimental_condition, Control_condition), 
+    by = c('study'='Filename'))
+
+# split and re-name the annotation fields
+anno.cols <- wan_mice %>% 
+  select(Annotation) %>% distinct() %>% 
+  mutate(anno = str_split_fixed(Annotation,'_', 7) %>% 
+           as.data.frame() %>% 
+           rename_with(~c('category',
+                          'exptCondition',
+                          'sex',
+                          'age',
+                          'brainRegion',
+                          'cellType',
+                          'transgene'))) %>%
+  unnest_wider(anno) %>% 
+  mutate(across(-Annotation, ~ str_trim(.x, 'both')))
+
+# Add the annotation columns to the original table
+wan_mice <- left_join(wan_mice, anno.cols) %>% relocate(category:transgene, .after = Annotation)
+```
+
+So how many of these studies are categorized as AD models?
+
+``` r
+wan_mice %>% group_by(category) %>% summarise(n = length(unique(study)))
+```
+
+Only 43 are considered AD models. Let's take a closer look at the AD mice category:
+
+``` r
+wan_mice %>% filter(category == 'AD') %>% group_by(transgene) %>% summarise(n = length(unique(study)))
+```
+
+Over half of the AD mouse model datasets are related to mice carrying an APP transgene, there are 10 related to mice carrying a Tau transgene, and 7 in the "other" category. What's in this other category?
+
+
+``` r
+wan_mice %>% filter(category == 'AD', transgene == 'other') %>% select(exptCondition, sex, age, brainRegion)
+```
+
+Let's select a subset to work with. You can choose your own here, but I'm going to pick the neurodegenerative disease models (AD, PD, HD, FTD-ALS, SCA, and CJD). I'm going to filter to only include studies that look at brain expression (i.e. not sampling cell types), and I'm going to exclude a couple of other categories (e.g. "spinal cord" and "motor neurons"). I encourage you to choose your own adventure here.
+
+``` r
+wan.data <- wan_mice %>%
+  filter(
+    category %in% c('AD', 'HD', 'FTD-ALS', 'PD', 'SCA', 'CJD', 'Rett'),
+    cellType == 'na',
+    brainRegion != 'spinal cord',
+    brainRegion != 'motor neurons'
+  )
+```
+
+So this should be far fewer than 234 studies
+
+``` r
+nrow(wan.data)
+```
+
+Ok, 87 seems like a more manageable number. Now let's read in the data from Synapse. Each DEG results table has similarly labelled columns -- let's grab the gene IDs, log2FoldChange values, and padj significance values for each. This step can take a little while.
+
+``` r
+st = Sys.time()
+wan.data$d <- map(
+  1:nrow(wan.data),
+  ~ read_tsv( synapser::synGet(wan.data$id[.x])$path, show_col_types = F ) %>% select(Gene, IsDEG,log2FoldChange, padj)
+  , .progress = T) 
+ed = Sys.time()-st
+print(ed)
+```
+
+#### AMP-AD Module Correlation
+
+Like with the LOAD1 study we can start with the correlation to the co-expression module data. [Wan, et al.](https://doi.org/10.1016/j.celrep.2020.107908) included similar analyses in their results. 
+
+
+``` r
+# prepare the module table 
+mod.lfc <- ampad_modules_fc %>% nest(data = c(symbol, ampad_fc))
+
+# prepare the mouse data
+wan.lfc <- wan.data %>% unnest(d) %>% rename(symbol = Gene) %>% select(-IsDEG) %>% 
+  nest(data = c(symbol, log2FoldChange, padj))
+
+# Join the tables together for each comparison
+wan.vs.mod <- crossing(wan.lfc, mod = mod.lfc$module) %>% 
+  mutate(
+    data = map2(data, mod,
+                ~ { 
+                  mm = .x
+                  hs = mod.lfc %>% filter(module == .y) %>% pull(data) %>% .[[1]] 
+                  inner_join(mm, hs, by = 'symbol', na_matches = 'never') 
+                }
+            )
+  )
+```
+
+Compute the correlation
+
+
+``` r
+cor.df <- wan.vs.mod %>% 
+  mutate(
+    cor = map(data, ~ cor.test(.x[['ampad_fc']], .x[['log2FoldChange']], method = 'pearson')),
+    correlation = map_dbl(cor, ~broom::tidy(.x) %>% pull(estimate)),
+    p.value = map_dbl(cor, ~broom::tidy(.x) %>% pull(p.value)),
+    p.adj = p.adjust(p.value, method = 'BH'),
+    significant = p.adj < 0.05
+  ) %>% 
+  left_join(., module_clusters, by = c('mod'='module'))
+```
+
+Plot the correlation
+
+
+``` r
+tmp <- cor.df %>% ungroup() %>% 
+  mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
+
+ggplot(data = tmp, aes(mod, model_name))+
+  facet_grid(cols = vars(cluster_label), switch = 'y', scales='free',space= 'free')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), 
+             stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'left')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    # strip.text.x = element_text(angle = 90, size = 10,colour = c("black")),
+    strip.text.y.left = element_text(angle = 0,size = 12),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 0, vjust = 0, size = 12),
+    axis.text.y = element_text(angle = 0, size = 12),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 7
+
+This is a lot of information! Take a minute to explore the plot and discuss with your neighbor what trends you notice. We'll come back to discuss as a group.
+
+:::::::::::::::::::::::: solution 
+
+Some things I notice:
+(1) The `AD` models are fairly similar and many show strong positive correlation to clusters A and B
+(2) The `HD` models show negative correlations to clusters A and B, but have the strongest correlations with cluster E
+(3) The `SCA` models tend to look a bit like the `AD` models
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+#### Biodomain Correlation
+
+We can also perform the correlation by biodomain genes. Here we join up the whole cohort
+
+
+``` r
+hs.lfc <- ampad_modules_raw %>% 
+  filter(
+    Model == "Diagnosis", 
+    Comparison == "AD-CONTROL",
+    Tissue %in% c('PHG','TCX','DLPFC'),
+    !is.na(mouse_symbol)
+    ) %>%
+  rename(symbol = mouse_symbol) %>% 
+  nest(
+    data = c(hgnc_symbol, symbol, logFC, adj.P.Val), 
+    .by = c(Study, Tissue)
+  )
+
+wan.lfc <- wan.data %>% unnest(d) %>% rename(symbol = Gene) %>% select(-IsDEG) %>% 
+  nest(data = c(symbol, log2FoldChange, padj))
+
+# Join the tables together for each comparison
+wan.vs.amp <- crossing(wan.lfc, amp = hs.lfc$Study) %>% 
+  mutate(
+    data = map2(data, amp,
+                ~ { 
+                  mm = .x
+                  hs = hs.lfc %>% filter(Study == .y) %>% pull(data) %>% .[[1]] 
+                  inner_join(mm, hs, by = 'symbol', na_matches = 'never') 
+                }
+            )
+  )
+```
+
+
+
+``` r
+cor.df <- crossing(wan.vs.amp, set = bd.gene.lists$set) %>% 
+  mutate(
+    data = map2(
+      data, set, 
+      ~ .x %>% filter( symbol %in% bd.gene.lists$genes[[which(bd.gene.lists$set == .y)]] ) ),
+    n.genes = map_dbl(data, ~nrow(.x))
+  ) %>% 
+  filter(n.genes > 3) %>% 
+  mutate(
+    cor = map(data, ~ cor.test(.x[['logFC']], .x[['log2FoldChange']], method = 'pearson')),
+    correlation = map_dbl(cor, ~broom::tidy(.x) %>% pull(estimate)),
+    p.value = map_dbl(cor, ~broom::tidy(.x) %>% pull(p.value)),
+    p.adj = p.adjust(p.value, method = 'BH'),
+    significant = p.adj < 0.05
+  )
+```
+
+
+
+``` r
+tmp <- cor.df %>% filter(grepl('_',set)==F, amp == 'MSSM') %>% 
+  mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
+
+ord <- tmp %>% filter(set == 'Lipid Metabolism') %>% arrange(desc(correlation)) %>% pull(model_name)
+
+tmp <- tmp %>% mutate(model_name = fct_relevel(model_name, ord))
+
+ggplot(data = tmp, aes(set, model_name))+
+  facet_grid(rows = vars(amp), switch = 'y')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), 
+             stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'right')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    # strip.text.x = element_text(angle = 90, size = 10,colour = c("black")),
+    strip.text.y.left = element_text(angle = 0,size = 12),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 0, vjust = 0, size = 12),
+    axis.text.y = element_text(angle = 0, size = 12),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+#### subtypes
+
+
+``` r
+# some variable renaming
+stype.effects <- ampad_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
+neff.effects <- neff_subtype_fc %>% rename(symbol = Gene) %>% nest(data = c(symbol, ampad_fc))
+
+# Just the ROSMAPs
+# stype.effects.RM <- stype.effects %>% filter(grepl('Mayo', subtype))
+stype.effects.RM <- neff.effects
+
+wan.lfc <- wan.data %>% unnest(d) %>% rename(symbol = Gene) %>% select(-IsDEG) %>% 
+  nest(data = c(symbol, log2FoldChange, padj))
+
+# Join the tables together for each comparison
+cor.df <- crossing(wan.lfc, stype = stype.effects.RM$subtype) %>% 
+  mutate(
+    data = map2(data, stype,
+                ~ { 
+                  mm = .x 
+                  hs = stype.effects.RM %>% filter(subtype == .y) %>% pull(data) %>% .[[1]] 
+                  inner_join(mm, hs, by = 'symbol', na_matches = 'never') %>% distinct()
+                }
+            )
+  ) %>% 
+  mutate(
+    cor = map(data, ~ cor.test(.x[['ampad_fc']], .x[['log2FoldChange']], method = 'pearson')),
+    correlation = map_dbl(cor, ~broom::tidy(.x) %>% pull(estimate)),
+    p.value = map_dbl(cor, ~broom::tidy(.x) %>% pull(p.value)),
+    p.adj = p.adjust(p.value, method = 'BH'),
+    significant = p.adj < 0.05
+  )
+```
+
+
+
+
+``` r
+tmp <- cor.df %>% 
+  mutate(model_name = str_c('[',category,'] ',study,': ', exptCondition, ' (', transgene,')')) 
+
+ord <- tmp %>% filter(stype == 'subtype C1') %>% arrange(desc(correlation)) %>% pull(model_name)
+
+tmp <- tmp %>% mutate(model_name = fct_relevel(model_name, ord))
+
+ggplot(data = tmp, aes(stype, model_name))+
+  # facet_grid(rows = vars(Annotation), switch = 'y')+
+  geom_tile(color = 'black', fill = 'white')+
+  geom_point(aes(color = correlation, size = abs(correlation)))+
+  geom_point(data = subset(tmp, significant), 
+             stroke = 1.2,shape = 0, size = 6)+
+  scale_x_discrete(position = 'top')+
+  scale_y_discrete(limits = rev, position = 'right')+
+  scale_size()+#guide = 'none'
+  scale_color_gradient2(name = "Correlation", low = "#85070C", high = "#164B6E", 
+                         guide = guide_colorbar(ticks = FALSE) )+
+  labs(x = NULL, y = NULL)+
+  theme(
+    # strip.text.x = element_text(angle = 90, size = 10,colour = c("black")),
+    strip.text.y.left = element_text(angle = 0,size = 12),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 0, vjust = 0, size = 12),
+    axis.text.y = element_text(angle = 0, size = 12),
+    panel.background = element_blank(),
+    plot.title = element_text(angle = 0, vjust = -54, hjust = 0.03,size=12,face="bold"),
+    plot.title.position = "plot",
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    plot.margin = margin(2,2,2,20)
+  )
+```
+
+## Conclusion
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- AD is complex and human patient populations are heterogenous
+- Molecular subtyping is one way to reduce that complexity
+- We can use identified human subtypes to help characterize mouse models
+- Each existing mouse model of AD may match to a particular subset of human AD subtypes but not all subtypes simultaneously.
+- Most of the molecular AD subtypes were identified using transcriptomics data and there seems to be similarities between AD subtypes across studies.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+``` r
+sessionInfo()
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 24.04.3 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+time zone: Etc/UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] gt_1.3.0               corrplot_0.95          lubridate_1.9.4       
+ [4] forcats_1.0.1          stringr_1.6.0          purrr_1.2.1           
+ [7] readr_2.1.6            tidyr_1.3.2            tibble_3.3.1          
+[10] tidyverse_2.0.0        data.table_1.18.2.1    clusterProfiler_4.18.4
+[13] dplyr_1.1.4            cowplot_1.2.0          GO.db_3.22.0          
+[16] org.Hs.eg.db_3.22.0    org.Mm.eg.db_3.22.0    AnnotationDbi_1.72.0  
+[19] IRanges_2.44.0         S4Vectors_0.48.0       Biobase_2.70.0        
+[22] BiocGenerics_0.56.0    generics_0.1.4         ggplot2_4.0.1         
+
+loaded via a namespace (and not attached):
+  [1] DBI_1.2.3               gson_0.1.0              rlang_1.1.7            
+  [4] magrittr_2.0.4          DOSE_4.4.0              otel_0.2.0             
+  [7] compiler_4.5.2          RSQLite_2.4.5           png_0.1-8              
+ [10] systemfonts_1.3.1       vctrs_0.7.1             reshape2_1.4.5         
+ [13] pkgconfig_2.0.3         crayon_1.5.3            fastmap_1.2.0          
+ [16] XVector_0.50.0          tzdb_0.5.0              enrichplot_1.30.4      
+ [19] bit_4.6.0               xfun_0.56               cachem_1.1.0           
+ [22] aplot_0.2.9             jsonlite_2.0.0          blob_1.3.0             
+ [25] tidydr_0.0.6            tweenr_2.0.3            BiocParallel_1.44.0    
+ [28] cluster_2.1.8.1         parallel_4.5.2          R6_2.6.1               
+ [31] stringi_1.8.7           RColorBrewer_1.1-3      GOSemSim_2.36.0        
+ [34] Rcpp_1.1.1              Seqinfo_1.0.0           knitr_1.51             
+ [37] ggtangle_0.1.1          R.utils_2.13.0          timechange_0.4.0       
+ [40] Matrix_1.7-4            splines_4.5.2           igraph_2.2.1           
+ [43] tidyselect_1.2.1        qvalue_2.42.0           yaml_2.3.12            
+ [46] codetools_0.2-20        lattice_0.22-7          plyr_1.8.9             
+ [49] treeio_1.34.0           withr_3.0.2             KEGGREST_1.50.0        
+ [52] S7_0.2.1                evaluate_1.0.5          gridGraphics_0.5-1     
+ [55] polyclip_1.10-7         scatterpie_0.2.6        xml2_1.5.2             
+ [58] Biostrings_2.78.0       pillar_1.11.1           BiocManager_1.30.27    
+ [61] ggtree_4.0.4            renv_1.1.7              ggfun_0.2.0            
+ [64] hms_1.1.4               scales_1.4.0            tidytree_0.4.7         
+ [67] glue_1.8.0              gdtools_0.4.4           lazyeval_0.2.2         
+ [70] tools_4.5.2             ggnewscale_0.5.2        fgsea_1.36.2           
+ [73] ggiraph_0.9.3           fs_1.6.6                fastmatch_1.1-8        
+ [76] grid_4.5.2              ape_5.8-1               nlme_3.1-168           
+ [79] patchwork_1.3.2         ggforce_0.5.0           cli_3.6.5              
+ [82] rappdirs_0.3.4          fontBitstreamVera_0.1.1 gtable_0.3.6           
+ [85] R.methodsS3_1.8.2       yulab.utils_0.2.4       sass_0.4.10            
+ [88] digest_0.6.39           fontquiver_0.2.1        ggrepel_0.9.6          
+ [91] ggplotify_0.1.3         htmlwidgets_1.6.4       farver_2.1.2           
+ [94] memoise_2.0.1           htmltools_0.5.9         R.oo_1.27.1            
+ [97] lifecycle_1.0.5         httr_1.4.7              MASS_7.3-65            
+[100] fontLiberation_0.1.0    bit64_4.6.0-1          
+```

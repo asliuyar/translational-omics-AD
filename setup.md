@@ -10,13 +10,18 @@ RStudio development environment on the data analysis and sharing platform
 
 ### Access CAVATICA
 
-1. [Sign up for a free CAVATICA account](https://cavatica.sbgenomics.com). Note 
-that you can also access free cloud credits if you so choose.
+1. [Sign up for a free CAVATICA account](https://docs.cavatica.org/docs/sign-up-for-cavatica).
+
+1. Request your free pilot fund cloud credits by 
+[contacting CAVATICA support](https://docs.cavatica.org/docs/getting-started).
 
 1. [Create a project](https://docs.cavatica.org/docs/quickstart#create-a-project).
-For **Billing group**, select pilot funds if you chose free cloud credits in 
-step 1. Read more about projects in the 
-[CAVATICA guide](https://docs.cavatica.org/docs/projects-on-cavatica)
+
+1. For **Billing group**, select `Pilot Funds` if you have received free pilot 
+fund cloud credits.
+
+1. Change the default setting to `Allow network access`.
+![](episodes/fig/block-network-access.png)
 
 1. Run a 
 [Data Studio analysis](https://docs.cavatica.org/docs/run-an-analysis-using-data-cruncher).
@@ -36,7 +41,7 @@ the following commands into the Console:
 ```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(version = "3.20")
+BiocManager::install()
 
 # install synapser
 install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
@@ -63,10 +68,6 @@ Install Bioconductor packages.
 # When the following query arises, type 'n' (it is faster)
 # Do you want to install from sources the packages which need compilation? 
 # (Yes/no/cancel) n
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-
-    install.packages("BiocManager")
 
 BiocManager::install("clusterProfiler")
 BiocManager::install("DESeq2")

@@ -6,16 +6,16 @@ exercises: 10
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to work with Synapse R client?
-- How to work with data in AD Knowledge Portal?
+- How can we work with the Synapse R client?
+- How can we work with data in AD Knowledge Portal?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use Synapser Package.
-- Demonstrate how to locate data and metadata in the Portal.
-- Demonstrate how to download data from the Portal programmatically.
+- Explain how to use `Synapser` Package.
+- Demonstrate how to locate data and metadata in the AD Knowledge Portal.
+- Demonstrate how to download data from the AD Knowledge Portal programmatically.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -293,8 +293,6 @@ individuals and specimens as needed based on your analysis criteria!
 
 
 ``` r
-library(lubridate)
-
 # convert columns of strings to month-date-year format
 joined_meta_time <- joined_meta %>% 
   mutate(dateBirth = mdy(dateBirth), dateDeath = mdy(dateDeath)) %>% 
@@ -407,8 +405,8 @@ which files:
 
 
 ``` r
-annotations_table <- read_csv(query$filepath, show_col_types = FALSE)
-
+annotations_table <- read_csv(query$filepath, 
+                              show_col_types = FALSE)
 annotations_table
 ```
 

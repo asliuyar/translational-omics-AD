@@ -410,7 +410,7 @@ count_tpose %>%
         theme_bw()
 ```
 
-<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-16-1.png" alt="" style="display: block; margin: auto;" />
 
 You will notice expression of Human APP is higher in 5XFAD carriers but lower in
 non-carriers. However mouse App expressed in both 5XFAD carrier and non-carrier.
@@ -514,7 +514,8 @@ meta.12M.Male
 
 
 ``` r
-dat <- as.matrix(rawdata[ , colnames(rawdata) %in% rownames(meta.12M.Male)])
+dat <- as.matrix(rawdata[ , colnames(rawdata) %in%
+                            rownames(meta.12M.Male)])
 colnames(dat)
 ```
 
@@ -919,7 +920,27 @@ Warning: One or more p-values is 0. Converting to 10^-1 * current lowest
 non-zero p-value...
 ```
 
-<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-41-1.png" style="display: block; margin: auto;" />
+``` warning
+Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.
+ℹ The deprecated feature was likely used in the EnhancedVolcano package.
+  Please report the issue to the authors.
+This warning is displayed once per session.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.
+```
+
+``` warning
+Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
+ℹ Please use the `linewidth` argument instead.
+ℹ The deprecated feature was likely used in the EnhancedVolcano package.
+  Please report the issue to the authors.
+This warning is displayed once per session.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.
+```
+
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-41-1.png" alt="" style="display: block; margin: auto;" />
 
 You can see that some top significantly expressed are 
 immune/inflammation-related genes such as Ctsd, C4b, Csf1 etc. These genes are 
@@ -986,7 +1007,6 @@ fitting model and testing
 
 ``` r
 vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
-
 plotPCA(vsd, intgroup = c("genotype", "sex", "timepoint"))
 ```
 
@@ -994,7 +1014,7 @@ plotPCA(vsd, intgroup = c("genotype", "sex", "timepoint"))
 using ntop=500 top features by variance
 ```
 
-<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-44-1.png" style="display: block; margin: auto;" />
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-44-1.png" alt="" style="display: block; margin: auto;" />
 
 We can see that clustering is occurring, though it's kind of hard to see exactly 
 how they are clustering in this visualization.
@@ -1022,7 +1042,7 @@ ggplot(pcaData, aes(PC1, PC2,color = genotype, shape = sex)) +
             y = paste0("PC2: ", percentVar[2], "% variance"))
 ```
 
-<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-45-1.png" style="display: block; margin: auto;" />
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-45-1.png" alt="" style="display: block; margin: auto;" />
 
 PCA identified genotype and sex being a major source of variation in between 
 5XFAD and WT mice. Female and male samples from the 5XFAD carriers  clustered 
@@ -1095,7 +1115,6 @@ metadata$Group <- paste0(metadata$genotype,
                          metadata$sex,
                          "-",
                          metadata$timepoint)
-
 unique(metadata$Group)
 ```
 
@@ -1527,7 +1546,7 @@ clusterProfiler::dotplot(enrich_pathway,
                          title        = "Enriched KEGG Pathways")
 ```
 
-<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-59-1.png" style="display: block; margin: auto;" />
+<img src="fig/differential-expression-analysis-rendered-unnamed-chunk-59-1.png" alt="" style="display: block; margin: auto;" />
 
 What does this plot infer?
 
