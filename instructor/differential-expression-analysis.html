@@ -20,7 +20,7 @@
       <div class="large-logo">
         <img id="incubator-logo" alt="Lesson Description" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-danger">
           <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
-            <a href="https://cdh.carpentries.org/the-lesson-life-cycle.html#early-development-pre-alpha-through-alpha" class="external-link alert-link">
+            <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
               <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
               Pre-Alpha
             </a>
@@ -56,6 +56,7 @@
             </li>
           </ul></li>
       </div>
+
 
       <div class="dropdown" id="instructor-dropdown">
         <button class="btn btn-secondary dropdown-toggle bordered-button" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -118,11 +119,11 @@
   Translational Omics in Alzheimers Disease
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 29%" class="percentage">
-    29%
+<aside class="col-md-12 lesson-progress"><div style="width: 13%" class="percentage">
+    13%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 29%" aria-valuenow="29" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 13%" aria-valuenow="13" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -237,7 +238,16 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="mouse-human-alignment.html">4. Mouse human alignment of transcriptomic signatures</a>
+        <a href="mouse-human-alignment.html">4. Cross Species Functional Alignment</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="choosing_the_right_model.html">5. Choosing the right animal models</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -295,13 +305,13 @@
           Previous: Synapse and AD
         </a>
         <a class="chapter-link float-end" href="../instructor/mouse-human-alignment.html" rel="next">
-          Next: Mouse human...
+          Next: Cross Species...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Differential expression analysis</h1>
-        <p>Last updated on 2025-04-18 |
+        <p>Last updated on 2026-02-12 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/differential-expression-analysis.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -742,7 +752,7 @@ covariates by <code>MouseID</code>.</p>
 <span>        <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">gene_id</span><span class="op">)</span> <span class="op">+</span></span>
 <span>        <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>You will notice expression of Human APP is higher in 5XFAD carriers
+<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-16-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>You will notice expression of Human APP is higher in 5XFAD carriers
 but lower in non-carriers. However mouse App expressed in both 5XFAD
 carrier and non-carrier.</p>
 <p>We are going to sum the counts from both orthologous genes (human APP
@@ -851,7 +861,8 @@ mice from either sex, at any time point.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">as.matrix</span><span class="op">(</span><span class="va">rawdata</span><span class="op">[</span> , <span class="fu">colnames</span><span class="op">(</span><span class="va">rawdata</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">meta.12M.Male</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">as.matrix</span><span class="op">(</span><span class="va">rawdata</span><span class="op">[</span> , <span class="fu">colnames</span><span class="op">(</span><span class="va">rawdata</span><span class="op">)</span> <span class="op">%in%</span></span>
+<span>                            <span class="fu">rownames</span><span class="op">(</span><span class="va">meta.12M.Male</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu">colnames</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -1282,7 +1293,29 @@ adjusted or unadjusted p-values. The default cut-off for log2FC is
 <pre class="warning" tabindex="0"><code>Warning: One or more p-values is 0. Converting to 10^-1 * current lowest
 non-zero p-value...</code></pre>
 </div>
-<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-41-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>You can see that some top significantly expressed are
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.
+ℹ The deprecated feature was likely used in the EnhancedVolcano package.
+  Please report the issue to the authors.
+This warning is displayed once per session.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
+ℹ Please use the `linewidth` argument instead.
+ℹ The deprecated feature was likely used in the EnhancedVolcano package.
+  Please report the issue to the authors.
+This warning is displayed once per session.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+</div>
+<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-41-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>You can see that some top significantly expressed are
 immune/inflammation-related genes such as Ctsd, C4b, Csf1 etc. These
 genes are upregulated in the 5XFAD strain.</p>
 <p><strong>Principal component plot of the samples</strong></p>
@@ -1291,7 +1324,7 @@ reduces the dimensionality of these large matrixes into a linear
 coordinate system, so that we can more easily visualize what factors are
 contributing the most to variation in the dataset by graphing the
 principal components.</p>
-<div class="codewrapper sourceCode" id="cb77">
+<div class="codewrapper sourceCode" id="cb79">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1305,7 +1338,7 @@ principal components.</p>
 <pre class="warning" tabindex="0"><code>Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
 design formula are characters, converting to factors</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb79">
+<div class="codewrapper sourceCode" id="cb81">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1354,12 +1387,11 @@ design formula are characters, converting to factors</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>fitting model and testing</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb88">
+<div class="codewrapper sourceCode" id="cb90">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vsd</span> <span class="op">&lt;-</span> <span class="fu">varianceStabilizingTransformation</span><span class="op">(</span><span class="va">dds</span>, blind <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">plotPCA</span><span class="op">(</span><span class="va">vsd</span>, intgroup <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"genotype"</span>, <span class="st">"sex"</span>, <span class="st">"timepoint"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -1367,11 +1399,11 @@ design formula are characters, converting to factors</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>using ntop=500 top features by variance</code></pre>
 </div>
-<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-44-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We can see that clustering is occurring, though it’s kind of hard to
+<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-44-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We can see that clustering is occurring, though it’s kind of hard to
 see exactly how they are clustering in this visualization.</p>
 <p>It is also possible to customize the PCA plot using the
 <code>ggplot</code> function.</p>
-<div class="codewrapper sourceCode" id="cb90">
+<div class="codewrapper sourceCode" id="cb92">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1384,7 +1416,7 @@ see exactly how they are clustering in this visualization.</p>
 </h3>
 <pre class="output" tabindex="0"><code>using ntop=500 top features by variance</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb92">
+<div class="codewrapper sourceCode" id="cb94">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1396,7 +1428,7 @@ see exactly how they are clustering in this visualization.</p>
 <span>       <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"PC1: "</span>, <span class="va">percentVar</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"% variance"</span><span class="op">)</span>, </span>
 <span>            y <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"PC2: "</span>, <span class="va">percentVar</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="st">"% variance"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-45-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>PCA identified genotype and sex being a major source of variation in
+<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-45-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>PCA identified genotype and sex being a major source of variation in
 between 5XFAD and WT mice. Female and male samples from the 5XFAD
 carriers clustered distinctly at all ages, suggesting the presence of
 sex-biased molecular changes in animals.</p>
@@ -1404,7 +1436,7 @@ sex-biased molecular changes in animals.</p>
 <p>Finally, we can build a function for differential analysis that
 consists of all above discussed steps. It will require to input sorted
 raw count matrix, sample metadata and define the reference group.</p>
-<div class="codewrapper sourceCode" id="cb93">
+<div class="codewrapper sourceCode" id="cb95">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1456,7 +1488,7 @@ data.</p>
 <p>First, we add a <code>Group</code> column to our metadata table that
 will combine all variables of interest (<code>genotype</code>,
 <code>sex</code>, and <code>timepoint</code>) for each sample.</p>
-<div class="codewrapper sourceCode" id="cb94">
+<div class="codewrapper sourceCode" id="cb96">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1465,7 +1497,6 @@ will combine all variables of interest (<code>genotype</code>,
 <span>                         <span class="va">metadata</span><span class="op">$</span><span class="va">sex</span>,</span>
 <span>                         <span class="st">"-"</span>,</span>
 <span>                         <span class="va">metadata</span><span class="op">$</span><span class="va">timepoint</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">unique</span><span class="op">(</span><span class="va">metadata</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -1483,7 +1514,7 @@ that we would like to compare with each other. Here I have made
 comparison groups for age and sex-matched 5xFAD carriers vs
 5xFAD_noncarriers, with carriers as the cases and noncarriers as the
 controls:</p>
-<div class="codewrapper sourceCode" id="cb96">
+<div class="codewrapper sourceCode" id="cb98">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1500,7 +1531,7 @@ controls:</p>
 <span>                                       <span class="st">"5XFAD_carrier-male-12 mo"</span>,</span>
 <span>                                       <span class="st">"5XFAD_carrier-female-12 mo"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb97">
+<div class="codewrapper sourceCode" id="cb99">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1520,7 +1551,7 @@ controls:</p>
 <p>Finally, we implement our <code>DEG</code> function on each
 case/control comparison of interest and store the result table in a list
 and data frame:</p>
-<div class="codewrapper sourceCode" id="cb99">
+<div class="codewrapper sourceCode" id="cb101">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1768,7 +1799,7 @@ design formula are characters, converting to factors</code></pre>
 'select()' returned 1:many mapping between keys and columns</code></pre>
 </div>
 <p>Let’s explore the result stored in our list:</p>
-<div class="codewrapper sourceCode" id="cb142">
+<div class="codewrapper sourceCode" id="cb144">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1784,7 +1815,7 @@ design formula are characters, converting to factors</code></pre>
 <p>We can easily extract the result table for any group of interest by
 using $ and name of group. Let’s check top few rows from
 <code>5XFAD_carrier-male-4 mo</code> group:</p>
-<div class="codewrapper sourceCode" id="cb144">
+<div class="codewrapper sourceCode" id="cb146">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1809,7 +1840,7 @@ ENSMUSG00000000049  0.36554951 0.714701258 0.9999514
 ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567</code></pre>
 </div>
 <p>Let’s check the result stored as dataframe:</p>
-<div class="codewrapper sourceCode" id="cb146">
+<div class="codewrapper sourceCode" id="cb148">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1834,7 +1865,7 @@ ENSMUSG00000000049  0.36554951 0.714701258 0.9999514 5xFAD male 4 mo
 ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre>
 </div>
 <p>Check if result is present for all ages:</p>
-<div class="codewrapper sourceCode" id="cb148">
+<div class="codewrapper sourceCode" id="cb150">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1846,7 +1877,7 @@ ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre
 <pre class="output" tabindex="0"><code>[1] "4 mo"  "6 mo"  "12 mo"</code></pre>
 </div>
 <p>Check if result is present for both sexes:</p>
-<div class="codewrapper sourceCode" id="cb150">
+<div class="codewrapper sourceCode" id="cb152">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1858,7 +1889,7 @@ ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre
 <pre class="output" tabindex="0"><code>[1] "male"   "female"</code></pre>
 </div>
 <p>Check number of genes in each group:</p>
-<div class="codewrapper sourceCode" id="cb152">
+<div class="codewrapper sourceCode" id="cb154">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1877,7 +1908,7 @@ ENSMUSG00000000056 -2.63427474 0.008431723 0.5696567 5xFAD male 4 mo</code></pre
 </div>
 <p>Check number of genes significantly differentially expressed in all
 cases compared to age and sex-matched controls:</p>
-<div class="codewrapper sourceCode" id="cb154">
+<div class="codewrapper sourceCode" id="cb156">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1895,25 +1926,25 @@ cases compared to age and sex-matched controls:</p>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu">kable</span><span class="op">(</span><span class="va">deg</span><span class="op">)</span></span></code></pre>
 </div>
-<table class="table"><thead><tr class="header"><th align="left">Case</th>
+<table class="table"><thead><tr><th align="left">Case</th>
 <th align="right">Up_DEGs.pval.05</th>
 <th align="right">Down_DEGs.pval.05</th>
-</tr></thead><tbody><tr class="odd"><td align="left">5XFAD_carrier-male-4 mo</td>
+</tr></thead><tbody><tr><td align="left">5XFAD_carrier-male-4 mo</td>
 <td align="right">86</td>
 <td align="right">11</td>
-</tr><tr class="even"><td align="left">5XFAD_carrier-female-4 mo</td>
+</tr><tr><td align="left">5XFAD_carrier-female-4 mo</td>
 <td align="right">522</td>
 <td align="right">90</td>
-</tr><tr class="odd"><td align="left">5XFAD_carrier-male-6 mo</td>
+</tr><tr><td align="left">5XFAD_carrier-male-6 mo</td>
 <td align="right">714</td>
 <td align="right">488</td>
-</tr><tr class="even"><td align="left">5XFAD_carrier-female-6 mo</td>
+</tr><tr><td align="left">5XFAD_carrier-female-6 mo</td>
 <td align="right">1081</td>
 <td align="right">409</td>
-</tr><tr class="odd"><td align="left">5XFAD_carrier-male-12 mo</td>
+</tr><tr><td align="left">5XFAD_carrier-male-12 mo</td>
 <td align="right">1098</td>
 <td align="right">505</td>
-</tr><tr class="even"><td align="left">5XFAD_carrier-female-12 mo</td>
+</tr><tr><td align="left">5XFAD_carrier-female-12 mo</td>
 <td align="right">1494</td>
 <td align="right">1023</td>
 </tr></tbody></table><p>Interestingly, in females more genes are differentially expressed at
@@ -1926,7 +1957,7 @@ the mice get in both sexes.</p>
 of differentially expressed genes. Here we will test for enrichment of
 KEGG pathways using using the <code>enrichKEGG</code> function in the
 <code>clusterProfiler</code> package.</p>
-<div class="codewrapper sourceCode" id="cb155">
+<div class="codewrapper sourceCode" id="cb157">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1951,7 +1982,7 @@ KEGG pathways using using the <code>enrichKEGG</code> function in the
 </div>
 <p>Let’s plot top enriched functions using the <code>dotplot</code>
 function of the <code>clusterProfiler</code> package.</p>
-<div class="codewrapper sourceCode" id="cb156">
+<div class="codewrapper sourceCode" id="cb158">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1960,7 +1991,7 @@ function of the <code>clusterProfiler</code> package.</p>
 <span>                         font.size    <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>                         title        <span class="op">=</span> <span class="st">"Enriched KEGG Pathways"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-59-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>What does this plot infer?</p>
+<figure><img src="../fig/differential-expression-analysis-rendered-unnamed-chunk-59-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>What does this plot infer?</p>
 </div>
 <div class="section level2">
 <h2 id="save-data-for-next-lesson">Save Data for Next Lesson<a class="anchor" aria-label="anchor" href="#save-data-for-next-lesson"></a></h2>
@@ -1969,7 +2000,7 @@ will load it at the beginning of the next lesson. We will use R’s
 <code>save</code> command to save the objects in compressed, binary
 format. The <code>save</code> command is useful when you want to save
 multiple objects in one file.</p>
-<div class="codewrapper sourceCode" id="cb157">
+<div class="codewrapper sourceCode" id="cb159">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1979,8 +2010,8 @@ multiple objects in one file.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul><li>
 </li></ul></div>
@@ -2007,7 +2038,7 @@ any links that you are not going to use.
           Previous: Synapse and AD
         </a>
         <a class="chapter-link float-end" href="../instructor/mouse-human-alignment.html" rel="next">
-          Next: Mouse human...
+          Next: Cross Species...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -2024,15 +2055,17 @@ any links that you are not going to use.
 	
         | <a href="https://github.com/asliuyar/translational-omics-AD/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/asliuyar/translational-omics-AD/" class="external-link">Source</a></p>
-				<p><a href="https://github.com/asliuyar/translational-omics-AD/blob/main/CITATION.cff" class="external-link">Cite</a> | <a href="mailto:">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
-			</div>
-			<div class="col-md-6">
+        <p>
+        <a href="../citation.html">Cite</a>
+        | <a href="mailto:">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
+		</div>
+		<div class="col-md-6">
 
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.11" class="external-link">sandpaper (0.16.11)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.5" class="external-link">varnish (1.0.5)</a></p>
-			</div>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.18.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.0.9)</a></p>
+		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
 		<a href="#top">
@@ -2042,10 +2075,10 @@ any links that you are not going to use.
   <script type="application/ld+json">
     {
   "@context": "https://schema.org",
-  "@type": "TrainingMaterial",
+  "@type": "LearningResource",
   "@id": "https://asliuyar.github.io/translational-omics-AD/instructor/differential-expression-analysis.html",
   "inLanguage": "en",
-  "dct:conformsTo": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE",
+  "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "Alzheimers-disease, cross-species-translation, omics, AD-Knowledge-Portal",
   "name": "Differential expression analysis",
@@ -2053,8 +2086,8 @@ any links that you are not going to use.
   "url": "https://asliuyar.github.io/translational-omics-AD/instructor/differential-expression-analysis.html",
   "identifier": "https://asliuyar.github.io/translational-omics-AD/instructor/differential-expression-analysis.html",
   "dateCreated": "2024-10-02",
-  "dateModified": "2025-04-18",
-  "datePublished": "2025-04-29"
+  "dateModified": "2026-02-12",
+  "datePublished": "2026-02-12"
 }
 
   </script><script>
