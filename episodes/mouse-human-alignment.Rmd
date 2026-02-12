@@ -1413,7 +1413,7 @@ bd.tally = tibble(domain = c(unique(biodom$Biodomain), 'no domain')) %>%
 arrange(bd.tally, desc(n_sig_term))
 ```
 
-Many enriched terms don't map to a domain (`r bd.tally %>% filter(domain == 'no domain') %>% pull(n_sig_term) %>% sum()`), but nearly half do (`r bd.tally %>% filter(domain != 'no domain') %>% pull(n_sig_term) %>% sum()`). Of those that do, the vast majority map into the `Immune Response` biodomain.  
+Many enriched terms don't map to a domain r bd.tally %>% filter(domain == 'no domain') %>% pull(n_sig_term) %>% sum()), but nearly half do (r bd.tally %>% filter(domain != 'no domain') %>% pull(n_sig_term) %>% sum()). Of those that do, the vast majority map into the `Immune Response` biodomain.  
 
 We can plot the enrichment results, stratified by biodomain:  
 
