@@ -32,7 +32,7 @@ Author: Gregory Cary, Jackson Laboratory
 First, let's install the necessary packages into the workspace, starting with the annotation packages:  
 
 ```{r, eval=FALSE}
-# Mouse and Human annotation databses
+# Mouse and Human annotation databases
 BiocManager::install(c('org.Mm.eg.db','org.Hs.eg.db', 'GO.db'))
 ```
 
@@ -129,7 +129,20 @@ counts <- syn$get('syn22108847') %>% .$path %>% read_tsv()
 # biospecimen  metadata
 meta <- syn$get('syn22103213') %>% .$path %>% read_csv() %>% 
   select(individualID, specimenID) 
+counts <- read_tsv("data/htseqcounts_5XFAD.txt", 
+                   show_col_types = FALSE)
 
+# individual metadata
+ind_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_individual_metadata.csv", 
+                     show_col_types = FALSE)
+
+# biospecimen metadata
+bio_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_biospecimen_metadata.csv", 
+                     show_col_types = FALSE)
+
+# assay metadata
+rna_meta <- read_csv("data/Jax.IU.Pitt_5XFAD_assay_RNAseq_metadata.csv", 
+                     show_col_types = FALSE)
 # individual metadata, joined to the above
 meta <- syn$get('syn22103212') %>% .$path %>% read_csv() %>% 
   left_join(., meta, by = 'individualID') %>% 
@@ -821,18 +834,16 @@ Others?
 #### Step 0: Reading Gene Expression Count matrix from Previous Lesson
 
 First we'll read the results saved after differential expression analysis (above). We'll only keep the information about which age cohort and the differential expression results. 
+
 ```{r FAD}
-fad.deg <- readRDS( here::here("5xFAD_DESeq_analysis.rds") ) %>% 
-  mutate(age = str_c(age,'m')) %>% 
-  select(age, res.t) %>% 
-  unnest(res.t)
+fad.deg <- load("results/DEAnalysis_5XFAD.Rdata")
 
 head(fad.deg)
 ```
 
 Let's also load the AMP-AD module data.
 ```{r}
-load(here::here("AMPAD_Module_Data.RData"))
+load("data/AMPAD_Module_Data.RData")
 ```
 
 
@@ -842,18 +853,21 @@ We compute a Pearson correlation between changes in expression for each gene wit
 
 First, we'll combine both mouse `fad.deg` and human `ampad_modules_fc` log fold change data sets for all genes.
 
-```{r step1, message=FALSE, warning=FALSE}
-model_vs_ampad <- inner_join(fad.deg, ampad_modules_fc, by = c("symbol"), multiple = "all") 
+```{r step1, message=FALSE, warning=FALSE, eval=FALSE}
+model_vs_ampad <- inner_join(fad.deg, 
+                             ampad_modules_fc, 
+                             by = c("symbol"), 
+                             multiple = "all") 
 ```
 
 **Note:** for this join we specify `multiple = "all"` so that the same gene can be matched across multiple human tissues and multiple mouse ages.
 
-```{r}
+```{r, eval=FALSE}
 head(model_vs_ampad)
 ```
 
 Now we'll create a list column containing data frames using the [tidyr::nest](https://tidyr.tidyverse.org/reference/nest.html) function. Nesting is implicitly a summarizing operation: you get one row for each group defined by the non-nested columns. 
-```{r}
+```{r, eval=FALSE}
 df <- model_vs_ampad %>%
   dplyr::select(module, age, symbol, log2FoldChange, ampad_fc) %>%
   group_by(module, age) %>%
@@ -863,19 +877,19 @@ head(df)
 ```
 
 And we can also look at some of the nested data: 
-```{r}
+```{r, eval=FALSE}
 head(df$data[[1]])
 ```
 
 These are the mouse and human log fold-change values for all genes in the TCXblue module; the mouse data corresponds to 4 month old 5xFAD mice.
 
 The total number of groups in the data table:
-```{r}
+```{r, eval=FALSE}
 dim(df)
 ```
 
 Next, we'll compute correlation coefficients using the `cor.test` function:  
-```{r}
+```{r, eval=FALSE}
 cor.df <- df  %>%
   mutate(
       cor_test = map(data, ~ cor.test(.x[["log2FoldChange"]], 
@@ -890,14 +904,14 @@ cor.df <- df  %>%
 Here we're using `purrr::map` based functions to apply the correlation test to every entry in the `data` column. We can pull out specific features from the `cor_test` list column, including the computed correlation coefficient (`estimate`) and the significance (`p.value`).
 
 In the end we should have correlation coefficients and significance values for every comparison in our data table:
-```{r}
+```{r, eval=FALSE}
 head(cor.df)
 ```
 
 #### Step 2: Annotate correlation table to prepare for visualization
 
 These steps will make it easier to make a nice looking plot during the next step. We'll add a column that flags whether the correlation is significant or not, and we'll add in the information about which consensus cluster each module belongs to:
-```{r step2, message=FALSE, warning=FALSE}
+```{r step2, message=FALSE, warning=FALSE, eval=FALSE}
 model_module <- cor.df %>%
   mutate(significant = p_value < 0.05) %>%
   left_join(module_clusters, by = "module") %>%
@@ -909,7 +923,7 @@ head(model_module)
 
 #### Step 3: Create a dataframe to use as input for plotting the results
 More preparations for plotting, here we'll get all of the values in the right order so that they are grouped together nicely on the plot.
-```{r step3, message=FALSE, warning=FALSE}
+```{r step3, message=FALSE, warning=FALSE, eval=FALSE}
 correlation_for_plot <- model_module %>%
     arrange(cluster) %>%
     mutate( 
@@ -921,7 +935,7 @@ head(correlation_for_plot)
 
 ### Visualizing the Correlation plot
 Now, we will use the above matrix and visualize the correlation results using `ggplot2` package functions.
-```{r AMPAD1, message=FALSE, warning=FALSE, fig.width = 16, fig.height = 4, fig.show='hide'}
+```{r AMPAD1, message=FALSE, warning=FALSE, fig.width = 16, fig.height = 4, fig.show='hide', eval=FALSE}
 data <- correlation_for_plot
 range(correlation_for_plot$correlation)
 
@@ -975,7 +989,7 @@ In the above plot, categories along the x-axis are the 30 AMP-AD co-expression m
 ### Examining individual correlation results
 
 Let's say we want to know more about a single comparison in the plot above and which genes are contributing to the correlation result. Maybe we're really interested in the correlations to the FPbrown module between 5xFAD mice at 4 months and 6 months. We can plot the individual correlations for each comparison in the plot above with the data we have. We'll label genes with large fold change in the mouse using the `ggrepel::geom_label_repel` function.   
-```{r fig.width=8, fig.height=4, fig.show='hide'}
+```{r fig.width=8, fig.height=4, fig.show='hide', eval=FALSE}
 # specify which comparisons to consider
 m <- 'FPbrown'
 a <- c('4m','6m')
@@ -1000,7 +1014,7 @@ ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
 
 Here we can see that the 5xFAD logFC are pretty small in general. The correlations are relatively weak and driven by individual genes that have relatively large changes (e.g. Heatr4, Nirp1a, Rpl39l). If we compare a different module, say STGblue, we can see a stronger relationship between mouse and human expression changes.
 
-```{r fig.width=8, fig.height=4, fig.show='hide'}
+```{r fig.width=8, fig.height=4, fig.show='hide', eval=FALSE}
 m <- 'STGblue'
 a <- c('4m','6m')
 
@@ -1049,7 +1063,7 @@ Of course, these overlap tests are generally considered for all annotation class
 There are many R packages available to handle the statistical tests and corrections involved in ORA. Today we'll use `clusterProfiler::enrichGO()`, which wraps statistical testing for overlap with GO terms and multiple test correction in one function. 
 
 Let's start by considering the enrichments from the mouse data analyzed previously. We'll start by considering the genes that are significantly DE in 6 month old animals
-```{r}
+```{r, eval=FALSE}
 gene.list.up <- fad.deg %>% 
   filter(age == '6m',
          padj <= 0.05, 
@@ -1074,7 +1088,7 @@ length(gene.list.dn)
 
 There are a total of `r length(gene.list.up)` significantly up-regulated genes and `r length(gene.list.dn)` significantly down-regulated genes in this cohort. Now test for over representation of GO terms among the DEGs. First, we need to identify the universe of all possible genes which includes the genes that were both measured by the experiment and contained within the annotation set.
 
-```{r}
+```{r, eval=FALSE}
 univ <- as.data.frame(org.Mm.egGO) %>% 
   pull(gene_id) %>% 
   unique() %>% 
@@ -1085,7 +1099,7 @@ univ <- as.data.frame(org.Mm.egGO) %>%
 
 Now let's test for enriched GO terms (this can take 3-4 minutes)
 
-```{r}
+```{r, eval=FALSE}
 enr.up <- enrichGO(gene.list.up, 
                    ont = 'all', 
                    OrgDb = org.Mm.eg.db, 
@@ -1101,7 +1115,7 @@ enr.dn <- enrichGO(gene.list.dn,
 ```
 
 How many significant terms are identified:  
-```{r}
+```{r, eval=FALSE}
 enr.up@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
 enr.dn@result %>% filter(p.adjust <= 0.05) %>% pull(ID) %>% unique() %>% length()
 ```
@@ -1126,7 +1140,7 @@ enrichGO(gene.list.up, ont = 'all', OrgDb = org.Mm.eg.db, keyType = 'SYMBOL') %>
 
 
 Plot the top 10 significant terms:  
-```{r significant_terms, fig.width=12, fig.height=5, fig.show='hide'}
+```{r significant_terms, fig.width=12, fig.height=5, fig.show='hide', eval=FALSE}
 cowplot::plot_grid(
   dotplot(enr.dn, showCategory = 10) + ggtitle('down'),
   dotplot(enr.up, showCategory = 10) + ggtitle('up')
@@ -1141,7 +1155,7 @@ From this we can see that nervous system related terms (e.g. "dendrite developme
 
 Let's analyze those same data with the `fgsea::fgseaMultilevel()` function. First we'll specify the gene list and use the `log2FoldChange` value to rank the genes in the list.  
 
-```{r}
+```{r, eval=FALSE}
 gene.list <- fad.deg %>% 
   filter(age == '6m', padj <= 0.05) %>%
   arrange(desc(log2FoldChange)) %>% 
