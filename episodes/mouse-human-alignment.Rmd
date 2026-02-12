@@ -33,27 +33,27 @@ First, let's install the necessary packages into the workspace, starting with th
 
 ```{r, eval=FALSE}
 # Mouse and Human annotation databases
-BiocManager::install(c('org.Mm.eg.db','org.Hs.eg.db', 'GO.db'))
+# BiocManager::install(c('org.Mm.eg.db','org.Hs.eg.db', 'GO.db'))
 ```
 
 Next we'll install the `fgsea` and `clusterProfiler` packages, which will be used for GO term enrichment.  
 
 ```{r, eval=FALSE}
 # fgsea package
-BiocManager::install(c('fgsea', 'clusterProfiler'))
+# BiocManager::install(c('fgsea', 'clusterProfiler'))
 ```
 
 Finally we can instally the `synapseclient` python package using the `reticulate` R package, this will enable us comand-line access to objects in the Synapse data repository.   
 
 ```{r, eval=FALSE}
 # synapseclient python package
-reticulate::py_install('synapseclient')
+# reticulate::py_install('synapseclient')
 ```
 
 Finally we'll need to generate a personal access token on Synapse. Login to Synapse, go to `Your Account > Account Settings > Personal Access Tokens > Manage Personal Access Tokens`. Click on `Create New Token` and make sure to enable both View and Download permissions. Paste the resulting PAT in the quotes below and save it to your workspace.  
 
 ```{r }
-synToken <- 'eyJ0eXAiOiJKV1QiLCJraWQiOiJXN05OOldMSlQ6SjVSSzpMN1RMOlQ3TDc6M1ZYNjpKRU9VOjY0NFI6VTNJWDo1S1oyOjdaQ0s6RlBUSCIsImFsZyI6IlJTMjU2In0.eyJhY2Nlc3MiOnsic2NvcGUiOlsidmlldyIsImRvd25sb2FkIiwibW9kaWZ5Il0sIm9pZGNfY2xhaW1zIjp7fX0sInRva2VuX3R5cGUiOiJQRVJTT05BTF9BQ0NFU1NfVE9LRU4iLCJpc3MiOiJodHRwczovL3JlcG8tcHJvZC5wcm9kLnNhZ2ViYXNlLm9yZy9hdXRoL3YxIiwiYXVkIjoiMCIsIm5iZiI6MTcxNTE4MzU1NSwiaWF0IjoxNzE1MTgzNTU1LCJqdGkiOiI3ODE5Iiwic3ViIjoiMzQwMTgyNCJ9.mdzYySkYoJ25QDdd-i6t5VkNnRaQSF3-YM92brbNEC6f-UuRfuut_TikaUexqXK9rBTwuF0L_2ZOUqfn8YsmYyfsC61OjnlbNuKikK19wkcLFEyZZMzR7ljrJVQ9nFtzC-dxMocpcb1tiM5q0AIZanU8lWbe2pHuFvc5ChWe6ApY2ShAezxs9pA7K5Kq2Fvk7fEcwCAqGbnPjQIObiWbx6lTMFDc9gi-OsslxFw62iL1IxgJjGEKOm-XjUFIhSoU8mkGRwt2Oja_YxJ-kSL07jRleZQfcCnZjERNd3wZeN9mLP28uSuON31DKz9hTBYo7VwiiL3Xv5iEp5kUGLNm1g'
+# synToken <- 
 ```
 
 **NOTE**: This is for learning purposes only. Storing your PAT in an environmental variable in your workspace is not secure and you could easily loose access to the PAT. The preferred method is to store it in a separate file called `.synapseConfig` under your home directory.  
@@ -66,7 +66,7 @@ syn.client <- reticulate::import('synapseclient')
 syn        <- syn.client$Synapse()
 
 # log in to Synapse
-syn$login('greg.cary@jax.org', authToken = synToken)
+# syn$login('', authToken = synToken)
 ```
 
 Finally, let's load the R packages we'll need for today's lesson:  
@@ -1086,7 +1086,7 @@ length(gene.list.up)
 length(gene.list.dn)
 ```
 
-There are a total of `r length(gene.list.up)` significantly up-regulated genes and `r length(gene.list.dn)` significantly down-regulated genes in this cohort. Now test for over representation of GO terms among the DEGs. First, we need to identify the universe of all possible genes which includes the genes that were both measured by the experiment and contained within the annotation set.
+There are a total of # r length(gene.list.up) significantly up-regulated genes and r length(gene.list.dn) significantly down-regulated genes in this cohort. Now test for over representation of GO terms among the DEGs. First, we need to identify the universe of all possible genes which includes the genes that were both measured by the experiment and contained within the annotation set.
 
 ```{r, eval=FALSE}
 univ <- as.data.frame(org.Mm.egGO) %>% 
