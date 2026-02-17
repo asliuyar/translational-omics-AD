@@ -68,6 +68,7 @@ episodes:
 - exploring-data-in-synapse.Rmd
 - differential-expression-analysis.Rmd
 - mouse-human-alignment.Rmd
+- choosing_the_right_model.Rmd
 
 # Information for Learners
 learners: 
