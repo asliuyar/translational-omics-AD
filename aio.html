@@ -6,21 +6,27 @@
 <title>Translational Omics in Alzheimers Disease: All in One View</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="assets/themetoggle.js"></script><link rel="stylesheet" type="text/css" href="assets/styles.css">
-<script src="assets/scripts.js" type="text/javascript"></script><!-- mathjax --><script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      config: ["MMLorHTML.js"],
-      jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML", "output/PreviewHTML"],
-      extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js", "fast-preview.js", "AssistiveMML.js", "a11y/accessibility-menu.js"],
-      TeX: {
-        extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-      },
-      tex2jax: {
-        inlineMath: [['\\(', '\\)']],
-        displayMath: [ ['$$','$$'], ['\\[', '\\]'] ],
-        processEscapes: true
-      }
-    });
-    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><!-- Responsive Favicon for The Carpentries --><link rel="apple-touch-icon" sizes="180x180" href="favicons/incubator/apple-touch-icon.png">
+<script src="assets/scripts.js" type="text/javascript"></script><!-- mathjax --><!-- NOTE: https://docs.mathjax.org/en/latest/output/mathml.html#mathml-support --><!-- Changes from V2 to V4: https://mathjax.github.io/MathJax-demos-web/convert-configuration/convert-configuration.html
+        Jax output/NativeMML is not yet implemented
+        Jax output/PreviewHTML is not yet implemented
+        Extension fast-preview is not yet implemented (but may be in a future release)
+    --><script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [ ['$$','$$'], ['\\[', '\\]'] ],
+            processEscapes: true,
+            packages: ['base', 'ams', 'noerrors', 'noundefined']
+        },
+        options: {
+            ignoreHtmlClass: 'tex2jax_ignore',
+            processHtmlClass: 'tex2jax_process'
+        },
+        loader: {
+            load: ['a11y/assistive-mml', '[tex]/noerrors']
+        }
+    };
+    </script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script><!-- Responsive Favicon for The Carpentries --><link rel="apple-touch-icon" sizes="180x180" href="favicons/incubator/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicons/incubator/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicons/incubator/favicon-16x16.png">
 <link rel="manifest" href="favicons/incubator/site.webmanifest">
@@ -47,8 +53,8 @@
       </div>
     </div>
     <div class="selector-container">
-      <div id="theme-selector">
-        <li class="nav-item dropdown" id="theme-button-list">
+      <menu class="theme-selector" id="theme-selector-menu">
+<li class="nav-item dropdown theme-button-list" id="theme-button-list-menu">
           <button class="btn btn-link nav-link px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (auto)">
             <svg class="bi my-1 theme-icon-active"><use href="#circle-half"></use></svg><i data-feather="chevron-down"></i>
           </button>
@@ -73,10 +79,8 @@
             </li>
           </ul>
 </li>
-      </div>
-
-
-      <div class="dropdown" id="instructor-dropdown">
+    </menu>
+<div class="dropdown" id="instructor-dropdown">
         <button class="btn btn-secondary dropdown-toggle bordered-button" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
           <i aria-hidden="true" class="icon" data-feather="eye"></i> Learner View <i data-feather="chevron-down"></i>
         </button>
@@ -141,29 +145,18 @@
     <a id="search-button" class="btn btn-primary" href="aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div>
 <!--/div.container-fluid -->
-</nav><div class="col-md-12 mobile-title">
-  Translational Omics in Alzheimers Disease
-</div>
-
-<aside class="col-md-12 lesson-progress"><div style="width: %" class="percentage">
-    %
-  </div>
-  <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: %" aria-valuenow="" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
-    </div>
-  </div>
-</aside><div class="container">
+</nav><div class="container">
       <div class="row">
         <!-- START: inst/pkgdown/templates/navbar.html -->
 <div id="sidebar-col" class="col-lg-4">
   <div id="sidebar" class="sidebar">
-      <nav aria-labelledby="flush-headingEleven"><button role="button" aria-label="close menu" alt="close menu" aria-expanded="true" aria-controls="sidebar" class="collapse-toggle" data-collapse="Collapse " data-episodes="Episodes ">
+      <nav aria-labelledby="flush-collapse-chapters-toggle"><button role="button" aria-label="Collapse" alt="Collapse" aria-expanded="true" aria-controls="sidebar" class="collapse-toggle" data-collapse="Collapse " data-episodes="Episodes ">
           <i class="search-icon" data-feather="x" role="img"></i>
         </button>
         <div class="sidebar-inner">
           <div class="row mobile-row" id="theme-row-mobile">
-            <div class="col" id="theme-selector">
-              <li class="nav-item dropdown" id="theme-button-list">
+            <menu class="col theme-selector" id="theme-selector-sidebar">
+<li class="nav-item dropdown theme-button-list" id="theme-button-list-sidebar">
                 <button class="btn btn-link nav-link px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (auto)">
                   <svg class="bi my-1 theme-icon-active"><use href="#circle-half"></use></svg><span class="d-lg-none ms-1" id="bd-theme-text">Toggle Theme</span>
                 </button>
@@ -188,19 +181,19 @@
                   </li>
                 </ul>
 </li>
-            </div>
-          </div>
+            </menu>
+</div>
           <div class="row mobile-row">
             <div class="col">
               <div class="sidenav-view-selector">
-                <div class="accordion accordion-flush" id="accordionFlush9">
+                <div class="accordion accordion-flush" id="accordion-instructor-toggle">
                   <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingNine">
-                      <button class="accordion-button collapsed" id="instructor" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+                    <h2 class="accordion-header" id="flush-heading-instructor-toggle">
+                      <button class="accordion-button collapsed" id="instructor" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-instructor-toggle" aria-expanded="false" aria-controls="flush-collapse-instructor-toggle">
                         <i id="eye" aria-hidden="true" class="icon" data-feather="eye"></i> Learner View
                       </button>
                     </h2>
-                    <div id="flush-collapseNine" class="accordion-collapse collapse" aria-labelledby="flush-headingNine" data-bs-parent="#accordionFlush2">
+                    <div id="flush-collapse-instructor-toggle" class="accordion-collapse collapse" data-bs-parent="#accordion-instructor-toggle">
                       <div class="accordion-body">
                         <a href="instructor/aio.html">Instructor View</a>
                       </div>
@@ -218,15 +211,15 @@
 </div>
 <!--/div.mobile-row -->
 
-          <div class="accordion accordion-flush" id="accordionFlush11">
+          <div class="accordion accordion-flush" id="accordion-chapters-toggle">
             <div class="accordion-item">
 
-              <button id="chapters" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEleven" aria-expanded="false" aria-controls="flush-collapseEleven">
-                <h2 class="accordion-header chapters" id="flush-headingEleven">
+              <button id="chapters" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-chapters-toggle" aria-expanded="false" aria-controls="flush-collapse-chapters-toggle">
+                <h2 class="accordion-header chapters" id="flush-heading-chapters-toggle">
                   EPISODES
                 </h2>
               </button>
-              <div id="flush-collapseEleven" class="accordion-collapse show collapse" aria-labelledby="flush-headingEleven" data-bs-parent="#accordionFlush11">
+              <div id="flush-collapse-chapters-toggle" class="accordion-collapse show collapse" data-bs-parent="#accordion-chapters-toggle">
 
                 <div class="accordion-body">
                   <div class="accordion accordion-flush" id="accordionFlush1">
@@ -306,14 +299,14 @@
             </div>
 
             <hr class="half-width">
-<div class="accordion accordion-flush lesson-resources" id="accordionFlush12">
+<div class="accordion accordion-flush lesson-resources" id="accordion-resources-toggle">
               <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingTwelve">
-                  <button class="accordion-button collapsed" id="lesson-resources" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwelve" aria-expanded="false" aria-controls="flush-collapseTwelve">
+                <h2 class="accordion-header" id="flush-heading-resources-toggle">
+                  <button class="accordion-button collapsed" id="lesson-resources" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-resources-toggle" aria-expanded="false" aria-controls="flush-collapse-resources-toggle">
                     RESOURCES
                   </button>
                 </h2>
-                <div id="flush-collapseTwelve" class="accordion-collapse collapse" aria-labelledby="flush-headingTwelve" data-bs-parent="#accordionFlush12">
+                <div id="flush-collapse-resources-toggle" class="accordion-collapse collapse" data-bs-parent="#accordion-resources-toggle">
                   <div class="accordion-body">
                     <ul>
 <li>
@@ -353,11 +346,11 @@
         <!-- START: inst/pkgdown/templates/content-extra.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <main id="main-content" class="main-content"><div class="container lesson-content">
-        
+        <h1>All in One View</h1>
         
 <section id="aio-introduction"><p>Content from <a href="introduction.html">Introduction to Omics Translation in AD</a></p>
 <hr>
-<p>Last updated on 2026-03-03 |
+<p>Last updated on 2026-04-21 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/introduction.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -396,7 +389,7 @@ any links that you are not going to use.
  --></p>
 </section></section><section id="aio-exploring-data-in-synapse"><p>Content from <a href="exploring-data-in-synapse.html">Synapse and AD Knowledge Portal</a></p>
 <hr>
-<p>Last updated on 2026-03-03 |
+<p>Last updated on 2026-04-21 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/exploring-data-in-synapse.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -794,7 +787,7 @@ raw fastqs and processed counts data.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 
 </div>
@@ -972,7 +965,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-differential-expression-analysis"><p>Content from <a href="differential-expression-analysis.html">Differential expression analysis</a></p>
 <hr>
-<p>Last updated on 2026-03-03 |
+<p>Last updated on 2026-04-21 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/differential-expression-analysis.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2705,7 +2698,7 @@ any links that you are not going to use.
 </div>
 </div></section><section id="aio-mouse-human-alignment"><p>Content from <a href="mouse-human-alignment.html">Cross Species Functional Alignment</a></p>
 <hr>
-<p>Last updated on 2026-03-03 |
+<p>Last updated on 2026-04-21 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/mouse-human-alignment.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -3176,7 +3169,7 @@ filter?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3365,7 +3358,7 @@ than we saw at four months.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3402,7 +3395,7 @@ than we saw at four months.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>The comparisons to check are 4m+6m, 4m+10m, and 6m+10m; these are in
 rows 1+2, 1+3, and 2+3, respectively.</p>
@@ -3610,7 +3603,7 @@ corresponding module<br>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>You could also try:</p>
 <div class="codewrapper sourceCode" id="cb42">
@@ -3709,7 +3702,7 @@ orthologs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb49">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3935,7 +3928,7 @@ approach; we’ll return to approach #2 later in the week.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <p><span class="math display">\[cor.test(LogFC(h),
 LogFC(m))\]</span></p>
@@ -4418,7 +4411,7 @@ list if you do not specify the “universe”?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb81">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4563,7 +4556,7 @@ results relates to the directionality of enrichment).</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution8" aria-expanded="false" aria-controls="collapseSolution8">
   <h4 class="accordion-header" id="headingSolution8"> Show me the solution </h4>
 </button>
-<div id="collapseSolution8" class="accordion-collapse collapse" data-bs-parent="#accordionSolution8" aria-labelledby="headingSolution8">
+<div id="collapseSolution8" class="accordion-collapse collapse" aria-labelledby="headingSolution8" data-bs-parent="#accordionSolution8">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb89">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4596,7 +4589,7 @@ slightly different. Why would this be the case?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution9" aria-expanded="false" aria-controls="collapseSolution9">
   <h4 class="accordion-header" id="headingSolution9"> Show me the solution </h4>
 </button>
-<div id="collapseSolution9" class="accordion-collapse collapse" data-bs-parent="#accordionSolution9" aria-labelledby="headingSolution9">
+<div id="collapseSolution9" class="accordion-collapse collapse" aria-labelledby="headingSolution9" data-bs-parent="#accordionSolution9">
 <div class="accordion-body">
 <p><code>fgsea</code> uses a permutation-based approach to estimate the
 significance of the gene set enrichments. Because this involves random
@@ -4978,7 +4971,7 @@ enrichements?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution10" aria-expanded="false" aria-controls="collapseSolution10">
   <h4 class="accordion-header" id="headingSolution10"> Show me the solution </h4>
 </button>
-<div id="collapseSolution10" class="accordion-collapse collapse" data-bs-parent="#accordionSolution10" aria-labelledby="headingSolution10">
+<div id="collapseSolution10" class="accordion-collapse collapse" aria-labelledby="headingSolution10" data-bs-parent="#accordionSolution10">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb103">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5056,7 +5049,7 @@ with <code>p.adjust</code> values less than <code>1e-5</code>?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution11" aria-expanded="false" aria-controls="collapseSolution11">
   <h4 class="accordion-header" id="headingSolution11"> Show me the solution </h4>
 </button>
-<div id="collapseSolution11" class="accordion-collapse collapse" data-bs-parent="#accordionSolution11" aria-labelledby="headingSolution11">
+<div id="collapseSolution11" class="accordion-collapse collapse" aria-labelledby="headingSolution11" data-bs-parent="#accordionSolution11">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb104">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5482,7 +5475,7 @@ compare the the correlations of enriched terms and modules.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution12" aria-expanded="false" aria-controls="collapseSolution12">
   <h4 class="accordion-header" id="headingSolution12"> Show me the solution </h4>
 </button>
-<div id="collapseSolution12" class="accordion-collapse collapse" data-bs-parent="#accordionSolution12" aria-labelledby="headingSolution12">
+<div id="collapseSolution12" class="accordion-collapse collapse" aria-labelledby="headingSolution12" data-bs-parent="#accordionSolution12">
 <div class="accordion-body">
 <p>first set up the lists of genes associated with biodomain and
 subdomain term lists</p>
@@ -5727,35 +5720,35 @@ Subdomains allows for more granular comparisons</li>
 <div class="codewrapper sourceCode" id="cb123">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb123-2"><a href="#cb123-2" tabindex="-1"></a>R version <span class="dv">4</span>.<span class="fl">5.2</span> (<span class="dv">2025-10-31</span>)</span>
-<span id="cb123-3"><a href="#cb123-3" tabindex="-1"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>pc<span class="sc">-</span>linux<span class="sc">-</span>gnu</span>
-<span id="cb123-4"><a href="#cb123-4" tabindex="-1"></a>Running under<span class="sc">:</span> Ubuntu <span class="dv">24</span>.<span class="fl">04.3</span> LTS</span>
-<span id="cb123-5"><a href="#cb123-5" tabindex="-1"></a></span>
-<span id="cb123-6"><a href="#cb123-6" tabindex="-1"></a>Matrix products<span class="sc">:</span> default</span>
-<span id="cb123-7"><a href="#cb123-7" tabindex="-1"></a>BLAS<span class="sc">:</span>   <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libblas.so<span class="fl">.3</span> </span>
-<span id="cb123-8"><a href="#cb123-8" tabindex="-1"></a>LAPACK<span class="sc">:</span> <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libopenblasp<span class="sc">-</span>r0.<span class="dv">3</span>.<span class="fl">26.</span>so;  LAPACK version <span class="dv">3</span>.<span class="fl">12.0</span></span>
-<span id="cb123-9"><a href="#cb123-9" tabindex="-1"></a></span>
-<span id="cb123-10"><a href="#cb123-10" tabindex="-1"></a>locale<span class="sc">:</span></span>
-<span id="cb123-11"><a href="#cb123-11" tabindex="-1"></a> [<span class="dv">1</span>] LC_CTYPE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NUMERIC<span class="ot">=</span>C              </span>
-<span id="cb123-12"><a href="#cb123-12" tabindex="-1"></a> [<span class="dv">3</span>] LC_TIME<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>        LC_COLLATE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    </span>
-<span id="cb123-13"><a href="#cb123-13" tabindex="-1"></a> [<span class="dv">5</span>] LC_MONETARY<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    LC_MESSAGES<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>   </span>
-<span id="cb123-14"><a href="#cb123-14" tabindex="-1"></a> [<span class="dv">7</span>] LC_PAPER<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NAME<span class="ot">=</span>C                 </span>
-<span id="cb123-15"><a href="#cb123-15" tabindex="-1"></a> [<span class="dv">9</span>] LC_ADDRESS<span class="ot">=</span>C               LC_TELEPHONE<span class="ot">=</span>C            </span>
-<span id="cb123-16"><a href="#cb123-16" tabindex="-1"></a>[<span class="dv">11</span>] LC_MEASUREMENT<span class="ot">=</span>en_US.UTF<span class="dv">-8</span> LC_IDENTIFICATION<span class="ot">=</span>C       </span>
-<span id="cb123-17"><a href="#cb123-17" tabindex="-1"></a></span>
-<span id="cb123-18"><a href="#cb123-18" tabindex="-1"></a>time zone<span class="sc">:</span> Etc<span class="sc">/</span>UTC</span>
-<span id="cb123-19"><a href="#cb123-19" tabindex="-1"></a>tzcode source<span class="sc">:</span> <span class="fu">system</span> (glibc)</span>
-<span id="cb123-20"><a href="#cb123-20" tabindex="-1"></a></span>
-<span id="cb123-21"><a href="#cb123-21" tabindex="-1"></a>attached base packages<span class="sc">:</span></span>
-<span id="cb123-22"><a href="#cb123-22" tabindex="-1"></a>[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base     </span>
-<span id="cb123-23"><a href="#cb123-23" tabindex="-1"></a></span>
-<span id="cb123-24"><a href="#cb123-24" tabindex="-1"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
-<span id="cb123-25"><a href="#cb123-25" tabindex="-1"></a> [<span class="dv">1</span>] BiocManager_1.<span class="fl">30.27</span> compiler_4.<span class="fl">5.2</span>      cli_3.<span class="fl">6.5</span>          </span>
-<span id="cb123-26"><a href="#cb123-26" tabindex="-1"></a> [<span class="dv">4</span>] tools_4.<span class="fl">5.2</span>         pillar_1.<span class="fl">11.1</span>       otel_0.<span class="fl">2.0</span>         </span>
-<span id="cb123-27"><a href="#cb123-27" tabindex="-1"></a> [<span class="dv">7</span>] glue_1.<span class="fl">8.0</span>          yaml_2.<span class="fl">3.12</span>         vctrs_0.<span class="fl">7.1</span>        </span>
-<span id="cb123-28"><a href="#cb123-28" tabindex="-1"></a>[<span class="dv">10</span>] knitr_1<span class="fl">.51</span>          xfun_0<span class="fl">.56</span>           lifecycle_1.<span class="fl">0.5</span>    </span>
-<span id="cb123-29"><a href="#cb123-29" tabindex="-1"></a>[<span class="dv">13</span>] rlang_1.<span class="fl">1.7</span>         renv_1.<span class="fl">1.7</span>          evaluate_1.<span class="fl">0.5</span>     </span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" tabindex="-1" aria-label="code-block-123-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb123-2"><a href="#cb123-2" tabindex="-1" aria-label="code-block-123-2"></a>R version <span class="dv">4</span>.<span class="fl">5.3</span> (<span class="dv">2026-03-11</span>)</span>
+<span id="cb123-3"><a href="#cb123-3" tabindex="-1" aria-label="code-block-123-3"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>pc<span class="sc">-</span>linux<span class="sc">-</span>gnu</span>
+<span id="cb123-4"><a href="#cb123-4" tabindex="-1" aria-label="code-block-123-4"></a>Running under<span class="sc">:</span> Ubuntu <span class="dv">24</span>.<span class="fl">04.4</span> LTS</span>
+<span id="cb123-5"><a href="#cb123-5" tabindex="-1" aria-label="code-block-123-5"></a></span>
+<span id="cb123-6"><a href="#cb123-6" tabindex="-1" aria-label="code-block-123-6"></a>Matrix products<span class="sc">:</span> default</span>
+<span id="cb123-7"><a href="#cb123-7" tabindex="-1" aria-label="code-block-123-7"></a>BLAS<span class="sc">:</span>   <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libblas.so<span class="fl">.3</span> </span>
+<span id="cb123-8"><a href="#cb123-8" tabindex="-1" aria-label="code-block-123-8"></a>LAPACK<span class="sc">:</span> <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libopenblasp<span class="sc">-</span>r0.<span class="dv">3</span>.<span class="fl">26.</span>so;  LAPACK version <span class="dv">3</span>.<span class="fl">12.0</span></span>
+<span id="cb123-9"><a href="#cb123-9" tabindex="-1" aria-label="code-block-123-9"></a></span>
+<span id="cb123-10"><a href="#cb123-10" tabindex="-1" aria-label="code-block-123-10"></a>locale<span class="sc">:</span></span>
+<span id="cb123-11"><a href="#cb123-11" tabindex="-1" aria-label="code-block-123-11"></a> [<span class="dv">1</span>] LC_CTYPE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NUMERIC<span class="ot">=</span>C              </span>
+<span id="cb123-12"><a href="#cb123-12" tabindex="-1" aria-label="code-block-123-12"></a> [<span class="dv">3</span>] LC_TIME<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>        LC_COLLATE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    </span>
+<span id="cb123-13"><a href="#cb123-13" tabindex="-1" aria-label="code-block-123-13"></a> [<span class="dv">5</span>] LC_MONETARY<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    LC_MESSAGES<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>   </span>
+<span id="cb123-14"><a href="#cb123-14" tabindex="-1" aria-label="code-block-123-14"></a> [<span class="dv">7</span>] LC_PAPER<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NAME<span class="ot">=</span>C                 </span>
+<span id="cb123-15"><a href="#cb123-15" tabindex="-1" aria-label="code-block-123-15"></a> [<span class="dv">9</span>] LC_ADDRESS<span class="ot">=</span>C               LC_TELEPHONE<span class="ot">=</span>C            </span>
+<span id="cb123-16"><a href="#cb123-16" tabindex="-1" aria-label="code-block-123-16"></a>[<span class="dv">11</span>] LC_MEASUREMENT<span class="ot">=</span>en_US.UTF<span class="dv">-8</span> LC_IDENTIFICATION<span class="ot">=</span>C       </span>
+<span id="cb123-17"><a href="#cb123-17" tabindex="-1" aria-label="code-block-123-17"></a></span>
+<span id="cb123-18"><a href="#cb123-18" tabindex="-1" aria-label="code-block-123-18"></a>time zone<span class="sc">:</span> Etc<span class="sc">/</span>UTC</span>
+<span id="cb123-19"><a href="#cb123-19" tabindex="-1" aria-label="code-block-123-19"></a>tzcode source<span class="sc">:</span> <span class="fu">system</span> (glibc)</span>
+<span id="cb123-20"><a href="#cb123-20" tabindex="-1" aria-label="code-block-123-20"></a></span>
+<span id="cb123-21"><a href="#cb123-21" tabindex="-1" aria-label="code-block-123-21"></a>attached base packages<span class="sc">:</span></span>
+<span id="cb123-22"><a href="#cb123-22" tabindex="-1" aria-label="code-block-123-22"></a>[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base     </span>
+<span id="cb123-23"><a href="#cb123-23" tabindex="-1" aria-label="code-block-123-23"></a></span>
+<span id="cb123-24"><a href="#cb123-24" tabindex="-1" aria-label="code-block-123-24"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
+<span id="cb123-25"><a href="#cb123-25" tabindex="-1" aria-label="code-block-123-25"></a> [<span class="dv">1</span>] BiocManager_1.<span class="fl">30.27</span> compiler_4.<span class="fl">5.3</span>      cli_3.<span class="fl">6.5</span>          </span>
+<span id="cb123-26"><a href="#cb123-26" tabindex="-1" aria-label="code-block-123-26"></a> [<span class="dv">4</span>] tools_4.<span class="fl">5.3</span>         pillar_1.<span class="fl">11.1</span>       otel_0.<span class="fl">2.0</span>         </span>
+<span id="cb123-27"><a href="#cb123-27" tabindex="-1" aria-label="code-block-123-27"></a> [<span class="dv">7</span>] glue_1.<span class="fl">8.0</span>          yaml_2.<span class="fl">3.12</span>         vctrs_0.<span class="fl">7.2</span>        </span>
+<span id="cb123-28"><a href="#cb123-28" tabindex="-1" aria-label="code-block-123-28"></a>[<span class="dv">10</span>] knitr_1<span class="fl">.51</span>          xfun_0<span class="fl">.57</span>           lifecycle_1.<span class="fl">0.5</span>    </span>
+<span id="cb123-29"><a href="#cb123-29" tabindex="-1" aria-label="code-block-123-29"></a>[<span class="dv">13</span>] rlang_1.<span class="fl">2.0</span>         renv_1.<span class="fl">2.0</span>          evaluate_1.<span class="fl">0.5</span>     </span></code></pre>
 </div>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
@@ -5763,7 +5756,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-choosing_the_right_model"><p>Content from <a href="choosing_the_right_model.html">Choosing the right animal models</a></p>
 <hr>
-<p>Last updated on 2026-03-03 |
+<p>Last updated on 2026-04-21 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/choosing_the_right_model.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -5902,23 +5895,23 @@ enabled the partitioning of AD cases into potential disease subtypes.
 These studies have often stratified AD subjects into inflammatory and
 non-inflammatory subtypes.</p>
 <!--html_preserve-->
-<div id="iwielrwvpc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iwielrwvpc table {
+<div id="dxcbblmxpv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dxcbblmxpv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iwielrwvpc thead, #iwielrwvpc tbody, #iwielrwvpc tfoot, #iwielrwvpc tr, #iwielrwvpc td, #iwielrwvpc th {
+#dxcbblmxpv thead, #dxcbblmxpv tbody, #dxcbblmxpv tfoot, #dxcbblmxpv tr, #dxcbblmxpv td, #dxcbblmxpv th {
   border-style: none;
 }
 
-#iwielrwvpc p {
+#dxcbblmxpv p {
   margin: 0;
   padding: 0;
 }
 
-#iwielrwvpc .gt_table {
+#dxcbblmxpv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -5944,12 +5937,12 @@ non-inflammatory subtypes.</p>
   border-left-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_caption {
+#dxcbblmxpv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iwielrwvpc .gt_title {
+#dxcbblmxpv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -5961,7 +5954,7 @@ non-inflammatory subtypes.</p>
   border-bottom-width: 0;
 }
 
-#iwielrwvpc .gt_subtitle {
+#dxcbblmxpv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -5973,7 +5966,7 @@ non-inflammatory subtypes.</p>
   border-top-width: 0;
 }
 
-#iwielrwvpc .gt_heading {
+#dxcbblmxpv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -5985,13 +5978,13 @@ non-inflammatory subtypes.</p>
   border-right-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_bottom_border {
+#dxcbblmxpv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_col_headings {
+#dxcbblmxpv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -6006,7 +5999,7 @@ non-inflammatory subtypes.</p>
   border-right-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_col_heading {
+#dxcbblmxpv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6026,7 +6019,7 @@ non-inflammatory subtypes.</p>
   overflow-x: hidden;
 }
 
-#iwielrwvpc .gt_column_spanner_outer {
+#dxcbblmxpv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6038,15 +6031,15 @@ non-inflammatory subtypes.</p>
   padding-right: 4px;
 }
 
-#iwielrwvpc .gt_column_spanner_outer:first-child {
+#dxcbblmxpv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iwielrwvpc .gt_column_spanner_outer:last-child {
+#dxcbblmxpv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iwielrwvpc .gt_column_spanner {
+#dxcbblmxpv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -6058,11 +6051,11 @@ non-inflammatory subtypes.</p>
   width: 100%;
 }
 
-#iwielrwvpc .gt_spanner_row {
+#dxcbblmxpv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iwielrwvpc .gt_group_heading {
+#dxcbblmxpv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6088,7 +6081,7 @@ non-inflammatory subtypes.</p>
   text-align: left;
 }
 
-#iwielrwvpc .gt_empty_group_heading {
+#dxcbblmxpv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -6103,15 +6096,15 @@ non-inflammatory subtypes.</p>
   vertical-align: middle;
 }
 
-#iwielrwvpc .gt_from_md > :first-child {
+#dxcbblmxpv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iwielrwvpc .gt_from_md > :last-child {
+#dxcbblmxpv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iwielrwvpc .gt_row {
+#dxcbblmxpv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6130,7 +6123,7 @@ non-inflammatory subtypes.</p>
   overflow-x: hidden;
 }
 
-#iwielrwvpc .gt_stub {
+#dxcbblmxpv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6143,7 +6136,7 @@ non-inflammatory subtypes.</p>
   padding-right: 5px;
 }
 
-#iwielrwvpc .gt_stub_row_group {
+#dxcbblmxpv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6157,15 +6150,15 @@ non-inflammatory subtypes.</p>
   vertical-align: top;
 }
 
-#iwielrwvpc .gt_row_group_first td {
+#dxcbblmxpv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iwielrwvpc .gt_row_group_first th {
+#dxcbblmxpv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iwielrwvpc .gt_summary_row {
+#dxcbblmxpv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -6175,16 +6168,16 @@ non-inflammatory subtypes.</p>
   padding-right: 5px;
 }
 
-#iwielrwvpc .gt_first_summary_row {
+#dxcbblmxpv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_first_summary_row.thick {
+#dxcbblmxpv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iwielrwvpc .gt_last_summary_row {
+#dxcbblmxpv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6194,7 +6187,7 @@ non-inflammatory subtypes.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_grand_summary_row {
+#dxcbblmxpv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -6204,7 +6197,7 @@ non-inflammatory subtypes.</p>
   padding-right: 5px;
 }
 
-#iwielrwvpc .gt_first_grand_summary_row {
+#dxcbblmxpv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6214,7 +6207,7 @@ non-inflammatory subtypes.</p>
   border-top-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_last_grand_summary_row_top {
+#dxcbblmxpv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6224,11 +6217,11 @@ non-inflammatory subtypes.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_striped {
+#dxcbblmxpv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iwielrwvpc .gt_table_body {
+#dxcbblmxpv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -6237,7 +6230,7 @@ non-inflammatory subtypes.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_footnotes {
+#dxcbblmxpv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -6251,7 +6244,7 @@ non-inflammatory subtypes.</p>
   border-right-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_footnote {
+#dxcbblmxpv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -6260,7 +6253,7 @@ non-inflammatory subtypes.</p>
   padding-right: 5px;
 }
 
-#iwielrwvpc .gt_sourcenotes {
+#dxcbblmxpv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -6274,7 +6267,7 @@ non-inflammatory subtypes.</p>
   border-right-color: #D3D3D3;
 }
 
-#iwielrwvpc .gt_sourcenote {
+#dxcbblmxpv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -6282,72 +6275,72 @@ non-inflammatory subtypes.</p>
   padding-right: 5px;
 }
 
-#iwielrwvpc .gt_left {
+#dxcbblmxpv .gt_left {
   text-align: left;
 }
 
-#iwielrwvpc .gt_center {
+#dxcbblmxpv .gt_center {
   text-align: center;
 }
 
-#iwielrwvpc .gt_right {
+#dxcbblmxpv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iwielrwvpc .gt_font_normal {
+#dxcbblmxpv .gt_font_normal {
   font-weight: normal;
 }
 
-#iwielrwvpc .gt_font_bold {
+#dxcbblmxpv .gt_font_bold {
   font-weight: bold;
 }
 
-#iwielrwvpc .gt_font_italic {
+#dxcbblmxpv .gt_font_italic {
   font-style: italic;
 }
 
-#iwielrwvpc .gt_super {
+#dxcbblmxpv .gt_super {
   font-size: 65%;
 }
 
-#iwielrwvpc .gt_footnote_marks {
+#dxcbblmxpv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iwielrwvpc .gt_asterisk {
+#dxcbblmxpv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iwielrwvpc .gt_indent_1 {
+#dxcbblmxpv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iwielrwvpc .gt_indent_2 {
+#dxcbblmxpv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iwielrwvpc .gt_indent_3 {
+#dxcbblmxpv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iwielrwvpc .gt_indent_4 {
+#dxcbblmxpv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iwielrwvpc .gt_indent_5 {
+#dxcbblmxpv .gt_indent_5 {
   text-indent: 25px;
 }
 
-#iwielrwvpc .katex-display {
+#dxcbblmxpv .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#iwielrwvpc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dxcbblmxpv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -7095,7 +7088,7 @@ variants capture effect of neurodegeneration </strong></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 
 </div>
@@ -7296,7 +7289,7 @@ correlated with subtype C1 and subtype A.</em></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 
 </div>
@@ -7325,7 +7318,7 @@ analysis to see how AD subtypes corresponds to each other.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 
 </div>
@@ -7371,7 +7364,7 @@ one we used in the earlier session?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb56">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7658,7 +7651,7 @@ different?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 
 </div>
@@ -7683,7 +7676,7 @@ the other AMP-AD cohorts?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 
 </div>
@@ -8119,7 +8112,7 @@ discuss as a group.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
 <div class="accordion-body">
 <p>Some things I notice: (1) The <code>AD</code> models are fairly
 similar and many show strong positive correlation to clusters A and B
@@ -8329,75 +8322,75 @@ subtypes across studies.</li>
 <div class="codewrapper sourceCode" id="cb89">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a>R version <span class="dv">4</span>.<span class="fl">5.2</span> (<span class="dv">2025-10-31</span>)</span>
-<span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>pc<span class="sc">-</span>linux<span class="sc">-</span>gnu</span>
-<span id="cb89-4"><a href="#cb89-4" tabindex="-1"></a>Running under<span class="sc">:</span> Ubuntu <span class="dv">24</span>.<span class="fl">04.3</span> LTS</span>
-<span id="cb89-5"><a href="#cb89-5" tabindex="-1"></a></span>
-<span id="cb89-6"><a href="#cb89-6" tabindex="-1"></a>Matrix products<span class="sc">:</span> default</span>
-<span id="cb89-7"><a href="#cb89-7" tabindex="-1"></a>BLAS<span class="sc">:</span>   <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libblas.so<span class="fl">.3</span> </span>
-<span id="cb89-8"><a href="#cb89-8" tabindex="-1"></a>LAPACK<span class="sc">:</span> <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libopenblasp<span class="sc">-</span>r0.<span class="dv">3</span>.<span class="fl">26.</span>so;  LAPACK version <span class="dv">3</span>.<span class="fl">12.0</span></span>
-<span id="cb89-9"><a href="#cb89-9" tabindex="-1"></a></span>
-<span id="cb89-10"><a href="#cb89-10" tabindex="-1"></a>locale<span class="sc">:</span></span>
-<span id="cb89-11"><a href="#cb89-11" tabindex="-1"></a> [<span class="dv">1</span>] LC_CTYPE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NUMERIC<span class="ot">=</span>C              </span>
-<span id="cb89-12"><a href="#cb89-12" tabindex="-1"></a> [<span class="dv">3</span>] LC_TIME<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>        LC_COLLATE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    </span>
-<span id="cb89-13"><a href="#cb89-13" tabindex="-1"></a> [<span class="dv">5</span>] LC_MONETARY<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    LC_MESSAGES<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>   </span>
-<span id="cb89-14"><a href="#cb89-14" tabindex="-1"></a> [<span class="dv">7</span>] LC_PAPER<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NAME<span class="ot">=</span>C                 </span>
-<span id="cb89-15"><a href="#cb89-15" tabindex="-1"></a> [<span class="dv">9</span>] LC_ADDRESS<span class="ot">=</span>C               LC_TELEPHONE<span class="ot">=</span>C            </span>
-<span id="cb89-16"><a href="#cb89-16" tabindex="-1"></a>[<span class="dv">11</span>] LC_MEASUREMENT<span class="ot">=</span>en_US.UTF<span class="dv">-8</span> LC_IDENTIFICATION<span class="ot">=</span>C       </span>
-<span id="cb89-17"><a href="#cb89-17" tabindex="-1"></a></span>
-<span id="cb89-18"><a href="#cb89-18" tabindex="-1"></a>time zone<span class="sc">:</span> Etc<span class="sc">/</span>UTC</span>
-<span id="cb89-19"><a href="#cb89-19" tabindex="-1"></a>tzcode source<span class="sc">:</span> <span class="fu">system</span> (glibc)</span>
-<span id="cb89-20"><a href="#cb89-20" tabindex="-1"></a></span>
-<span id="cb89-21"><a href="#cb89-21" tabindex="-1"></a>attached base packages<span class="sc">:</span></span>
-<span id="cb89-22"><a href="#cb89-22" tabindex="-1"></a>[<span class="dv">1</span>] stats4    stats     graphics  grDevices utils     datasets  methods  </span>
-<span id="cb89-23"><a href="#cb89-23" tabindex="-1"></a>[<span class="dv">8</span>] base     </span>
-<span id="cb89-24"><a href="#cb89-24" tabindex="-1"></a></span>
-<span id="cb89-25"><a href="#cb89-25" tabindex="-1"></a>other attached packages<span class="sc">:</span></span>
-<span id="cb89-26"><a href="#cb89-26" tabindex="-1"></a> [<span class="dv">1</span>] gt_1.<span class="fl">3.0</span>               corrplot_0<span class="fl">.95</span>          lubridate_1.<span class="fl">9.5</span>       </span>
-<span id="cb89-27"><a href="#cb89-27" tabindex="-1"></a> [<span class="dv">4</span>] forcats_1.<span class="fl">0.1</span>          stringr_1.<span class="fl">6.0</span>          purrr_1.<span class="fl">2.1</span>           </span>
-<span id="cb89-28"><a href="#cb89-28" tabindex="-1"></a> [<span class="dv">7</span>] readr_2.<span class="fl">1.6</span>            tidyr_1.<span class="fl">3.2</span>            tibble_3.<span class="fl">3.1</span>          </span>
-<span id="cb89-29"><a href="#cb89-29" tabindex="-1"></a>[<span class="dv">10</span>] tidyverse_2.<span class="fl">0.0</span>        data.table_1.<span class="dv">18</span>.<span class="fl">2.1</span>    clusterProfiler_4.<span class="fl">18.4</span></span>
-<span id="cb89-30"><a href="#cb89-30" tabindex="-1"></a>[<span class="dv">13</span>] dplyr_1.<span class="fl">2.0</span>            cowplot_1.<span class="fl">2.0</span>          GO.db_3.<span class="fl">22.0</span>          </span>
-<span id="cb89-31"><a href="#cb89-31" tabindex="-1"></a>[<span class="dv">16</span>] org.Hs.eg.db_3.<span class="fl">22.0</span>    org.Mm.eg.db_3.<span class="fl">22.0</span>    AnnotationDbi_1.<span class="fl">72.0</span>  </span>
-<span id="cb89-32"><a href="#cb89-32" tabindex="-1"></a>[<span class="dv">19</span>] IRanges_2.<span class="fl">44.0</span>         S4Vectors_0.<span class="fl">48.0</span>       Biobase_2.<span class="fl">70.0</span>        </span>
-<span id="cb89-33"><a href="#cb89-33" tabindex="-1"></a>[<span class="dv">22</span>] BiocGenerics_0.<span class="fl">56.0</span>    generics_0.<span class="fl">1.4</span>         ggplot2_4.<span class="fl">0.2</span>         </span>
-<span id="cb89-34"><a href="#cb89-34" tabindex="-1"></a></span>
-<span id="cb89-35"><a href="#cb89-35" tabindex="-1"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
-<span id="cb89-36"><a href="#cb89-36" tabindex="-1"></a>  [<span class="dv">1</span>] DBI_1.<span class="fl">2.3</span>               gson_0.<span class="fl">1.0</span>              rlang_1.<span class="fl">1.7</span>            </span>
-<span id="cb89-37"><a href="#cb89-37" tabindex="-1"></a>  [<span class="dv">4</span>] magrittr_2.<span class="fl">0.4</span>          DOSE_4.<span class="fl">4.0</span>              otel_0.<span class="fl">2.0</span>             </span>
-<span id="cb89-38"><a href="#cb89-38" tabindex="-1"></a>  [<span class="dv">7</span>] compiler_4.<span class="fl">5.2</span>          RSQLite_2.<span class="fl">4.6</span>           png_0<span class="fl">.1</span><span class="dv">-8</span>              </span>
-<span id="cb89-39"><a href="#cb89-39" tabindex="-1"></a> [<span class="dv">10</span>] systemfonts_1.<span class="fl">3.1</span>       vctrs_0.<span class="fl">7.1</span>             reshape2_1.<span class="fl">4.5</span>         </span>
-<span id="cb89-40"><a href="#cb89-40" tabindex="-1"></a> [<span class="dv">13</span>] pkgconfig_2.<span class="fl">0.3</span>         crayon_1.<span class="fl">5.3</span>            fastmap_1.<span class="fl">2.0</span>          </span>
-<span id="cb89-41"><a href="#cb89-41" tabindex="-1"></a> [<span class="dv">16</span>] XVector_0.<span class="fl">50.0</span>          tzdb_0.<span class="fl">5.0</span>              enrichplot_1.<span class="fl">30.4</span>      </span>
-<span id="cb89-42"><a href="#cb89-42" tabindex="-1"></a> [<span class="dv">19</span>] bit_4.<span class="fl">6.0</span>               xfun_0<span class="fl">.56</span>               cachem_1.<span class="fl">1.0</span>           </span>
-<span id="cb89-43"><a href="#cb89-43" tabindex="-1"></a> [<span class="dv">22</span>] aplot_0.<span class="fl">2.9</span>             jsonlite_2.<span class="fl">0.0</span>          blob_1.<span class="fl">3.0</span>             </span>
-<span id="cb89-44"><a href="#cb89-44" tabindex="-1"></a> [<span class="dv">25</span>] tidydr_0.<span class="fl">0.6</span>            tweenr_2.<span class="fl">0.3</span>            BiocParallel_1.<span class="fl">44.0</span>    </span>
-<span id="cb89-45"><a href="#cb89-45" tabindex="-1"></a> [<span class="dv">28</span>] cluster_2.<span class="dv">1</span>.<span class="fl">8.1</span>         parallel_4.<span class="fl">5.2</span>          R6_2.<span class="fl">6.1</span>               </span>
-<span id="cb89-46"><a href="#cb89-46" tabindex="-1"></a> [<span class="dv">31</span>] stringi_1.<span class="fl">8.7</span>           RColorBrewer_1<span class="fl">.1</span><span class="dv">-3</span>      GOSemSim_2.<span class="fl">36.0</span>        </span>
-<span id="cb89-47"><a href="#cb89-47" tabindex="-1"></a> [<span class="dv">34</span>] Rcpp_1.<span class="fl">1.1</span>              Seqinfo_1.<span class="fl">0.0</span>           knitr_1<span class="fl">.51</span>             </span>
-<span id="cb89-48"><a href="#cb89-48" tabindex="-1"></a> [<span class="dv">37</span>] ggtangle_0.<span class="fl">1.1</span>          R.utils_2.<span class="fl">13.0</span>          timechange_0.<span class="fl">4.0</span>       </span>
-<span id="cb89-49"><a href="#cb89-49" tabindex="-1"></a> [<span class="dv">40</span>] Matrix_1<span class="fl">.7</span><span class="dv">-4</span>            splines_4.<span class="fl">5.2</span>           igraph_2.<span class="fl">2.1</span>           </span>
-<span id="cb89-50"><a href="#cb89-50" tabindex="-1"></a> [<span class="dv">43</span>] tidyselect_1.<span class="fl">2.1</span>        qvalue_2.<span class="fl">42.0</span>           yaml_2.<span class="fl">3.12</span>            </span>
-<span id="cb89-51"><a href="#cb89-51" tabindex="-1"></a> [<span class="dv">46</span>] codetools_0<span class="fl">.2</span><span class="dv">-20</span>        lattice_0<span class="fl">.22</span><span class="dv">-9</span>          plyr_1.<span class="fl">8.9</span>             </span>
-<span id="cb89-52"><a href="#cb89-52" tabindex="-1"></a> [<span class="dv">49</span>] treeio_1.<span class="fl">34.0</span>           withr_3.<span class="fl">0.2</span>             KEGGREST_1.<span class="fl">50.0</span>        </span>
-<span id="cb89-53"><a href="#cb89-53" tabindex="-1"></a> [<span class="dv">52</span>] S7_0.<span class="fl">2.1</span>                evaluate_1.<span class="fl">0.5</span>          gridGraphics_0<span class="fl">.5</span><span class="dv">-1</span>     </span>
-<span id="cb89-54"><a href="#cb89-54" tabindex="-1"></a> [<span class="dv">55</span>] polyclip_1<span class="fl">.10</span><span class="dv">-7</span>         scatterpie_0.<span class="fl">2.6</span>        xml2_1.<span class="fl">5.2</span>             </span>
-<span id="cb89-55"><a href="#cb89-55" tabindex="-1"></a> [<span class="dv">58</span>] Biostrings_2.<span class="fl">78.0</span>       pillar_1.<span class="fl">11.1</span>           BiocManager_1.<span class="fl">30.27</span>    </span>
-<span id="cb89-56"><a href="#cb89-56" tabindex="-1"></a> [<span class="dv">61</span>] ggtree_4.<span class="fl">0.4</span>            renv_1.<span class="fl">1.7</span>              ggfun_0.<span class="fl">2.0</span>            </span>
-<span id="cb89-57"><a href="#cb89-57" tabindex="-1"></a> [<span class="dv">64</span>] hms_1.<span class="fl">1.4</span>               scales_1.<span class="fl">4.0</span>            tidytree_0.<span class="fl">4.7</span>         </span>
-<span id="cb89-58"><a href="#cb89-58" tabindex="-1"></a> [<span class="dv">67</span>] glue_1.<span class="fl">8.0</span>              gdtools_0.<span class="fl">5.0</span>           lazyeval_0.<span class="fl">2.2</span>         </span>
-<span id="cb89-59"><a href="#cb89-59" tabindex="-1"></a> [<span class="dv">70</span>] tools_4.<span class="fl">5.2</span>             ggnewscale_0.<span class="fl">5.2</span>        fgsea_1.<span class="fl">36.2</span>           </span>
-<span id="cb89-60"><a href="#cb89-60" tabindex="-1"></a> [<span class="dv">73</span>] ggiraph_0.<span class="fl">9.4</span>           fs_1.<span class="fl">6.6</span>                fastmatch_1<span class="fl">.1</span><span class="dv">-8</span>        </span>
-<span id="cb89-61"><a href="#cb89-61" tabindex="-1"></a> [<span class="dv">76</span>] grid_4.<span class="fl">5.2</span>              ape_5<span class="fl">.8</span><span class="dv">-1</span>               nlme_3<span class="fl">.1</span><span class="dv">-168</span>           </span>
-<span id="cb89-62"><a href="#cb89-62" tabindex="-1"></a> [<span class="dv">79</span>] patchwork_1.<span class="fl">3.2</span>         ggforce_0.<span class="fl">5.0</span>           cli_3.<span class="fl">6.5</span>              </span>
-<span id="cb89-63"><a href="#cb89-63" tabindex="-1"></a> [<span class="dv">82</span>] rappdirs_0.<span class="fl">3.4</span>          fontBitstreamVera_0.<span class="fl">1.1</span> gtable_0.<span class="fl">3.6</span>           </span>
-<span id="cb89-64"><a href="#cb89-64" tabindex="-1"></a> [<span class="dv">85</span>] R.methodsS3_1.<span class="fl">8.2</span>       yulab.utils_0.<span class="fl">2.4</span>       sass_0.<span class="fl">4.10</span>            </span>
-<span id="cb89-65"><a href="#cb89-65" tabindex="-1"></a> [<span class="dv">88</span>] digest_0.<span class="fl">6.39</span>           fontquiver_0.<span class="fl">2.1</span>        ggrepel_0.<span class="fl">9.6</span>          </span>
-<span id="cb89-66"><a href="#cb89-66" tabindex="-1"></a> [<span class="dv">91</span>] ggplotify_0.<span class="fl">1.3</span>         htmlwidgets_1.<span class="fl">6.4</span>       farver_2.<span class="fl">1.2</span>           </span>
-<span id="cb89-67"><a href="#cb89-67" tabindex="-1"></a> [<span class="dv">94</span>] memoise_2.<span class="fl">0.1</span>           htmltools_0.<span class="fl">5.9</span>         R.oo_1.<span class="fl">27.1</span>            </span>
-<span id="cb89-68"><a href="#cb89-68" tabindex="-1"></a> [<span class="dv">97</span>] lifecycle_1.<span class="fl">0.5</span>         httr_1.<span class="fl">4.7</span>              MASS_7<span class="fl">.3</span><span class="dv">-65</span>            </span>
-<span id="cb89-69"><a href="#cb89-69" tabindex="-1"></a>[<span class="dv">100</span>] fontLiberation_0.<span class="fl">1.0</span>    bit64_4.<span class="fl">6.0</span><span class="dv">-1</span>          </span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1" aria-label="code-block-89-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb89-2"><a href="#cb89-2" tabindex="-1" aria-label="code-block-89-2"></a>R version <span class="dv">4</span>.<span class="fl">5.3</span> (<span class="dv">2026-03-11</span>)</span>
+<span id="cb89-3"><a href="#cb89-3" tabindex="-1" aria-label="code-block-89-3"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>pc<span class="sc">-</span>linux<span class="sc">-</span>gnu</span>
+<span id="cb89-4"><a href="#cb89-4" tabindex="-1" aria-label="code-block-89-4"></a>Running under<span class="sc">:</span> Ubuntu <span class="dv">24</span>.<span class="fl">04.4</span> LTS</span>
+<span id="cb89-5"><a href="#cb89-5" tabindex="-1" aria-label="code-block-89-5"></a></span>
+<span id="cb89-6"><a href="#cb89-6" tabindex="-1" aria-label="code-block-89-6"></a>Matrix products<span class="sc">:</span> default</span>
+<span id="cb89-7"><a href="#cb89-7" tabindex="-1" aria-label="code-block-89-7"></a>BLAS<span class="sc">:</span>   <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libblas.so<span class="fl">.3</span> </span>
+<span id="cb89-8"><a href="#cb89-8" tabindex="-1" aria-label="code-block-89-8"></a>LAPACK<span class="sc">:</span> <span class="er">/</span>usr<span class="sc">/</span>lib<span class="sc">/</span>x86_64<span class="sc">-</span>linux<span class="sc">-</span>gnu<span class="sc">/</span>openblas<span class="sc">-</span>pthread<span class="sc">/</span>libopenblasp<span class="sc">-</span>r0.<span class="dv">3</span>.<span class="fl">26.</span>so;  LAPACK version <span class="dv">3</span>.<span class="fl">12.0</span></span>
+<span id="cb89-9"><a href="#cb89-9" tabindex="-1" aria-label="code-block-89-9"></a></span>
+<span id="cb89-10"><a href="#cb89-10" tabindex="-1" aria-label="code-block-89-10"></a>locale<span class="sc">:</span></span>
+<span id="cb89-11"><a href="#cb89-11" tabindex="-1" aria-label="code-block-89-11"></a> [<span class="dv">1</span>] LC_CTYPE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NUMERIC<span class="ot">=</span>C              </span>
+<span id="cb89-12"><a href="#cb89-12" tabindex="-1" aria-label="code-block-89-12"></a> [<span class="dv">3</span>] LC_TIME<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>        LC_COLLATE<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    </span>
+<span id="cb89-13"><a href="#cb89-13" tabindex="-1" aria-label="code-block-89-13"></a> [<span class="dv">5</span>] LC_MONETARY<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>    LC_MESSAGES<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>   </span>
+<span id="cb89-14"><a href="#cb89-14" tabindex="-1" aria-label="code-block-89-14"></a> [<span class="dv">7</span>] LC_PAPER<span class="ot">=</span>en_US.UTF<span class="dv">-8</span>       LC_NAME<span class="ot">=</span>C                 </span>
+<span id="cb89-15"><a href="#cb89-15" tabindex="-1" aria-label="code-block-89-15"></a> [<span class="dv">9</span>] LC_ADDRESS<span class="ot">=</span>C               LC_TELEPHONE<span class="ot">=</span>C            </span>
+<span id="cb89-16"><a href="#cb89-16" tabindex="-1" aria-label="code-block-89-16"></a>[<span class="dv">11</span>] LC_MEASUREMENT<span class="ot">=</span>en_US.UTF<span class="dv">-8</span> LC_IDENTIFICATION<span class="ot">=</span>C       </span>
+<span id="cb89-17"><a href="#cb89-17" tabindex="-1" aria-label="code-block-89-17"></a></span>
+<span id="cb89-18"><a href="#cb89-18" tabindex="-1" aria-label="code-block-89-18"></a>time zone<span class="sc">:</span> Etc<span class="sc">/</span>UTC</span>
+<span id="cb89-19"><a href="#cb89-19" tabindex="-1" aria-label="code-block-89-19"></a>tzcode source<span class="sc">:</span> <span class="fu">system</span> (glibc)</span>
+<span id="cb89-20"><a href="#cb89-20" tabindex="-1" aria-label="code-block-89-20"></a></span>
+<span id="cb89-21"><a href="#cb89-21" tabindex="-1" aria-label="code-block-89-21"></a>attached base packages<span class="sc">:</span></span>
+<span id="cb89-22"><a href="#cb89-22" tabindex="-1" aria-label="code-block-89-22"></a>[<span class="dv">1</span>] stats4    stats     graphics  grDevices utils     datasets  methods  </span>
+<span id="cb89-23"><a href="#cb89-23" tabindex="-1" aria-label="code-block-89-23"></a>[<span class="dv">8</span>] base     </span>
+<span id="cb89-24"><a href="#cb89-24" tabindex="-1" aria-label="code-block-89-24"></a></span>
+<span id="cb89-25"><a href="#cb89-25" tabindex="-1" aria-label="code-block-89-25"></a>other attached packages<span class="sc">:</span></span>
+<span id="cb89-26"><a href="#cb89-26" tabindex="-1" aria-label="code-block-89-26"></a> [<span class="dv">1</span>] gt_1.<span class="fl">3.0</span>               corrplot_0<span class="fl">.95</span>          lubridate_1.<span class="fl">9.5</span>       </span>
+<span id="cb89-27"><a href="#cb89-27" tabindex="-1" aria-label="code-block-89-27"></a> [<span class="dv">4</span>] forcats_1.<span class="fl">0.1</span>          stringr_1.<span class="fl">6.0</span>          purrr_1.<span class="fl">2.1</span>           </span>
+<span id="cb89-28"><a href="#cb89-28" tabindex="-1" aria-label="code-block-89-28"></a> [<span class="dv">7</span>] readr_2.<span class="fl">2.0</span>            tidyr_1.<span class="fl">3.2</span>            tibble_3.<span class="fl">3.1</span>          </span>
+<span id="cb89-29"><a href="#cb89-29" tabindex="-1" aria-label="code-block-89-29"></a>[<span class="dv">10</span>] tidyverse_2.<span class="fl">0.0</span>        data.table_1.<span class="dv">18</span>.<span class="fl">2.1</span>    clusterProfiler_4.<span class="fl">18.4</span></span>
+<span id="cb89-30"><a href="#cb89-30" tabindex="-1" aria-label="code-block-89-30"></a>[<span class="dv">13</span>] dplyr_1.<span class="fl">2.1</span>            cowplot_1.<span class="fl">2.0</span>          GO.db_3.<span class="fl">22.0</span>          </span>
+<span id="cb89-31"><a href="#cb89-31" tabindex="-1" aria-label="code-block-89-31"></a>[<span class="dv">16</span>] org.Hs.eg.db_3.<span class="fl">22.0</span>    org.Mm.eg.db_3.<span class="fl">22.0</span>    AnnotationDbi_1.<span class="fl">72.0</span>  </span>
+<span id="cb89-32"><a href="#cb89-32" tabindex="-1" aria-label="code-block-89-32"></a>[<span class="dv">19</span>] IRanges_2.<span class="fl">44.0</span>         S4Vectors_0.<span class="fl">48.1</span>       Biobase_2.<span class="fl">70.0</span>        </span>
+<span id="cb89-33"><a href="#cb89-33" tabindex="-1" aria-label="code-block-89-33"></a>[<span class="dv">22</span>] BiocGenerics_0.<span class="fl">56.0</span>    generics_0.<span class="fl">1.4</span>         ggplot2_4.<span class="fl">0.2</span>         </span>
+<span id="cb89-34"><a href="#cb89-34" tabindex="-1" aria-label="code-block-89-34"></a></span>
+<span id="cb89-35"><a href="#cb89-35" tabindex="-1" aria-label="code-block-89-35"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
+<span id="cb89-36"><a href="#cb89-36" tabindex="-1" aria-label="code-block-89-36"></a>  [<span class="dv">1</span>] DBI_1.<span class="fl">3.0</span>               gson_0.<span class="fl">1.0</span>              rlang_1.<span class="fl">2.0</span>            </span>
+<span id="cb89-37"><a href="#cb89-37" tabindex="-1" aria-label="code-block-89-37"></a>  [<span class="dv">4</span>] magrittr_2.<span class="fl">0.5</span>          DOSE_4.<span class="fl">4.0</span>              otel_0.<span class="fl">2.0</span>             </span>
+<span id="cb89-38"><a href="#cb89-38" tabindex="-1" aria-label="code-block-89-38"></a>  [<span class="dv">7</span>] compiler_4.<span class="fl">5.3</span>          RSQLite_2.<span class="fl">4.6</span>           png_0<span class="fl">.1</span><span class="dv">-9</span>              </span>
+<span id="cb89-39"><a href="#cb89-39" tabindex="-1" aria-label="code-block-89-39"></a> [<span class="dv">10</span>] systemfonts_1.<span class="fl">3.2</span>       vctrs_0.<span class="fl">7.2</span>             reshape2_1.<span class="fl">4.5</span>         </span>
+<span id="cb89-40"><a href="#cb89-40" tabindex="-1" aria-label="code-block-89-40"></a> [<span class="dv">13</span>] pkgconfig_2.<span class="fl">0.3</span>         crayon_1.<span class="fl">5.3</span>            fastmap_1.<span class="fl">2.0</span>          </span>
+<span id="cb89-41"><a href="#cb89-41" tabindex="-1" aria-label="code-block-89-41"></a> [<span class="dv">16</span>] XVector_0.<span class="fl">50.0</span>          tzdb_0.<span class="fl">5.0</span>              enrichplot_1.<span class="fl">30.5</span>      </span>
+<span id="cb89-42"><a href="#cb89-42" tabindex="-1" aria-label="code-block-89-42"></a> [<span class="dv">19</span>] bit_4.<span class="fl">6.0</span>               xfun_0<span class="fl">.57</span>               cachem_1.<span class="fl">1.0</span>           </span>
+<span id="cb89-43"><a href="#cb89-43" tabindex="-1" aria-label="code-block-89-43"></a> [<span class="dv">22</span>] aplot_0.<span class="fl">2.9</span>             jsonlite_2.<span class="fl">0.0</span>          blob_1.<span class="fl">3.0</span>             </span>
+<span id="cb89-44"><a href="#cb89-44" tabindex="-1" aria-label="code-block-89-44"></a> [<span class="dv">25</span>] tidydr_0.<span class="fl">0.6</span>            tweenr_2.<span class="fl">0.3</span>            BiocParallel_1.<span class="fl">44.0</span>    </span>
+<span id="cb89-45"><a href="#cb89-45" tabindex="-1" aria-label="code-block-89-45"></a> [<span class="dv">28</span>] cluster_2.<span class="dv">1</span>.<span class="fl">8.2</span>         parallel_4.<span class="fl">5.3</span>          R6_2.<span class="fl">6.1</span>               </span>
+<span id="cb89-46"><a href="#cb89-46" tabindex="-1" aria-label="code-block-89-46"></a> [<span class="dv">31</span>] stringi_1.<span class="fl">8.7</span>           RColorBrewer_1<span class="fl">.1</span><span class="dv">-3</span>      GOSemSim_2.<span class="fl">36.0</span>        </span>
+<span id="cb89-47"><a href="#cb89-47" tabindex="-1" aria-label="code-block-89-47"></a> [<span class="dv">34</span>] Rcpp_1.<span class="fl">1.1</span>              Seqinfo_1.<span class="fl">0.0</span>           knitr_1<span class="fl">.51</span>             </span>
+<span id="cb89-48"><a href="#cb89-48" tabindex="-1" aria-label="code-block-89-48"></a> [<span class="dv">37</span>] ggtangle_0.<span class="fl">1.1</span>          R.utils_2.<span class="fl">13.0</span>          timechange_0.<span class="fl">4.0</span>       </span>
+<span id="cb89-49"><a href="#cb89-49" tabindex="-1" aria-label="code-block-89-49"></a> [<span class="dv">40</span>] Matrix_1<span class="fl">.7</span><span class="dv">-5</span>            splines_4.<span class="fl">5.3</span>           igraph_2.<span class="fl">2.2</span>           </span>
+<span id="cb89-50"><a href="#cb89-50" tabindex="-1" aria-label="code-block-89-50"></a> [<span class="dv">43</span>] tidyselect_1.<span class="fl">2.1</span>        qvalue_2.<span class="fl">42.0</span>           yaml_2.<span class="fl">3.12</span>            </span>
+<span id="cb89-51"><a href="#cb89-51" tabindex="-1" aria-label="code-block-89-51"></a> [<span class="dv">46</span>] codetools_0<span class="fl">.2</span><span class="dv">-20</span>        lattice_0<span class="fl">.22</span><span class="dv">-9</span>          plyr_1.<span class="fl">8.9</span>             </span>
+<span id="cb89-52"><a href="#cb89-52" tabindex="-1" aria-label="code-block-89-52"></a> [<span class="dv">49</span>] treeio_1.<span class="fl">34.0</span>           withr_3.<span class="fl">0.2</span>             KEGGREST_1.<span class="fl">50.0</span>        </span>
+<span id="cb89-53"><a href="#cb89-53" tabindex="-1" aria-label="code-block-89-53"></a> [<span class="dv">52</span>] S7_0.<span class="fl">2.1</span>                evaluate_1.<span class="fl">0.5</span>          gridGraphics_0<span class="fl">.5</span><span class="dv">-1</span>     </span>
+<span id="cb89-54"><a href="#cb89-54" tabindex="-1" aria-label="code-block-89-54"></a> [<span class="dv">55</span>] polyclip_1<span class="fl">.10</span><span class="dv">-7</span>         scatterpie_0.<span class="fl">2.6</span>        xml2_1.<span class="fl">5.2</span>             </span>
+<span id="cb89-55"><a href="#cb89-55" tabindex="-1" aria-label="code-block-89-55"></a> [<span class="dv">58</span>] Biostrings_2.<span class="fl">78.0</span>       pillar_1.<span class="fl">11.1</span>           BiocManager_1.<span class="fl">30.27</span>    </span>
+<span id="cb89-56"><a href="#cb89-56" tabindex="-1" aria-label="code-block-89-56"></a> [<span class="dv">61</span>] ggtree_4.<span class="fl">0.5</span>            renv_1.<span class="fl">2.0</span>              ggfun_0.<span class="fl">2.0</span>            </span>
+<span id="cb89-57"><a href="#cb89-57" tabindex="-1" aria-label="code-block-89-57"></a> [<span class="dv">64</span>] hms_1.<span class="fl">1.4</span>               scales_1.<span class="fl">4.0</span>            tidytree_0.<span class="fl">4.7</span>         </span>
+<span id="cb89-58"><a href="#cb89-58" tabindex="-1" aria-label="code-block-89-58"></a> [<span class="dv">67</span>] glue_1.<span class="fl">8.0</span>              gdtools_0.<span class="fl">5.0</span>           lazyeval_0.<span class="fl">2.3</span>         </span>
+<span id="cb89-59"><a href="#cb89-59" tabindex="-1" aria-label="code-block-89-59"></a> [<span class="dv">70</span>] tools_4.<span class="fl">5.3</span>             ggnewscale_0.<span class="fl">5.2</span>        fgsea_1.<span class="fl">36.2</span>           </span>
+<span id="cb89-60"><a href="#cb89-60" tabindex="-1" aria-label="code-block-89-60"></a> [<span class="dv">73</span>] ggiraph_0.<span class="fl">9.6</span>           fs_2.<span class="fl">0.1</span>                fastmatch_1<span class="fl">.1</span><span class="dv">-8</span>        </span>
+<span id="cb89-61"><a href="#cb89-61" tabindex="-1" aria-label="code-block-89-61"></a> [<span class="dv">76</span>] grid_4.<span class="fl">5.3</span>              ape_5<span class="fl">.8</span><span class="dv">-1</span>               nlme_3<span class="fl">.1</span><span class="dv">-169</span>           </span>
+<span id="cb89-62"><a href="#cb89-62" tabindex="-1" aria-label="code-block-89-62"></a> [<span class="dv">79</span>] patchwork_1.<span class="fl">3.2</span>         ggforce_0.<span class="fl">5.0</span>           cli_3.<span class="fl">6.5</span>              </span>
+<span id="cb89-63"><a href="#cb89-63" tabindex="-1" aria-label="code-block-89-63"></a> [<span class="dv">82</span>] rappdirs_0.<span class="fl">3.4</span>          fontBitstreamVera_0.<span class="fl">1.1</span> gtable_0.<span class="fl">3.6</span>           </span>
+<span id="cb89-64"><a href="#cb89-64" tabindex="-1" aria-label="code-block-89-64"></a> [<span class="dv">85</span>] R.methodsS3_1.<span class="fl">8.2</span>       yulab.utils_0.<span class="fl">2.4</span>       sass_0.<span class="fl">4.10</span>            </span>
+<span id="cb89-65"><a href="#cb89-65" tabindex="-1" aria-label="code-block-89-65"></a> [<span class="dv">88</span>] digest_0.<span class="fl">6.39</span>           fontquiver_0.<span class="fl">2.1</span>        ggrepel_0.<span class="fl">9.8</span>          </span>
+<span id="cb89-66"><a href="#cb89-66" tabindex="-1" aria-label="code-block-89-66"></a> [<span class="dv">91</span>] ggplotify_0.<span class="fl">1.3</span>         htmlwidgets_1.<span class="fl">6.4</span>       farver_2.<span class="fl">1.2</span>           </span>
+<span id="cb89-67"><a href="#cb89-67" tabindex="-1" aria-label="code-block-89-67"></a> [<span class="dv">94</span>] memoise_2.<span class="fl">0.1</span>           htmltools_0.<span class="fl">5.9</span>         R.oo_1.<span class="fl">27.1</span>            </span>
+<span id="cb89-68"><a href="#cb89-68" tabindex="-1" aria-label="code-block-89-68"></a> [<span class="dv">97</span>] lifecycle_1.<span class="fl">0.5</span>         httr_1.<span class="fl">4.8</span>              fontLiberation_0.<span class="fl">1.0</span>   </span>
+<span id="cb89-69"><a href="#cb89-69" tabindex="-1" aria-label="code-block-89-69"></a>[<span class="dv">100</span>] bit64_4.<span class="fl">6.0</span><span class="dv">-1</span>           MASS_7<span class="fl">.3</span><span class="dv">-65</span>            </span></code></pre>
 </div>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
@@ -8431,7 +8424,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.0.9)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.1.0)</a></p>
 		</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -8454,8 +8447,8 @@ any links that you are not going to use.
   "url": "https://asliuyar.github.io/translational-omics-AD/aio.html",
   "identifier": "https://asliuyar.github.io/translational-omics-AD/aio.html",
   "dateCreated": "2024-10-02",
-  "dateModified": "2026-04-14",
-  "datePublished": "2026-04-14"
+  "dateModified": "2026-04-21",
+  "datePublished": "2026-04-21"
 }
 
   </script><script>
