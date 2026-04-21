@@ -2238,9 +2238,9 @@ Overall, by aligning human and mouse omics signatures through the lens of domain
 
 ``` r
 sessionInfo()
-R version 4.5.2 (2025-10-31)
+R version 4.5.3 (2026-03-11)
 Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 24.04.3 LTS
+Running under: Ubuntu 24.04.4 LTS
 
 Matrix products: default
 BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -2261,9 +2261,9 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] BiocManager_1.30.27 compiler_4.5.2      cli_3.6.5          
- [4] tools_4.5.2         pillar_1.11.1       otel_0.2.0         
- [7] glue_1.8.0          yaml_2.3.12         vctrs_0.7.1        
-[10] knitr_1.51          xfun_0.56           lifecycle_1.0.5    
-[13] rlang_1.1.7         renv_1.1.7          evaluate_1.0.5     
+ [1] BiocManager_1.30.27 compiler_4.5.3      cli_3.6.5          
+ [4] tools_4.5.3         pillar_1.11.1       otel_0.2.0         
+ [7] glue_1.8.0          yaml_2.3.12         vctrs_0.7.2        
+[10] knitr_1.51          xfun_0.57           lifecycle_1.0.5    
+[13] rlang_1.2.0         renv_1.2.0          evaluate_1.0.5     
 ```
