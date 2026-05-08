@@ -1,0 +1,1390 @@
+---
+title: "Functional Alignment across Biological Systems"
+output: html_document
+teaching: 45
+exercises: 90
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How can transcriptomic data from experimental model systems be compared to human AD cohort data?
+- What aspects of AD biology are recapitulated in the 5xFAD mouse model?
+- How can functional annotation frameworks help interpret cross-system alignment?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Describe multiple strategies for aligning 'omics signatures across experimental model systems and human cohorts
+- Perform differential expression analysis of 5xFAD RNA-seq data using DESeq2 **(optional)**
+- Load and explore human AMP-AD co-expression modules and associated gene sets
+- Compute and visualize logFC correlations between mouse model and human AD module gene sets
+- Apply gene set enrichment strategies to identify functionally coherent gene sets from omics data
+- Use the AD biological domain framework to compare functional enrichment results across biological systems
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Author: Gregory Cary, Jackson Laboratory
+
+## Setup
+
+Here's the code to install the necessary non-standard packages into the workspace, including the annotation packages and the `clusterProfiler` package which will be used for GO term enrichment. This will not need to be run if we're working from the base environment set up before the session:  
+
+```{r install, eval=FALSE}
+# Mouse and Human annotation databases
+BiocManager::install(c('org.Mm.eg.db','org.Hs.eg.db', 'GO.db'))
+
+# clusterProfiler package
+BiocManager::install(c('clusterProfiler'))
+```
+
+Now we can load the R packages we'll need for today's lesson:  
+
+```{r libraries, warning=FALSE}
+# load necessary libraries for the analysis
+libs <- c('DESeq2', 'org.Mm.eg.db', 'org.Hs.eg.db', 'clusterProfiler', 'fgsea',
+          'broom', 'cowplot', 'ggrepel', 'here', 'tidyverse')
+
+for(l in libs){ suppressPackageStartupMessages(library(l, character.only = TRUE)) }
+
+# set ggplot plotting theme (personal preference)
+theme_set( theme_bw() )
+```
+
+We also need to install the `synapseclient` python package using the `reticulate` R package, this will enable us command-line access to objects in the Synapse data repository. 
+
+For today's lesson we'll install under the `/tmp` directory to prevent issues with Cavatica saving the analysis. Each time you launch an analysis in Cavatica you'll need to re-install the `synapseclient` package in order to have access to Synapse.   
+
+```{r synapseclient_install}
+# synapseclient python package
+reticulate::virtualenv_create(envname = "/tmp/r-reticulate")
+reticulate::py_install("synapseclient", envname = "/tmp/r-reticulate")
+Sys.setenv(RETICULATE_PYTHON = "/tmp/r-reticulate/bin/python")
+```
+
+We need to generate a **personal access token** on Synapse to gain access. Login to Synapse, go to `Your Account > Account Settings > Personal Access Tokens > Manage Personal Access Tokens`. Click on `Create New Token` and make sure to enable both View and Download permissions. Paste the resulting PAT in the quotes below and save it to your workspace.  
+
+```{r synapse_token}
+synToken <- '<<your_PAT_here>>'
+```
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Storing your Synapse credentials securely
+
+Pasting your PAT directly into a script is convenient for learning purposes but is not a secure long-term practice. The preferred approach is to store your credentials in a `.synapseConfig` file in your home directory:
+
+```ini
+[authentication]
+authtoken = your_token_here
+```
+
+This file is read automatically by `synapseclient` at login, so no 
+token needs to appear in your scripts.
+
+:::::::::::::::::::::::::::::::::::::::
+
+Now we should be able to login to Synapse through our R session using the following commands:  
+
+```{r synapse_login}
+# import the synapseclient python package
+syn.client <- reticulate::import('synapseclient')
+syn <- syn.client$Synapse()
+
+# log in to Synapse -- be sure to substitute your own Synapse credentials
+syn$login(authToken = synToken)
+```
+
+
+## [1] Aligning Phenotypes Between Biological Contexts
+
+Alzheimer's Disease (AD) is complex, and no single experimental system can fully recapitulate all aspects of late-onset AD (LOAD) pathology. To study AD meaningfully we need frameworks for identifying the dimensions along which experimental systems — whether animal or cellular models — share common biology with the disease we are trying to understand.
+
+In MODEL-AD, we use the following data modalities to identify commonalities between mouse models and human cohorts:  
+
+1. Imaging (e.g. MRI and PET) to correspond with human imaging studies (e.g. [ADNI](https://adni.loni.usc.edu/))  
+2. Neuropathological and biomarker phenotypes    
+3. *Lots* of 'omics --- genomics, transcriptomics, proteomics, and metabolomics   
+
+The 'omics comparisons allow for very rich comparisons because a significant proportion of genes are shared between these two species. Furthermore, homology at the anatomical and neuropathological levels is less clear.  
+
+![Aligning Human and Mouse Phenotypes](fig/dimensions_of_model_alignment.png){alt='image showing humans and mice along with neuroimaging, neuropathology, and heatmap images representing the different modalities to align.'}
+
+While imaging and neuropathology provide important phenotypic anchors, 'omics data offer particularly rich opportunities for cross-system comparison. A large proportion of genes are shared across species and between experimental systems, and transcriptomic measurements provide gene-level resolution across thousands of features simultaneously — making them well-suited for systematic alignment.
+
+In this session we will explore two complementary transcriptomic alignment strategies, each operating at a different level of biological resolution:
+
+1. **Gene-level correlation** within human co-expression module gene sets — asking whether the same genes change in the same direction across systems  
+  + correlations will be generally weak for all expression, but models may recapitulate specific aspects of the disease  
+  + we can use subsets of genes defined from co-expression modules, which represent genes expressed in similar patterns in AD, and look for correlations within these subsets  
+2. **Functional enrichment correlation** using the AD biological domain framework — asking whether the same biological processes are implicated across systems, even when specific genes differ  
+  + consider the functional annotations enriched among differentially expressed genes in each system  
+  + sub-divide these groups of co-functional genes into biological domains to aid our interpretation   
+
+These two approaches are complementary: animal models may fail to recapitulate human disease at the gene level while still preserving pathway-level signal, and distinguishing between these two scenarios is itself biologically informative. We'll use the 5xFAD mouse model as our experimental system throughout this session, comparing against transcriptomic data from human AD cohorts in the AMP-AD consortium.  
+
+## [2] Differential Expression Analysis in AD Mouse Models
+
+We'll analyze the 5xFAD RNA-seq expression data we explored in the previous session. Our goal is to identify genes that are differentially expressed between 5xFAD carriers and wild-type controls across multiple ages, capturing the transcriptomic response to this model of amyloid-driven AD pathology.  
+
+The 5xFAD model carries five mutant human transgenes affecting the amyloid precursor protein (APP) and presenilin 1 (PSEN1) genes, all of which are causal variants for Familial Alzheimer's Disease (FAD). These include three variants in the APP - Swedish (K670N/M671L), Florida (I716V), and London (V717I) - and two in PSEN1 - M146L and L286V. Both transgenes are expressed under the control of the neural-specific elements of the mouse Thy1 promoter, driving overexpression in the brain. More information about this generation and maintenance of this strain is available in the [JAX strain catalog](https://www.jax.org/strain/008730).   
+
+This model has been extensively characterized by the MODEL-AD consortium, including the dataset we explored yesterday ([syn21983020](https://www.synapse.org/Synapse:syn21983020); see [Oblak et al (2021)](https://pubmed.ncbi.nlm.nih.gov/34366832/) for details). The primary pathophysiological phenotypes are summarized in the figure below from [AlzForum](https://www.alzforum.org/research-models/5xfad-b6sjl), and include early deposition of amyloid plaques, gliosis and neuroinflammation, synaptic changes and cognitive impairment, and neuronal loss, specifically in cortical layer V and the subiculum. Notably, tau tangles are absent from this model.  
+
+![5xFAD Mouse Phenotypes (AlzForum)](fig/5xFAD_phenotypes.png){alt='list of AD phenotypes associated with 5xFAD mouse model'}
+
+We'll use `DESeq2` to assess differential expression across three ages, which will allow us to track the progression of transcriptomic changes as pathology develops.  
+
+### Read 5xFAD RNA-seq count data
+
+First, let's pull the RNA-seq count matrix and associated metadata from Synapse. The study includes two metadata files - one at the individual level and one at the biospecimen level - which we'll join together into a single covariate table
+
+```{r 5xFAD_counts_metadata}
+# RNA-seq counts
+counts <- syn$get('syn63855360') %>% .$path %>% read_tsv()
+
+# join individual and biospecimen metadata
+meta <- left_join(
+  syn$get('syn63084319') %>% .$path %>% read_csv(),
+  syn$get('syn63587028') %>% .$path %>% read_csv() %>%
+    # coerce to character to match type in individual metadata
+    mutate(individualID = as.character(individualID)) %>%
+    select(individualID, specimenID),
+  by = 'individualID'
+) %>% filter(!is.na(specimenID))
+```
+
+### Prepare covariates
+
+Next we'll wrangle the metadata into a covariate table suitable for `DESeq2`, computing animal age in months from the birth and death dates, and recording genotype into a simpler group label.
+
+```{r 5xFAD_covariates}
+covars <- meta %>%
+  slice(match(colnames(counts[,-c(1:2)]), individualID)) %>%
+  mutate(
+    age = round(ageDeath),
+    group = if_else(genotype == '5XFAD_carrier', '5xFAD', 'WT') %>% factor(),
+    sex = factor(sex)
+  ) %>%
+  select(individualID, group, sex, age)
+
+head(covars)
+```
+
+Next let's verify the sample metadata is aligned with the count matrix and get an overall sense of the experimental design
+
+```{r check_covariates}
+all(colnames(counts[,-c(1:2)]) == covars$individualID)
+covars %>% group_by(group, age, sex) %>% summarise(n = n())
+```
+
+This confirms we have 6 samples from each combination of genotype (5xFAD or WT), age (4, 6, and 11 months), and sex, for a total of 72 samples.  
+
+#### Accounting for transgenes
+
+The 5xFAD model introduces human copies of APP and PSEN1 into the mouse genome. To accurately capture reads from both the endogenous mouse genes and the human transgenes, this dataset was aligned against a custom transcriptome that includes both the mouse and human versions of each gene. As a result, the count matrix contains four relevant entries: mouse _App_ and _Psen1_ along with human _APP_ and _PSEN1_.   
+
+Before running the differential expression analysis we need to handle this carefully - if we leave the transgene counts separate, the expression of the endogenous mouse genes will be artificially underestimated in 5xFAD carriers, where some reads from each gene's transcript will have mapped to the human transgene entries instead. Our solution is to sum the counts from the human and mouse versions of each gene, storing the combined total under the mouse gene ID.  
+
+First let's look at the expression of these four genes to confirm the pattern we expect - i.e. human transgene counts only in 5xFAD carriers, endogenous mouse gene counts present in all groups.  
+
+```{r check_transgene_endogenous}
+tg.counts <- counts %>%
+    filter(gene_id %in% c("ENSG00000080815", "ENSMUSG00000019969",
+                          "ENSG00000142192", "ENSMUSG00000022892")) %>%
+    pivot_longer(cols = -c(gene_id, `transcript_id(s)`), names_to = "individualID", values_to = "counts") %>%
+    left_join(covars, by = "individualID") %>%
+    mutate(
+        age.m = factor(str_c(age, 'm'), levels = c('4m', '6m', '11m')),
+        symbol = case_when(
+            gene_id == "ENSG00000142192"   ~ "Human APP",
+            gene_id == "ENSG00000080815"   ~ "Human PSEN1",
+            gene_id == "ENSMUSG00000022892" ~ "Mouse App",
+            gene_id == "ENSMUSG00000019969" ~ "Mouse Psen1"
+        )
+    )
+
+ggplot(tg.counts, aes(x = age.m, y = counts, color = group, shape = sex)) +
+    geom_boxplot() +
+    geom_point(position = position_jitterdodge()) +
+    facet_wrap(~symbol, scales = 'free')
+```
+
+As expected, the human transgene counts are zero in WT animals and clearly several tens to hundreds of thousands of reads in each of the 5xFAD carriers. The endogenous mouse genes are expressed fairly uniformly across groups. Now we'll sum the human and the mouse counts for each gene pair and remove the human transgene entries from the counts matrix.  
+
+```{r sum_transgene_endogenous}
+counts <- counts %>% select(-`transcript_id(s)`) %>% column_to_rownames("gene_id")
+
+# sum human and mouse APP counts under the mouse App gene ID
+counts["ENSMUSG00000022892",] <- counts["ENSMUSG00000022892",] + counts["ENSG00000142192",]
+counts <- counts[rownames(counts) != "ENSG00000142192",]
+
+# sum human and mouse PSEN1 counts under the mouse Psen1 gene ID
+counts["ENSMUSG00000019969",] <- counts["ENSMUSG00000019969",] + counts["ENSG00000080815",]
+counts <- counts[rownames(counts) != "ENSG00000080815",]
+
+# RSEM produces fractional expected counts rather than raw integers;
+# round to nearest integer as recommended for DESeq2 input
+counts <- counts %>% 
+  mutate(across(everything(), ~ round(.x) %>% as.integer()))
+```
+ 
+Let's confirm that the human transgene entries are no longer present in the count matrix.  
+
+```{r confirm_no_Hs_ensg}
+# no rows should remain with human (non-ENSMUSG) gene IDs
+counts[!str_detect(rownames(counts), "ENSMUSG"),] %>% dim()
+```
+
+### Prepare data and run DESeq analysis
+
+We'll perform the differential expression analysis stratified by age group while controlling for sex as a covariate. Let's start by walking through the analysis for the youngest cohort (4 months), then extend the approach to the other age groups.  
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Differential expression analysis
+
+For this lesson we are using `DESeq2`, though other approaches are commonly used including `edgeR`, `limma-voom`, and `dream`. We won't cover the details of `DESeq2` exhaustively here — for more information please refer to the [DESeq2 vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).  
+:::::::::::::::::::::::::::::::::::::::
+
+First we'll subset the counts and metadata to the 4 month old animals and construct a `DESeqDataSet` object:  
+
+```{r 4m_dds}
+covars.4m <- covars %>% filter(age == 4)
+counts.4m <- counts[,colnames(counts) %in% covars.4m$individualID]
+
+dds.4m <- DESeqDataSetFromMatrix(
+  countData = counts.4m,
+  colData = covars.4m,
+  design = ~ sex + group
+)
+```
+
+Before running the analysis we'll apply a minimal pre-filtering step to remove genes with very low counts. This reduces memory usage, speeds up the analysis, and improves visualizations by removing uninformative features. Here we'll keep only genes with at least 10 reads in at least 6 samples:  
+
+```{r dds_filter}
+dds.4m <- dds.4m[rowSums(counts(dds.4m) >= 10) >= 6,]
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 1
+
+What proportion of the ~55k genes in the count matrix remain after this filter?
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+We also need to set the reference level for the group variable so `DESeq2` computes the fold changes in the correct direction (i.e. 5xFAD relative to WT):  
+
+```{r dds_factor_level}
+dds.4m$group <- relevel(dds.4m$group,ref="WT")  
+```
+
+Now we're ready to run the differential expression analysis; it'll take a few seconds to process this step:
+
+```{r deseq}
+dds.4m <- DESeq(dds.4m)
+```
+
+We can extract the results for the 5xFAD vs WT contrast and map in the relevant gene symbols (for interpretability):  
+
+```{r deseq_results}
+res.4m <- results(dds.4m, contrast = c('group','5xFAD','WT'), alpha = 0.05) %>% 
+  as.data.frame() %>% 
+  rownames_to_column('ensembl_gene_id') %>% 
+  mutate(symbol = AnnotationDbi::mapIds(
+    org.Mm.eg.db::org.Mm.eg.db,
+    keys = ensembl_gene_id,
+    column = "SYMBOL",
+    keytype = "ENSEMBL",
+    multiVals = "first"
+  )) 
+
+summary(results(dds.4m, contrast = c('group', '5xFAD', 'WT'), alpha = 0.05))
+```
+
+There are 430 significantly DE genes at this 4 month timepoint, with the large majority being upregulated in 5xFAD relative to WT. 
+
+Let's visualize the results as a volcano plot:
+
+```{r volcano}
+ggplot(
+  arrange(res.4m, desc(padj)), 
+  aes(log2FoldChange, -log10(padj))) +
+  geom_vline(xintercept = 0, lwd = .1) +
+  geom_point(
+    alpha = .3,
+    aes(color = (padj < 0.05 & abs(log2FoldChange) > log2(1.2))),
+    show.legend = FALSE
+  ) +
+  scale_color_manual(values = c('grey', 'red')) +
+  ggrepel::geom_text_repel(
+    data = subset(res.4m, padj < 0.05 & abs(log2FoldChange) > log2(1.2)),
+    aes(label = symbol),
+    min.segment.length = 0
+  )
+```
+
+Among the most significantly upregulated genes are _Psen1_ and _App_, which is expected given the transgene summing we performed earlier, along with markers of microglial activation including _Cst7_, _Ccl6_, and _Clec7a_, suggesting robust neuroinflammatory changes even at this early stage.  
+
+### Extending to all age groups
+
+Now let's extend the analysis to all three age groups. Rather than repeating the steps above three times, we'll use a nested tibble approach - storing the metadata, counts, DESeq objects, and results for each age as a list column in a single data frame. This pattern is computationally efficient and keeps all age group results organized in one place. This will likely take a few minutes to run - set it up and take a break!
+
+```{r deseq_all_ages}
+fad.deg <- tibble(age = c(4, 6, 11)) %>%
+  mutate(
+    meta   = map(age, ~ covars %>% filter(age == .x)),
+    counts = map(meta, ~ counts %>% select(.x %>% pull(individualID))),
+    dds = map2(counts, meta, ~ DESeqDataSetFromMatrix(
+      countData = .x,
+      colData = .y,
+      design = ~ sex + group
+    )),
+    dds = map(dds, ~ .x[rowSums(counts(.x) >= 10) >= 6,]),
+    dds = map(dds, ~ { .x$group <- relevel(.x$group, ref = 'WT'); .x }),
+    dds = map(dds, ~ DESeq(.x)),
+    res = map(dds, ~ results(.x, contrast = c('group', '5xFAD', 'WT'), alpha = 0.05)),
+    res.t = map(res, ~ as.data.frame(.x) %>%
+      rownames_to_column('ensembl_gene_id') %>%
+      mutate(symbol = AnnotationDbi::mapIds(
+        org.Mm.eg.db::org.Mm.eg.db,
+        keys = ensembl_gene_id,
+        column = "SYMBOL",
+        keytype = "ENSEMBL",
+        multiVals = "first"
+      )))
+  )
+```
+
+The resulting `fad.deg` tibble contains one row per age group, with list columns holding the metadata, counts, DESeq objects, and results for each: 
+
+```{r check_deseq}
+glimpse(fad.deg)
+```
+
+We can quickly summarize the DE results across ages: 
+
+```{r how_many_DEG}
+map(fad.deg$res, ~ summary(.x))
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 2
+
+How many significantly up- and down-regulated genes are found at each age? 
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::
+
+Finally, let's save these results before moving on:
+
+```{r save_deg}
+saveRDS(fad.deg, here::here("5xFAD_DESeq_analysis.rds"))
+```
+
+## [3] Overview of Human cohort data
+
+Now that we have our mouse transcriptomes analyzed, let's shift to the human side. The Accelerating Medicines Partnership-Alzheimer’s Disease Consortium ([AMP-AD](https://adknowledgeportal.synapse.org/Explore/Programs/DetailsPage?Program=AMP-AD)) has generated extensive 'omics data from multiple human AD cohorts, applying systems biology approaches toward the goal of elucidating AD mechanisms and highlighting potential therapeutic targets.
+
+Three large independent cohorts form the core of AMP-AD:
+
+1. The Religious Orders Study and the Memory and Aging Project ([ROSMAP, syn3219045](https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=syn3219045)) 
+2. Mount Sinai Brain Bank ([MSBB, syn3159438](https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=syn3159438))  
+3. Mayo Clinic ([Mayo, syn5550404](https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=syn5550404)) 
+
+Together these studies have collected postmortem RNA-seq profiles from over 1,200 individuals spanning seven distinct brain regions:  dorsolateral prefrontal cortex (DLPFC), temporal cortex (TCX), inferior frontal gyrus (IFG), superior temporal gyrus (STG), frontal pole (FP), parahippocampal gyrus (PHG), and cerebellum (CBE). Samples are generally balanced across AD, MCI, and non-affected controls, providing a broad assessment of how AD affects multiple brain regions across three independent US populations.  
+
+![Transcriptomic studies of Alzheimer's Disease](fig/ampad_studies_regions.png){alt='table showing AMP-AD studies, the number of samples, and brain regions sampled'}
+
+### Human consensus co-expression modules
+
+[Wan, et al. (2020)](https://doi.org/10.1016/j.celrep.2020.107908) performed meta-analysis across all available AMP-AD RNA-seq datasets to systematically characterize gene expression changes associated with AD. Briefly, RNA-seq read libraries were normalized and covariates adjusted for each study separately before testing for differential expression using fixed/mixed effects modeling to account for batch effects. Co-expression analysis was then performed on each brain region independently using multiple algorithms, generating 2,978 co-expression modules in total. Of these, 660 showed enrichment for AD-associated differentially expressed genes.  
+
+Wan _et al_ then clustered these modules using network analyses and identified 30 co-expression modules related to LOAD pathology, further organized into five consensus clusters that span brain regions and cohorts. Cell-type enrichment analysis revealed distinct cellular signatures for each consensus cluster:   
+
+- **Consensus cluster A** — enriched for extracellular matrix organization; astrocyte signatures  
+- **Consensus cluster B** — enriched for immune system processes; microglial and endothelial signatures  
+- **Consensus cluster C** — enriched for neuronal system processes; neuronal signatures  
+- **Consensus cluster D** — enriched for cell cycle and nonsense-mediated decay; oligodendrocyte signatures  
+- **Consensus cluster E** — enriched for organelle biogenesis and cellular stress response; mixed cell type signatures  
+
+![AMP-AD GENE Modules](fig/ampad_consensus_clusters.png){alt='Heatmap showing the overlap between co-expression clusters and the consensus clusters'}
+
+### Accessing AMP-AD module data
+
+The 30 co-expression modules are available from the Synapse data repository ([syn11932957](https://www.synapse.org/Synapse:syn11932957)); let's download and explore the data. 
+
+```{r ampad_modules, warning=FALSE, message=FALSE}
+query <- syn$tableQuery("SELECT * FROM syn11932957")
+module_table <- read_csv(query$filepath)
+
+head(module_table)
+```
+
+The columns we'll primarily utilize are `GeneID` (Ensembl gene IDs), `Module` (co-expression module name), `brainRegion` (tissue of origin), and `external_gene_name` (gene symbols). How many modules are there and how many genes does each module contain?
+
+```{r module_demographics}
+length(unique(module_table$Module))
+    
+ggplot(module_table, aes(y = Module)) + 
+  geom_bar() + 
+  theme_bw()
+```
+
+We can also check the total number of unique genes across all modules:  
+
+```{r module_n_genes}
+length(unique(module_table$GeneID))
+``` 
+
+The consensus cluster assignments for each module - mapping 30 co-expression modules into five clusters as described in Wan _et al._ - have been generated and are available through Synapse. This bookkeeping is directly based on the analyses in Wan _et al._ rather than any additional analytical steps, so we'll just load it directly:
+
+```{r consensus_clusters}
+module_clusters <- syn$get('syn74808462') %>% .$path %>% read_csv()
+```
+
+This loads `module_clusters`, a lookup table mapping each of the 30 modules to its consensus cluster label, which we'll use for visualization later.
+
+#### Mouse orthologs of human module genes  
+
+Since we're comparing human module genes against mouse model data, we need the corresponding mouse ortholog for each human gene. Wan _et al._ identified mouse orthologs using the HGNC Comparison of Orthology Predictions ([HCOP](https://www.genenames.org/tools/hcop/)) tool. While there are a variety of ways to define and convey gene orthology, for the sake of simplicity we are going to use their mapping table directly from Synapse ([syn17010253](https://doi.org/10.7303/syn17010253.1)):   
+
+```{r module_orthologs, warning=FALSE, message=FALSE}
+mouse.human.ortho <- syn$get("syn17010253")$path %>% read_tsv()
+```
+
+We'll add mouse gene symbols to the module table from before by matching on human Ensembl IDs:
+
+```{r join_mmus_to_modules, warning=FALSE, message=FALSE}
+module_table$Mouse_gene_symbol <-
+  mouse.human.ortho$mouse_symbol[
+    match(module_table$GeneID, mouse.human.ortho$human_ensembl_gene)
+    ]
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 3
+
+How many human genes are we removing that don't have identified orthologs? 
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Let's retain only the columns we need and filter to genes that have a mouse ortholog mapped:  
+
+```{r refine_ampad_modules}
+ampad_modules <- module_table %>% 
+  distinct(tissue = brainRegion, module = Module, gene = GeneID, Mouse_gene_symbol) %>% 
+  filter(!is.na(Mouse_gene_symbol), Mouse_gene_symbol != "")
+```
+
+### Human AD differential expression data
+
+We'll also need fold change estimates for each module gene in human AD. These come from a meta-analysis of reprocessed AMP-AD RNA-seq data across all seven brain regions ([syn14237651](https://www.synapse.org/#!Synapse:syn14237651)).  
+
+```{r ampad_deg, warning=FALSE, message=FALSE}
+ampad_modules_raw <- read_tsv(syn$get("syn14237651")$path)
+```
+
+This table contains results from multiple models and comparisons - we'll filter to consider the `diagnosis` model, comparing AD cases against controls, keeping only the `Tissue`, `Gene` and `logFC` columns that we need moving forward:  
+
+```{r ampad_deg_filtered, warning=FALSE, message=FALSE}
+ampad_fc <- ampad_modules_raw %>%
+  as_tibble() %>%
+  filter(Model == "Diagnosis", Comparison == "AD-CONTROL") %>%
+  distinct(tissue = Tissue, gene = ensembl_gene_id, ampad_fc = logFC)
+```
+
+#### Combining modules with fold change data
+
+Now we'll join the module assignments (`ampad_modules`) and human fold change data (`ampad_fc`), matching on both `gene` (huan Ensembl gene IDs) and `tissue` to respect the structure of the module level data. **Reminder**: Each gene can be present in multiple brain regions, but should only be in one module per brain region. 
+
+```{r ampad_modules_fc, warning=FALSE, message=FALSE}
+ampad_modules_fc <- inner_join(ampad_modules, ampad_fc, by = c("gene", "tissue")) %>%
+  select(symbol = Mouse_gene_symbol, module, ampad_fc)
+```
+
+This is the key data object for the human side of the module based comparisons in the subsequent section.
+
+## [4] Correlation between mouse models and human AD modules
+
+Now we'll get to the cross-species alignment. Our goal is to identify AMP-AD co-expression modules where the direction and magnitude of gene expression changes are correlated between 5xFAD mice and human AD subjects. The figure below illustrates what we're looking for - modules where logFC values are correlated (left) as well as modules where there is little or no relationship (right).  
+
+![Human-Mouse logFC correlation](fig/hs_mm_logfc_correlation.png){alt='Example correlation plots for AMP-AD co-expression module genes and mouse model expression.'}
+
+There are two approaches commonly used to compute correlation:   
+
+1. **logFC vs logFC**: compare the change in expression between AD and control in humans against the change in expression between 5xFAD and WT in mice, for each gene in a given module:
+  + logFC(human) = log fold change in expression of human AD patients compared to control patients   
+  + logFC(mouse) = log fold change in expression of mouse AD models compared to control mouse models  
+    
+  $$\text{cor.test}(logFC_{\text{human}}, logFC_{\text{mouse}})$$ 
+  
+2. **logFC vs β**: compare human AD expression changes against mouse genetic effect sizes from a linear regression model:  
+  + logFC(human) = log fold change in expression of human AD patients compared to control patients  
+  + β(mouse) = mouse gene expression effect size from linear regression model  
+    
+  $$\text{cor.test}(logFC_{\text{human}}, β_{\text{mouse}})$$ 
+
+Both approaches assess directional coherence between human and mouse expression for genes within AMP-AD modules. We'll use approach 1 today.
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 4
+
+What are the relative advantages of each approach?
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+### Compute module-level correlations
+
+We'll join the mouse and human logFC values on gene symbol, nest the data by module and age group, then compute a Pearson correlation for each combination. Note that because the same mouse gene symbol can match to multiple human modules and brain regions, we specify `multiple = "all"` in the join call:
+
+```{r module_correlation}
+cor.df <- fad.deg %>% select(age, res.t) %>% unnest(res.t) %>% 
+  inner_join(., ampad_modules_fc, by = 'symbol', multiple = 'all') %>% 
+  select(module, age, symbol, log2FoldChange, ampad_fc) %>% 
+  nest(data = c(symbol, log2FoldChange, ampad_fc), .by = c(module, age)) %>% 
+  mutate(data = map(data, distinct)) %>% 
+  filter(map_dbl(data, nrow) > 3) %>% 
+  mutate(
+    cor_test    = map(data, ~ cor.test(.x[["log2FoldChange"]], .x[["ampad_fc"]], method = "pearson")),
+    correlation = map_dbl(cor_test, "estimate"),
+    p_value     = map_dbl(cor_test, "p.value"),
+    significant = p_value < 0.05
+  ) %>%
+  select(-cor_test)
+```
+
+The filter for more than 3 genes per module/age combination ensures that correlations are computed only where there is sufficient data. We use `purrr::map` based functions throughout to apply operations across all nested data frames simultaneously.
+
+### Visualize module correlations
+
+Now we'll join the consensus cluster mapping and prepare the data for plotting to visualize the correlations across all 30 modules and three age groups. 
+
+```{r module_plot_data}
+plot_data <- cor.df %>%
+  left_join(module_clusters, by = "module") %>%
+  select(cluster, cluster_label, module, age, correlation, p_value, significant) %>%
+  arrange(cluster) %>%
+  mutate(
+    module = factor(module, levels = module_clusters$module),
+    age    = str_c(age, 'm'),
+    age    = factor(age, levels = c('11m', '6m', '4m'))
+  )
+```
+
+Modules are arranged along the x-axis, grouped by consensus cluster, ages along the y-axis, with circle color indicating correlation direction and size indicating magnitude. Black squares mark significant correlations (p < 0.05).  
+
+```{r module_plot, fig.width=15, fig.height=3}
+ggplot(plot_data, aes(x = module, y = age)) +
+  geom_tile(colour = "black", fill = "white") +
+  geom_point(aes(colour = correlation, size = abs(correlation))) +
+  geom_point(
+    data = ~ filter(.x, significant),
+    color = "black", shape = 0, size = 9
+  ) +
+  facet_grid(
+    rows = vars('5xFAD'),
+    cols = vars(cluster_label),
+    scales = "free", space = "free"
+  ) +
+  scale_x_discrete(position = "bottom") +
+  scale_size(guide = "none", limits = c(0, 0.4)) +
+  scale_color_gradient2(
+    limits = c(-0.5, 0.5),
+    low = "#85070C", high = "#164B6E",
+    name = "Correlation",
+    guide = guide_colorbar(ticks = FALSE)
+  ) +
+  labs(x = NULL, y = NULL) +
+  theme(
+    strip.text.x       = element_text(colour = "black"),
+    strip.text.y.left  = element_text(angle = 0),
+    axis.ticks         = element_blank(),
+    axis.text.x        = element_text(angle = 45, hjust = 1, vjust =1),
+    axis.text.y        = element_text(angle = 0),
+    panel.background   = element_blank(),
+    panel.grid         = element_blank(),
+    legend.position    = "right"
+  )
+```
+
+The 5xFAD mouse model shows gene expression changes that are correlated with human AD across all five consensus clusters, with the strongest correlations in Consensus Cluster B - consistent with enrichments for immune system processes and reflecting the prominent neuroinflammatory signature of this model. Several of the correlations for modules from Consensus Clusters D and E are negative, indicating these genes are moving in the opposite direction in 5xFAD mice compared with human AD.
+
+### Examining individual module correlations
+
+The heatmap gives a global view, but it can be insightful to look at individual modules to understand which genes are driving the correlations. We can plot gene-level correlation for any module and label the points to identify the genes having the strongest impact on the correlation.
+
+Let's first consider the FPbrown module, which sits in Consensus Cluster E and shows relatively weak correlations:
+
+```{r fpbrown_module_example, fig.width=8, fig.height=4, fig.show='hide'}
+# specify which comparisons to consider
+m <- 'FPbrown'
+a <- c(4,6)
+
+# filter the correlation data frame to these comparisons
+indiv.corr <- cor.df %>% filter(module == m, age %in% a) %>% unnest(data) %>% 
+  mutate( facet = str_c(age, '\n', 'r = ',signif(correlation,3),' ; p = ',signif(p_value,3) ))
+
+# plot
+ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
+  geom_vline(xintercept = 0, lwd = .1)+
+  geom_hline(yintercept = 0, lwd = .1)+
+  geom_point( size = .5, color = 'darkred')+
+  geom_smooth(method = 'lm', lwd = .5)+
+  ggrepel::geom_text_repel( data = arrange(indiv.corr, desc(abs(log2FoldChange))), 
+                             aes(label = symbol), size = 3, min.segment.length = 0 ) +
+  labs(x = '5xFAD logFC', y = 'AMP-AD logFC',
+       title = unique(indiv.corr$module))+
+  facet_wrap(~facet)+
+  theme_bw()
+```
+
+The correlations here are weak and driven by a small number of genes with large fold changes. 
+
+Compare this to the STGblue module in Consensus Cluster B, which shows much stronger alignment:
+
+```{r stgblue_module_example, fig.width=8, fig.height=4, fig.show='hide'}
+m <- 'STGblue'
+a <- c(4,6)
+
+# filter the correlation data frame to these comparisons
+indiv.corr <- cor.df %>% filter(module == m, age %in% a) %>% unnest(data) %>% 
+  mutate( facet = str_c(age, '\n', 'r = ',signif(correlation,3),' ; p = ',signif(p_value,3) ))
+
+# plot
+ggplot(indiv.corr, aes( log2FoldChange , ampad_fc ))+
+  geom_vline(xintercept = 0, lwd = .1)+
+  geom_hline(yintercept = 0, lwd = .1)+
+  geom_point( size = .5, color = 'darkred')+
+  geom_smooth(method = 'lm', lwd = .5)+
+  ggrepel::geom_text_repel( data = arrange(indiv.corr, desc(abs(log2FoldChange))), 
+                             aes(label = symbol), size = 3, min.segment.length = 0 ) +
+  labs(x = '5xFAD logFC', y = 'AMP-AD logFC',
+       title = unique(indiv.corr$module))+
+  facet_wrap(~facet)+
+  theme_bw()
+```
+
+The correlations in STGblue are considerably stronger (r ≈ 0.3 vs r ≈ 0.1 for FPbrown), with a consistent pattern across ages — genes like _Itgax_ and _Clec7a_ are upregulated in both young and older 5xFAD mice and in human AD, reinforcing the inflammatory signal we saw in the global heatmap. This contrast between modules illustrates an important point: the 5xFAD model does not uniformly recapitulate the transcriptomic signature of human AD, but does capture specific aspects — particularly neuroinflammation — more faithfully than others.
+
+::::::::::::::::::::::::::::::::::::: discussion
+
+## Which aspects of AD are not well modeled in 5xFAD mice?
+
+Looking at the correlation heatmap and the individual module examples, consider the following:
+
+- Which consensus clusters show weak or absent correlations with human AD?
+- Given what you know about 5xFAD pathophysiology, does this make biological sense?
+- What aspects of late-onset AD biology might be fundamentally difficult to model in any amyloid-driven transgenic mouse?
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+## [5] Detecting functional coherence of gene sets from omics data
+
+Most omics analyses produce data on many thousands of genomic features (i.e. transcripts, proteins, etc.) simultaneously. Gene functional enrichment analysis helps identify which biological processes are being impacted by a given experiment by testing whether groups of genes sharing a functional annotation are more prevalent among the affected genes than expected by chance. 
+
+The figure below from [Zhao & Rhee, Trends in Genetics (2023)](https://doi.org/10.1016/j.tig.2023.01.003) illustrates some common methods for functional enrichment approaches. Two of the most commonly utilized approaches are:  
+
+**Over-representation analysis (ORA)** tests for statistical overlap between a list of significantly differentially expressed genes and functional annotation sets, using a Fisher's exact or hypergeometric test. It is intuitive and fast, but requires arbitrary significance thresholding to define the gene list and discards quantitative information about effect size.  
+
+**Gene set enrichment analysis (GSEA)** uses a quantitative ranking of all measured genes - typically by fold change or a signed significance statistic - and calculates an enrichment score reflecting whether genes annotated to a term are concentrated at the top or bottom of the ranking metric. This avoids the need for arbitrary significance cutoff and preserves directional information through the _normalized enrichment score (NES)_: positive NES values indicate enrichment among up-regulated genes, negative NES values among down-regulated genes.
+
+![Functional enrichment approaches](fig/pathway_enrichment_Zhao_Rhee_TrendsGenetics.jpg){alt='Figure showing different methods to test functional enrichment.'}
+
+For the session today we'll focus on GSEA, which is better suited to the systematic comparisons we're aiming to make today - we can compare NES values for the same processes in different biological systems to understand how processes are affected in each context. 
+
+### Gene set enrichment analysis
+
+GSEA requires a ranked list of all measured genes. We'll rank by `log2FoldChange`, so that strongly up-regulated genes appear at the top and strongly down-regulated genes appear at the bottom of the list. Critically, we include _all_ genes with a valid gene symbol - not just those that pass a significance threshold - since restricting to only significant genes would introduce an arbitrary cutoff, driven by experimental power, that GSEA is designed to avoid. 
+
+```{r gsea_gene_list}
+gene.list <- fad.deg %>% 
+  filter(age == 6) %>% 
+  select(res.t) %>% unnest(res.t) %>% 
+  arrange(padj) %>% 
+  filter(!is.na(symbol), !duplicated(symbol)) %>% 
+  arrange(desc(log2FoldChange)) %>%
+  pull(log2FoldChange, name = symbol)
+```
+
+We'll use `clusterProfiler::gseGO()` to run GSEA against the full Gene Ontology. This function handles GO annotation retrieval internally, keeping the code concise. The function uses internal parallelization which Cavatica containers block, so we'll register the backend to run serialized:
+
+```{r gsea}
+# Cavatica containers block forking -- register serial backend for BiocParallel
+BiocParallel::register(BiocParallel::SerialParam())
+
+gse.enr <- gseGO(
+  geneList     = gene.list,
+  OrgDb        = org.Mm.eg.db,
+  keyType      = "SYMBOL",
+  ont          = "ALL",
+  minGSSize    = 15,
+  maxGSSize    = 500,
+  pvalueCutoff = 0.05,
+  verbose      = FALSE
+)
+```
+
+Let's take a look at the top results:
+
+```{r gsea_result_inspect}
+gse.enr@result %>% arrange(p.adjust) %>% 
+  select(Description, p.adjust, NES) %>% 
+  head(10)
+```
+
+The `NES` column tells us the direction of enrichment — positive values indicate the gene set is enriched among up-regulated genes, negative values among down-regulated genes. We can tally significant terms by direction:
+
+```{r gsea_n_sig_term}
+# up-regulated terms
+gse.enr@result %>% filter(p.adjust <= 0.05, NES > 0) %>% nrow()
+
+# down-regulated terms
+gse.enr@result %>% filter(p.adjust <= 0.05, NES < 0) %>% nrow()
+```
+
+And we can plot some of the top-enriched terms:
+
+```{r gsea_plot, fig.width=8, fig.height=6}
+dotplot(gse.enr, x = 'NES', showCategory = 25, font.size = 10, label_format = 80)
+```
+
+The dominant signal among up-regulated terms is immune activation — consistent with the prominent neuroinflammatory phenotype of the 5xFAD model. Down-regulated terms are enriched for synaptic and neuronal processes, reflecting the synaptic deficits and neuronal loss associated with amyloid pathology.  
+
+Now let's extend the analysis across all three age groups. This will take a few minutes to run — we'll use the time to discuss some important considerations for functional enrichment analysis:
+
+```{r gsea_all_ages}
+fad.enr <- fad.deg %>%
+  select(age, res.t) %>% 
+  unnest(res.t) %>% 
+  arrange(padj) %>% 
+  filter(!is.na(symbol), !duplicated(symbol), .by = age) %>%
+  summarise(
+    gl = log2FoldChange %>% setNames(., symbol) %>% 
+      sort(decreasing = TRUE) %>% list()
+    , .by = age
+  ) %>%
+  ungroup() %>%
+  mutate(
+    gse = map(gl, ~ gseGO(
+      geneList     = .x,
+      OrgDb        = org.Mm.eg.db,
+      keyType      = "SYMBOL",
+      ont          = "ALL",
+      minGSSize    = 15,
+      maxGSSize    = 500,
+      pvalueCutoff = 0.05,
+      verbose      = FALSE
+    ))
+  )
+
+saveRDS(fad.enr, here::here('5xFAD_gsea_results.rds'))
+```
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Challenge 5 [take-home] 
+
+**Over-representation analysis**
+
+Using `clusterProfiler::enrichGO()`, test for over-represented GO terms among significantly up- and down-regulated genes in 6 month old 5xFAD mice.
+
+Some things to consider:
+
+- What is the effect of specifying a background gene universe versus not?
+- How do the numbers of significant terms differ between up- and down-regulated gene lists?
+- How does the biological interpretation compare to the GSEA results above?
+
+:::::::::::::::::::::::: solution
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+### Common pitfalls & best practices
+
+These kinds of functional enrichment analyses are very common, but not all results reported are equal! A recent paper describes an ["Urgent need for consistent standards in functional enrichment analysis"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1009935). They examine how the results of functional enrichment analyses are reported in the literature, and identify several common shortcomings. Watch out for these common mistakes when performing and reporting your own analyses! We'll have more opportunities to discuss issues with reproducibility in computational biology research in future sessions.    
+
+![Common pitfalls](fig/common_pitfalls_Wijesooriya_PLOS_CompBio.png){alt='Figure from the paper showing the number of papers examined that failed to meet certain standards for reporting the results of functional enrichment testing.'}
+
+A few of the most important points to keep in mind when performing and reporting your own analyses:
+
+- **Background gene universe** — ORA results are highly sensitive to the choice of background. The universe should reflect the genes actually measured in the experiment, not all annotated genes
+- **Multiple testing correction** — with hundreds to thousands of terms being tested, uncorrected p-values will produce many false positives. Always report adjusted p-values
+- **Redundancy** — GO terms are hierarchically structured, so many significant terms will be highly redundant. Tools like clusterProfiler::simplify() can help reduce redundancy in results
+- **Directionality** — reporting enrichment without distinguishing up- from down-regulated signal obscures the biology. Always report NES direction or separate up/down gene lists
+
+## [6] Alzheimer's Disease Biological Domains
+
+Our GSEA identified hundreds of significantly enriched GO terms in 5xFAD mice at each age — far more than can be practically interpreted or visualized (we can reasonably display only 1–2% of significant terms in a single plot). We need a framework to help organize and interpret these results into meaningful, disease-relevant groupings.  
+
+Across human AD cohorts, several molecular endophenotypes - recurring patterns of biological dysregulation detected across omic data types -  have been consistently identified. Several of these are illustrated in the figure below (source: Jesse Wiley).  
+
+![Endophenotypes of AD](fig/AD_endophenotypes.png){alt='An image of a brain surrounded by different endophenotype categories that are associated with AD.'}
+
+Very similar biological themes emerge among the targets of therapeutics currently in clinical trials for AD (see below, [Cummings et al, Alzheimer's disease drug development pipeline: 2024, Alz Dem TRCI](https://doi.org/10.1002/trc2.12465)), suggesting these endophenotypes represent genuine disease-relevant biology rather than artifacts of any single study or data modality.   
+
+![Common AD Research Ontology](fig/CADRO_pipeline_2024.png){alt='Circle plot showing therapeutics in various stages of clinical trials coded by the CADRO target class.'}
+
+![Drugs in Pipeline by CADRO](fig/CADRO_agent_distribution_2024.png){alt='Bar plot showing the numbers of agents in clinical trials across each class.'}
+
+To formalize and operationalize these endophenotypic areas, the [Emory-Sage-SGC-JAX (ESSJ) TREAT-AD center](treatad.org/emory-sage-sgc/) developed the [AD Biological Domain Framework](https://alz-journals.onlinelibrary.wiley.com/doi/pdfdirect/10.1002/trc2.12461). The framework enumerates 19 distinct biological domains (biodomains) using curated sets of GO terms, with four guiding design principles:  
+
+ * *Objective:* built on existing well-annotated resources rather than expert opinion alone   
+ * *Automatable:* unlike CADRO, where therapeutic targets are manually assigned, biodomain annotations can be applied computationally   
+ * *Intelligible:* groupings are designed to be biologically interpretable  
+ * *Modifiable:* definitions are continuously updated as knowledge evolves  
+
+For example, terms like "cytokine receptor binding" and "leukocyte migration" are annotated to the `Immune Response` biodomain, while terms like "postsynaptic density" and "synaptic vesicle cycle" are annotated to the `Synapse` biodomain. In total, 6,837 GO terms (15.7% of the ontology) are assigned to a biodomain, covering 16,275 human genes. While biodomain GO term sets are largely non-overlapping, gene-level overlap is higher due to pleiotropy — genes involved in multiple biological processes will naturally appear in more than one domain (panel A vs panel B below): 
+
+![AD Biodomain Demographics](fig/AD_biodomains.png){alt='Heatmaps showing the fraction of overlapping GO terms and genes between the various biological domains.'}
+
+Within each biodomain, GO terms are further organized into functionally coherent subdomains based on gene co-annotation patterns and disease risk score enrichment:  
+
+![AD Subdomains](fig/AD_subdomains.png){alt='Plot showing the number of subdomains associated with each domain and how many GO terms are assigned to each domain.'}
+
+### Download and explore the biological domain annotations
+
+Let's download the biodomain definition file and associated label metadata from Synapse:  
+
+```{r biodomain_download}
+# biodomain definitions
+biodom <- readRDS(syn$get('syn25428992')$path)
+
+# biodomain labels and colors
+dom.lab <- read_csv(syn$get('syn26856828')$path)
+```
+
+The `dom.lab` file contains standardized abbreviations and colors for each domain that we'll use for visualization. Let's take a look at the structure of the `biodom` object:
+
+```{r biodomain_inspect}
+glimpse(biodom)
+```
+
+Each row links a GO term (`GO_ID`, `GOterm_Name`) to its biodomain and subdomain assignments, along with gene annotations from two sources: GO API-derived annotations (`symbol`, `uniprot`) and BioMart-derived annotations (`ensembl_id`, `entrez_id`, `hgnc_symbol`).  
+
+How many GO terms are annotated to each biodomain?
+
+```{r biodomain_n_go}
+biodom %>%
+  group_by(Biodomain) %>%
+  summarise(n_term = length(unique(GO_ID))) %>%
+  arrange(n_term)
+```
+
+The biodomains range in size from `Tau Homeostasis` (10 terms) up to `Synapse` (1,379 terms). We can also look at the subdomain structure — let's use the `Synapse` domain as an example:
+
+```{r subdomain_n_go}
+biodom %>%
+  filter(Biodomain == 'Synapse') %>%
+  group_by(Subdomain) %>%
+  summarise(n_term = length(unique(GO_ID))) %>%
+  arrange(n_term)
+```
+
+And we can inspect the genes annotated to any specific term:
+
+```{r biodomain_term_genes}
+biodom %>% filter(GOterm_Name == 'amyloid-beta formation') %>% pull(symbol) %>% unlist()
+```
+
+### Annotate enriched terms with biological domain 
+
+Now let's map biodomain annotations onto the 6 month GSEA results and see which disease-relevant processes are captured:  
+
+```{r gsea_biodom_annotate}
+gse.enr.bd <- gse.enr@result %>%
+  left_join(biodom %>% select(Biodomain, ID = GO_ID), by = 'ID') %>%
+  mutate(Biodomain = if_else(is.na(Biodomain), 'no domain', Biodomain)) %>%
+  relocate(Biodomain)
+
+gse.enr.bd %>% 
+  distinct(Biodomain, Description, NES, p.adjust) %>% 
+  arrange(NES) %>% 
+  { bind_rows(slice_head(., n = 5), slice_tail(., n = 5)) }
+```
+
+Not all enriched terms map to a biodomain — some are too broad (e.g. "hormone activity") while others simply haven't been captured by the biodomain definitions yet. Recall that the framework is designed to be modifiable, and these definitions are continuously updated.
+
+How many terms are enriched from each domain?
+
+```{r gsea_bd_tally}
+bd.tally <- biodom %>%
+  group_by(Biodomain) %>%
+  summarise(n_term = n_distinct(GO_ID)) %>%
+  left_join(
+    gse.enr.bd %>%
+      filter(Biodomain != 'no domain') %>%
+      group_by(Biodomain) %>%
+      summarise(n_sig_term = n_distinct(ID)),
+    by = 'Biodomain'
+  ) %>%
+  mutate(n_sig_term = replace_na(n_sig_term, 0)) %>%
+  arrange(desc(n_sig_term))
+
+bd.tally
+```
+
+Many enriched terms don't map to a domain, but of those that do the vast majority fall within the `Immune Response` biodomain. Let's visualize the full distribution of enrichment results stratified by biodomain:
+
+```{r biodomain_plot, fig.width=7, fig.height=5, fig.show='hide', warning=F}
+gse.enr.bd %>%
+  filter(Biodomain != 'no domain') %>%
+  left_join(dom.lab, by = c('Biodomain' = 'domain')) %>%
+  mutate(Biodomain = factor(Biodomain, levels = arrange(bd.tally, n_sig_term) %>% pull(Biodomain))) %>%
+  arrange(Biodomain, p.adjust) %>%
+  ggplot(aes(NES, Biodomain)) +
+  geom_violin(data = ~ filter(.x, NES > 0), aes(color = color), scale = 'width') +
+  geom_violin(data = ~ filter(.x, NES < 0), aes(color = color), scale = 'width') +
+  geom_jitter(aes(size = -log10(p.adjust), fill = color),
+              color = 'grey20', shape = 21, alpha = .3) +
+  geom_vline(xintercept = 0, lwd = .1) +
+  scale_y_discrete(drop = FALSE) +
+  scale_fill_identity() + scale_color_identity()
+```
+
+The enriched `Immune Response` domain terms are almost exclusively associated with up-regulated genes, while the `Synapse` domain shows a mix of up- and down-regulated terms. Several other domains also show significant enrichment — including `Proteostasis`, `Lipid Metabolism`, `Endolysosome`, and `APP Metabolism`.
+
+Now let's look across all three age groups to track how domain-level enrichments evolve as pathology progresses:
+
+```{r biodom_plot_all_ages, warning=F, fig.width=12, fig.height=4, fig.show='hide'}
+fad.enr %>%
+  select(age, gse) %>%
+  mutate(res = map(gse, ~ .x@result)) %>%
+  select(age, res) %>%
+  unnest(res) %>%
+  left_join(biodom %>% select(ID = GO_ID, Biodomain, Subdomain), by = 'ID') %>%
+  left_join(dom.lab, by = c('Biodomain' = 'domain')) %>%
+  filter(!is.na(p.adjust)) %>%
+  mutate(
+    Biodomain = if_else(is.na(Biodomain), 'none', Biodomain),
+    Subdomain = if_else(is.na(Subdomain), 'none', Subdomain),
+    age = factor(age, levels = c(4,6,11))
+  ) %>%
+  mutate(n_sig = n_distinct(ID), .by = Biodomain) %>%
+  mutate(Biodomain = fct_reorder(Biodomain, n_sig)) %>%
+  arrange(Biodomain, p.adjust) %>%
+  ggplot(aes(NES, Biodomain)) +
+  facet_grid(cols = vars(age), scales = 'free') +
+  geom_violin(data = ~ filter(.x, NES > 0), aes(color = color), scale = 'width') +
+  geom_violin(data = ~ filter(.x, NES < 0), aes(color = color), scale = 'width') +
+  geom_jitter(aes(size = -log10(p.adjust), fill = color),
+              color = 'grey20', shape = 21, alpha = .3) +
+  geom_vline(xintercept = 0, lwd = .1) +
+  scale_y_discrete(drop = FALSE) +
+  scale_fill_identity() + scale_color_identity()
+```
+
+The earliest transcriptomic changes in 5xFAD animals are dominated by `Immune Response` and `Lipid Metabolism` domain terms. By 6 months additional domains emerge, and by 11 months enrichments are more extensive and more significant across the board. We can also break this down to the subdomain level for a more granular view:
+
+```{r subdomain_plot, warning=F, fig.width=12, fig.height=10, fig.show='hide'}
+fad.enr %>%
+  select(age, gse) %>%
+  mutate(res = map(gse, ~ .x@result)) %>%
+  select(age, res) %>%
+  unnest(res) %>%
+  left_join(biodom %>% select(ID = GO_ID, Biodomain, Subdomain), by = 'ID') %>%
+  left_join(dom.lab, by = c('Biodomain' = 'domain')) %>%
+  filter(!is.na(p.adjust)) %>%
+  mutate(
+    Biodomain = if_else(is.na(Biodomain), 'none', Biodomain),
+    Subdomain = if_else(is.na(Subdomain), 'none', Subdomain),
+    sd_lab = str_c(abbr, '_', Subdomain),
+    age = factor(age, levels = c(4,6,11))
+  ) %>%
+  ggplot(aes(NES, sd_lab)) +
+  facet_grid(cols = vars(age), rows = vars(abbr), scales = 'free', space = 'free_y') +
+  geom_violin(data = ~ filter(.x, NES > 0), aes(color = color), scale = 'width') +
+  geom_violin(data = ~ filter(.x, NES < 0), aes(color = color), scale = 'width') +
+  geom_jitter(aes(size = -log10(p.adjust), fill = color),
+              color = 'grey20', shape = 21, alpha = .3) +
+  geom_vline(xintercept = 0, lwd = .1) +
+  scale_y_discrete(label = ~ str_remove_all(.x, '^[A-Za-z]{2}_'), drop = FALSE) +
+  scale_fill_identity() + scale_color_identity()+
+  theme(strip.text.y.right = element_text(angle = 0))
+```
+
+::::::::::::::::::::::::::::::::::::: discussion
+
+## What trends do you see in the subdomain results?
+Looking at the subdomain plot across ages, consider:
+
+- Which subdomain processes are affected earliest in the 5xFAD model?
+- Are there subdomains that appear only at later ages?
+- Do any subdomains show a mix of up- and down-regulated terms, and what might that suggest biologically?
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 6
+
+Which biodomain terms are over-represented among the genes in the STGblue co-expression module? Test for over-represented terms at `p.adjust < 0.05`. How does this change if you focus only on the most significantly enriched terms (`p.adjust < 1e-5`)?
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+### Cross-system biodomain enrichment comparison
+
+So far we've examined which biological domains are enriched in the 5xFAD mouse model. Now let's bring in the human side — do the same biological domains show enrichment in human AD cohorts? And where they do, are the enrichments in the same direction?
+
+We'll use pre-computed GSEA results from the AMP-AD human cohorts, available from Synapse:
+
+```{r hsap_gsea_download}
+hs.gsea <- read_tsv(syn$get('syn51713849')$path)
+```
+
+Let's map biodomain annotations onto the human GSEA results and visualize them using the same approach as above:
+
+```{r biodom_plot_hs, fig.width=12, fig.height=5, fig.show='hide'}
+hs.gsea %>%
+  left_join(biodom %>% select(Biodomain, Subdomain, ID = GO_ID), by = 'ID') %>%
+  left_join(dom.lab, by = c('Biodomain' = 'domain')) %>%
+  mutate(
+    Biodomain = if_else(is.na(Biodomain), 'none', Biodomain),
+    Subdomain = if_else(is.na(Subdomain), 'none', Subdomain)
+  ) %>%
+  mutate(n_sig = n_distinct(ID), .by = Biodomain) %>%
+  mutate(Biodomain = fct_reorder(Biodomain, n_sig)) %>%
+  arrange(Biodomain, p.adjust) %>%
+  ggplot(aes(NES, Biodomain)) +
+  facet_grid(cols = vars(Study, Tissue)) +
+  geom_violin(data = ~ filter(.x, NES > 0), aes(color = color), scale = 'width', drop = FALSE) +
+  geom_violin(data = ~ filter(.x, NES < 0), aes(color = color), scale = 'width', drop = FALSE) +
+  geom_jitter(aes(size = -log10(p.adjust), fill = color),
+              color = 'grey20', shape = 21, alpha = .3) +
+  geom_vline(xintercept = 0, lwd = .1) +
+  scale_y_discrete(drop = FALSE) +
+  scale_fill_identity() + scale_color_identity()
+```
+
+The human cohorts show consistent domain-level enrichment patterns across studies: strong up-regulation of `Immune Response`, `Structural Stabilization`, and `Vasculature` terms, alongside down-regulation of `Synapse` terms — a pattern that qualitatively resembles what we observed in the 5xFAD model.  
+
+Now let's place the mouse and human results side by side for a direct visual comparison:  
+
+```{r biodom_enr_compare, fig.width=12, fig.height=4, warning=F}
+bind_rows(
+  fad.enr %>%
+    mutate(res = map(gse, ~ .x@result)) %>%
+    mutate(model = str_c('5xFAD, ', age, 'm')) %>%
+    select(model, res) %>% unnest(res),
+  hs.gsea %>%
+    mutate(model = str_c(Study, ', ', Tissue)) 
+) %>%
+  left_join(biodom %>% select(Biodomain, Subdomain, ID = GO_ID), by = 'ID') %>%
+  left_join(dom.lab, by = c('Biodomain' = 'domain')) %>%
+  filter(!is.na(model)) %>%
+  mutate(
+    Biodomain = if_else(is.na(Biodomain), 'none', Biodomain),
+    Subdomain = if_else(is.na(Subdomain), 'none', Subdomain)
+  ) %>%
+  mutate(n_sig = n_distinct(ID), .by = Biodomain) %>%
+  mutate(Biodomain = fct_reorder(Biodomain, n_sig)) %>%
+  arrange(Biodomain, p.adjust) %>%
+  ggplot(aes(NES, Biodomain)) +
+  facet_wrap(~model, nrow = 1) +
+  geom_violin(data = ~ filter(.x, NES > 0), aes(color = color), scale = 'width') +
+  geom_violin(data = ~ filter(.x, NES < 0), aes(color = color), scale = 'width') +
+  geom_jitter(aes(size = -log10(p.adjust), fill = color),
+              color = 'grey20', shape = 21, alpha = .3) +
+  geom_vline(xintercept = 0, lwd = .1) +
+  scale_y_discrete(drop = FALSE) +
+  scale_fill_identity() + scale_color_identity()
+```
+
+There is clear qualitative similarity in the direction of domain enrichments between mouse and human — particularly for `Immune Response` and `Synapse`. But visual comparison alone isn't sufficient for a systematic assessment. To quantify the correspondence, we'll compare the direction of enrichment for GO terms within each biodomain between the two systems.
+
+### Quantifying cross-system biodomain concordance
+
+First we'll build term-level gene set lists for each biodomain and subdomain:
+
+```{r biodomain_term_sets}
+bd.terms <- tibble(set = unique(biodom$Biodomain)) %>%
+  mutate(terms = map(set, ~ biodom %>% filter(Biodomain == .x) %>% pull(GO_ID)))
+
+sd.terms <- full_join(biodom, dom.lab, by = c('Biodomain' = 'domain')) %>%
+  mutate(Subdomain = if_else(is.na(Subdomain), 'none', Subdomain)) %>%
+  select(Biodomain, abbr, Subdomain, subdomain_idx) %>%
+  distinct() %>%
+  mutate(
+    set = str_c(abbr, '_', Subdomain),
+    terms = map2(Biodomain, subdomain_idx, 
+                 ~ biodom %>%
+                   filter(Biodomain == .x, subdomain_idx == .y) %>% pull(GO_ID)) 
+  )
+
+bd.term.list <- bind_rows(
+  bd.terms,
+  sd.terms %>% select(set, terms)
+) %>% filter(set != 'NA_none')
+
+rm(bd.terms, sd.terms)
+```
+
+Next we'll combine the mouse and human GSEA results into pairwise comparisons across all 5xFAD ages and AMP-AD cohort/tissue combinations. Terms not significantly enriched in a given system have their NES set to zero so they contribute appropriately to the concordance analysis:  
+
+```{r biodom_term_join}
+fad.vs.amp <- crossing(
+  fad = str_c('5xFAD, ', fad.enr$age, 'm'),
+  amp = str_c(hs.gsea$Study, ', ', hs.gsea$Tissue)
+  ) %>%
+  mutate(data = map2(fad, amp, ~ {
+    mm <- fad.enr %>%
+      mutate(model = str_c('5xFAD, ', age, 'm')) %>%
+      filter(model == .x) %>%
+      pull(gse) %>% .[[1]] %>% .@result %>%
+      select(GOID = ID, term = Description, mm.nes = NES, mm.padj = p.adjust)
+    hs <- hs.gsea %>%
+      mutate(model = str_c(Study, ', ', Tissue)) %>%
+      filter(model == .y) %>%
+      select(GOID = ID, term = Description, hs.nes = NES, hs.padj = p.adjust)
+    full_join(mm, hs, by = c('GOID', 'term'), na_matches = 'never') %>%
+      mutate(
+        across(contains('padj'), ~ if_else(is.na(.x), 1, .x)),
+        across(contains('nes'),  ~ if_else(is.na(.x), 0, .x)),
+        hs.nes = if_else(hs.padj > 0.05, 0, hs.nes),
+        mm.nes = if_else(mm.padj > 0.05, 0, mm.nes)
+      )
+  }))
+```
+
+For each pairwise mouse-human comparison and biodomain/subdomain term set, we count how many jointly enriched terms are concordant (same direction in both systems) versus discordant (opposite directions), and compute the Jaccard index as a measure of term-level overlap. A binomial test against p = 0.5 assesses whether concordance exceeds chance, with multiple testing correction applied across all comparisons:
+
+::::::::::::::::::::::::::::::::::::::: caution
+
+## Interpreting significance
+
+GO terms within a biodomain share gene annotations and are not truly independent — p-values should be treated as anti-conservative and exploratory as a result.
+
+:::::::::::::::::::::::::::::::::::::::
+
+```{r biodom_term_overlap}
+bd.comp <- crossing(fad.vs.amp, set = bd.term.list$set) %>%
+  mutate(
+    data = map2(data, set, ~ .x %>%
+      filter(GOID %in% bd.term.list$terms[[which(bd.term.list$set == .y)]]) %>% 
+        distinct()
+      ),
+    n.terms    = map_dbl(data, nrow),
+    n.sig.both = map_dbl(data, ~ .x %>% filter(mm.padj <= 0.05 & hs.padj <= 0.05) %>% nrow()),
+    jaccard    = n.sig.both / n.terms,
+    
+    n.concordant = map_dbl(data, ~ .x %>% filter((mm.padj <= 0.05 & hs.padj <= 0.05) & 
+                                                   ((mm.nes > 0 & hs.nes > 0) | (mm.nes < 0 & hs.nes < 0) )) %>% nrow()),
+    n.discordant = map_dbl(data, ~ .x %>% filter((mm.padj <= 0.05 & hs.padj <= 0.05) & 
+                                                   ((mm.nes > 0 & hs.nes < 0) | (mm.nes < 0 & hs.nes > 0) )) %>% nrow()),
+    bt = map2(n.concordant, n.discordant, ~ {
+            n_tested <- .x + .y
+            if (n_tested == 0) list(p.value = NA_real_)
+            else binom.test(.x, n_tested, p = 0.5)
+          }),
+    p.value = map_dbl(bt, ~.x$p.value),
+    p.adj = p.adjust(p.value, method = 'BH'),
+    sig.concordant = p.adj <= 0.05 & n.concordant > n.discordant,
+    sig.discordant = p.adj <= 0.05 & n.discordant > n.concordant
+  ) %>% 
+  select(-bt)
+```
+
+Let's visualize the biodomain-level concordance. Circle fill indicates the number of concordant jointly enriched terms, circle size reflects the Jaccard index of term overlap, black squares mark significant concordance (binomial test, BH-adjusted p < 0.05), and red numbers indicate the count of discordant terms where present:   
+
+```{r biodom_corr_plot, fig.height=6}
+bd.comp %>%
+  filter(!grepl('_', set)) %>%
+  mutate(fad = factor(fad, c('5xFAD, 11m', '5xFAD, 6m', '5xFAD, 4m'))) %>%
+  ggplot(aes(set, fad)) +
+  facet_grid(rows = vars(amp)) +
+  geom_tile(colour = "black", fill = "white") +
+  geom_point(aes(fill = n.concordant, size = jaccard),
+             color = 'black', shape = 21, stroke = .3) +
+  geom_point(data = ~ filter(.x, sig.concordant),
+             color = "black", shape = 0, size = 5, stroke = .8) +
+  geom_point(data = ~ filter(.x, sig.discordant),
+             color = "#85070C", shape = 0, size = 5, stroke = .8) +
+  geom_text(
+    data = ~ filter(.x, n.discordant > 0),
+    aes(label = n.discordant),
+    color = '#85070C', size = 2.5, fontface = 'bold',
+    nudge_x = -0.35, nudge_y = 0.35
+  ) +
+  scale_size("Jaccard index", range = c(.5, 4), limits = c(1e-90, NA)) +
+  scale_fill_gradient(
+    "# concordant terms", low = "grey95", high = "#164B6E",
+    guide = guide_colorbar(ticks = TRUE)
+  ) +
+  scale_x_discrete(position = "top", drop = TRUE) +
+  labs(x = NULL, y = NULL) +
+  theme(
+    plot.margin         = margin(5, 50, 5, 5),
+    strip.text.y        = element_text(angle = 0),
+    axis.ticks          = element_blank(),
+    axis.text.x         = element_text(angle = 45, hjust = 0),
+    panel.background    = element_blank(),
+    panel.grid          = element_blank(),
+    legend.position     = "bottom"
+  )
+```
+
+The largest and most consistent cross-system overlap is in the `Immune Response` domain, with several hundred concordantly enriched terms across all ages and cohorts. Concordant enrichments are also observed for the `Apoptosis`, `Autophagy`, `Endolysosome`, `Lipid Metabolism`, `Structural Stabilization`, `Synapse`, and `Vasculature` biodomains. Very few discordant enrichments are identified, primarily in the `Synapse`, `Lipid Metabolism`, and `Proteostasis` biodomains.   
+
+We can also examine the subdomain level for a more specific picture, filtering to subdomains with either significant overlaps or any terms that are discordant:   
+
+```{r subdom_corr_plot, fig.width=6, fig.height=8}
+l <- bd.comp %>%
+  filter(grepl('_', set), n.sig.both > 0 & (p.adj < 0.05 | n.discordant > 0) ) %>%
+  pull(set) %>% unique()
+
+bd.comp %>%
+  filter(set %in% l) %>%
+  mutate(max.n = max(n.terms), .by = c(set)) %>%
+  mutate(
+    fad   = factor(fad, c('5xFAD, 11m', '5xFAD, 6m', '5xFAD, 4m') ),
+    set1  = str_split_fixed(set, '_', 2)[,2] %>% str_c('[', max.n, '] ', .),
+    abbr  = str_split_fixed(set, '_', 2)[,1]
+  ) %>%
+  ggplot(aes(set1, fad)) +
+  facet_grid(cols = vars(abbr), rows = vars(amp), 
+             scales = 'free', space = 'free', switch = 'x') +
+  geom_tile(colour = "black", fill = "white") +
+  geom_point(aes(fill = n.concordant, size = jaccard), 
+             color = 'black', shape = 21, stroke = .3) +
+  geom_point(data = ~ filter(.x, sig.concordant),
+             color = "black", shape = 0, size = 5, stroke = .8) +
+  geom_point(data = ~ filter(.x, sig.discordant),
+             color = "#85070C", shape = 0, size = 5, stroke = .8) +
+  geom_text(
+    data = ~ filter(.x, n.discordant > 0),
+    aes(label = n.discordant),
+    color = '#85070C', size = 2.5, fontface = 'bold',
+    nudge_x = -0.35, nudge_y = 0.35
+  ) +
+  scale_size("Jaccard index", range = c(.5, 4), limits = c(1e-90, NA)) +
+  scale_fill_gradient(
+    "# concordant terms",low = "grey95", high = "#164B6E",
+    guide = guide_colorbar(ticks = TRUE)
+  ) +
+  scale_x_discrete(position = "top", drop = TRUE) +
+  labs(x = NULL, y = NULL) +
+  theme(
+    strip.text.y        = element_text(angle = 0),
+    axis.ticks          = element_blank(),
+    axis.text.x         = element_text(angle = 45, hjust = 0),
+    panel.grid          = element_blank(),
+    panel.background    = element_blank(),
+    legend.position     = "bottom"
+  )
+```
+
+The concordant enrichments in the `Immune Response` biodomain are primarily driven by common enrichment of terms within "adaptive immune response","cytokine production", and "activation of innate immune response" subdomains.    
+
+Let's investigate an example more closely - how many shared terms are enriched in `Immune Response` and `Synapse` biodomains:
+
+```{r subdom_corr_example}
+# pull a subset to plot
+plot_df <- bd.comp %>%
+  filter(set %in% c('Synapse','Immune Response'), amp == 'MSSM, PHG') %>%
+  mutate(fad   = factor(fad, c('5xFAD, 11m', '5xFAD, 6m', '5xFAD, 4m') %>% rev) ) %>% 
+  unnest(data)
+
+# count the number of commonly enriched terms in each direction
+quad_counts <- plot_df %>%
+  group_by(set, fad) %>%
+  summarise(
+      n_pp = sum(hs.nes > 0 & mm.nes > 0),  # up in both
+      n_np = sum(hs.nes < 0 & mm.nes > 0),  # up in mouse, down in human
+      n_pn = sum(hs.nes > 0 & mm.nes < 0),  # down in mouse, up in human
+      n_nn = sum(hs.nes < 0 & mm.nes < 0),  # down in both
+      .groups = 'drop'
+  ) %>%
+  pivot_longer(cols = starts_with('n_'), names_to = 'quadrant', values_to = 'n') %>%
+  mutate(
+      hs.nes = if_else(quadrant %in% c('n_pp', 'n_pn'),  Inf, -Inf),
+      mm.nes = if_else(quadrant %in% c('n_pp', 'n_np'),  Inf, -Inf),
+      hjust  = if_else(quadrant %in% c('n_pp', 'n_pn'),  1.2, -0.2),
+      vjust  = if_else(quadrant %in% c('n_pp', 'n_np'),  1.5, -0.5)
+  )
+
+# plot
+ggplot(plot_df, aes(hs.nes, mm.nes)) +
+  geom_vline(xintercept = 0, lwd = 0.2) +
+  geom_hline(yintercept = 0, lwd = 0.2) +
+  geom_point() +
+  facet_grid(cols = vars(fad), rows = vars(set), scales = 'free') +
+  ggrepel::geom_text_repel(
+      data = subset(plot_df, abs(hs.nes) > 0 & abs(mm.nes) > 0),
+      aes(label = term), size = 2
+  ) +
+  geom_text(
+      data = quad_counts,
+      aes(label = n, hjust = hjust, vjust = vjust),
+      size = 4, color = 'grey40', fontface = 2
+  )
+```
+
+For `Immune Response` there are 168–230 terms jointly enriched across both human AD and 5xFAD, forming a dense concordant cloud that clearly drives the signals in the heatmaps above. 
+
+For `Synapse` there are only 4–12 terms that are jointly enriched — most of them are concordant (either up in both 5xFAD and human AD or down in both). However there is one term that is discordant - "regulated exocytosis" is down in the MSSM PHG samples, but up in the 4- and 11-month old 5xFAD mice.
+
+Together, these results demonstrate that the 5xFAD model recapitulates key aspects of human AD transcriptomics at the level of biological domain — most consistently in immune activation, but also in lipid metabolism, autophagy, and synaptic processes — while the degree of concordance and the number of jointly enriched terms both increase with age, reflecting the progressive nature of amyloid-driven pathology in this model.
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 7 [take-home]
+
+**Gene-level biodomain correlation**
+
+In section 4 we computed gene-level logFC correlations between 5xFAD and human AD within AMP-AD co-expression module gene sets. Now that we have the biodomain framework, we can apply the same approach using biodomain and subdomain gene sets instead of modules — asking whether the genes within each biological domain change in a coordinated direction across systems, rather than just the enriched terms.
+
+Using the ampad_modules_raw human fold change data and `fad.deg` mouse DE results:
+- Build gene lists for each biodomain and subdomain from the biodom object
+- Join mouse and human logFC values on ortholog-mapped gene symbols
+- Compute Pearson correlations within each biodomain/subdomain gene set across 5xFAD ages
+- Visualize the results and compare to the term-level concordance computed above — do the two approaches tell a consistent story?
+
+:::::::::::::::::::::::: solution 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## [7] Conclusion:
+
+In this session we used two complementary strategies to assess the degree to which the 5xFAD mouse model recapitulates human AD transcriptomics. Gene-level logFC correlations within AMP-AD co-expression modules revealed that the model captures specific aspects of disease — particularly neuroinflammatory signatures — more faithfully than others. Functional enrichment analysis through the lens of AD biological domains provided another layer of comparison, demonstrating consistent concordance between mouse and human in the `Immune Response`, `Structural Stabilization`, and `Apoptosis` domains across multiple cohorts. The aligned functional groups tend to increase at older aged 5xFAD cohorts, reflecting the progressive accumulation of pathology. Together these approaches illustrate that cross-system alignment is most informative when applied at multiple levels of biological resolution — from individual genes to pathways to disease-relevant functional groupings.   
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- No single experimental system fully recapitulates all aspects of LOAD — cross-system alignment helps identify which aspects of disease biology a given model captures
+- Gene-level logFC correlation within co-expression module gene sets is a practical approach for quantifying transcriptomic concordance between experimental systems and human AD cohorts
+- Gene set enrichment analysis with gseGO provides a quantitative, threshold-free assessment of functional coherence across biological systems
+- The AD biological domain framework organizes GO enrichment results into 19 disease-relevant groupings, enabling more interpretable and systematic cross-system comparisons
+- Biodomain-level enrichment comparisons reveal that the 5xFAD model shows strongest concordance with human AD in Immune Response, Structural Stabilization, and Apoptotic processes, with concordance increasing with age
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Session Info
+
+```{r session_info,collapse=TRUE}
+sessionInfo()
+```
