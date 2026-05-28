@@ -4,16 +4,23 @@ title: Setup
 
 For this lesson, you will be working in the R programming language and the 
 RStudio development environment on the data analysis and sharing platform 
-[CAVATICA](https://www.cavatica.org/).
+[CAVATICA](https://www.cavatica.org/). Links to [CAVATICA documentation](https://docs.cavatica.org/) are provided.
+You can also watch this [set of youtube videos](https://platform-support.velsera.com/hc/en-us/articles/30173756363537-Cavatica-Onboarding-Videos) to orient yourself to this cloud computing platform.  
+
+You can also follow this lesson on your local computer. 
+
+In either case you will need a [Synapse account](https://www.synapse.org/) for data access. Synapse is an ecosystem for responsible data sharing, innovative data reuse, and collaboration.
+
 
 ## Setup
 
-### Access CAVATICA
+Register for a [Synapse account](https://www.synapse.org/).
 
-1. [Sign up for a free CAVATICA account](https://docs.cavatica.org/docs/sign-up-for-cavatica).
+### Option 1. Access CAVATICA
 
-1. Request your free pilot fund cloud credits by 
-[contacting CAVATICA support](https://docs.cavatica.org/docs/getting-started).
+1. [Sign up for a CAVATICA account](https://docs.cavatica.org/docs/sign-up-for-cavatica).
+
+1. Log into [CAVATICA](https://pgc-accounts.sbgenomics.com/auth/login).
 
 1. [Create a project](https://docs.cavatica.org/docs/quickstart#create-a-project).
 
@@ -31,6 +38,11 @@ by clicking the **Data Studio** tab.
   - Use the default **Environment Setup**. You can read more about default and
   other available
   [environments and libraries for RStudio](https://docs.cavatica.org/docs/about-libraries-in-a-data-cruncher-analysis#rstudio).
+
+### Option 2. Use your local computer.
+While not recommended, it is possible to work through the lessons on your local machine (i.e. without using CAVATICA). Instructions for doing this are listed below. You should not download controlled data to your computer. Use CAVATICA instead if you will analyze controlled data like that from most human studies.
+
+[Install R and RStudio](https://carpentries.github.io/workshop-template/#r-1) to get started.
 
 
 ### Package Installation
