@@ -25,7 +25,7 @@ Register for a [Synapse account](https://www.synapse.org/).
 1. [Create a project](https://docs.cavatica.org/docs/quickstart#create-a-project).
 
 1. For **Billing group**, select `Pilot Funds` if you have received free pilot 
-fund cloud credits.
+fund cloud credits. Otherwise, select funds provided to you in the course or that you supplied with your own funds.
 
 1. Change the default setting to `Allow network access`.
 ![](episodes/fig/block-network-access.png)
