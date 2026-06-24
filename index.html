@@ -444,40 +444,6 @@ to View, Download, and Modify.</p>
 </div>
 <p>For more information on managing Synapse credentials with synapser,
 see the documentation here: <a href="https://r-docs.synapse.org/articles/manageSynapseCredentials.html" class="external-link uri">https://r-docs.synapse.org/articles/manageSynapseCredentials.html</a>.</p>
-<div class="codewrapper sourceCode" id="cb7">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># When the following query arises, type 'a'</span></span>
-<span><span class="co"># Update all/some/none? [a/s/n]: a</span></span>
-<span></span>
-<span><span class="co"># When the following query arises, type 'n' (it is faster)</span></span>
-<span><span class="co"># Do you want to install from sources the packages which need compilation? </span></span>
-<span><span class="co"># (Yes/no/cancel) n</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">requireNamespace</span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="fu">install.packages</span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"clusterProfiler"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"DESeq2"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"AnnotationDbi"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"org.Mm.eg.db"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"org.Hs.eg.db"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"GO.db"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"EnhancedVolcano"</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb8">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="fu">library</span>(<span class="st">"DESeq2"</span>)<span class="er">)</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a><span class="fu">library</span>(<span class="st">"AnnotationDbi"</span>)<span class="er">)</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1" aria-label="code-block-8-3"></a><span class="fu">library</span>(<span class="st">"org.Mm.eg.db"</span>)<span class="er">)</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1" aria-label="code-block-8-4"></a><span class="fu">library</span>(<span class="st">"org.Hs.eg.db"</span>)<span class="er">)</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1" aria-label="code-block-8-5"></a><span class="fu">library</span>(<span class="st">"GO.db"</span>)<span class="er">)</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1" aria-label="code-block-8-6"></a><span class="fu">library</span>(<span class="st">"EnhancedVolcano"</span>)<span class="er">)</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1" aria-label="code-block-8-7"></a><span class="fu">library</span>(<span class="st">"clusterProfiler"</span>)<span class="er">)</span></span></code></pre>
-</div>
 </div>
 </section><section><h2 class="section-heading" id="project-setup">Project Setup<a class="anchor" aria-label="anchor" href="#project-setup"></a></h2>
 <hr class="half-width"><p>Before you begin, determine your working directory
@@ -485,7 +451,7 @@ see the documentation here: <a href="https://r-docs.synapse.org/articles/manageS
 folders within your preferred working directory entitled
 <code>data</code> and <code>results</code>. You can copy and paste the
 following commands into the R console.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -507,7 +473,7 @@ RNAseq data from the Jax.IU.Pitt_5XFAD Study.</p>
 <p>This filters the table to a single file. In the “Id” column for this
 htseqcounts_5XFAD.txt file, there is a unique Synapse ID (synID).</p>
 <p>We can then use that synID to download the file.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -529,7 +495,7 @@ to download only the files that meet our search criteria.</p>
 a CSV file that is automatically downloaded to a Synapse cache directory
 .synapseCache in your home directory. You can use query$filepath to see
 the path to the file in the Synapse cache.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -547,7 +513,7 @@ and “parentId” columns contain info about where the file is in Synapse,
 and some columns contain AD Portal annotations for each file, like
 “dataType”, “specimenID”, and “assay”. This annotation table will later
 allow us to link downloaded files to additional metadata variables!</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -561,7 +527,7 @@ through the “id” column and apply the synGet() function to each file’s
 synID. In this case, we use purrr::walk() because it lets us call
 synGet() for its side effect (downloading files to a location we
 specify), and returns nothing.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
