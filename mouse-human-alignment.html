@@ -68,7 +68,7 @@
         </ul></div>
     </div>
   </div>
-  <hr></header><nav class="navbar navbar-expand-xl bottom-nav incubator" aria-label="Main Navigation"><div class="container-fluid nav-container">
+</header><nav class="navbar navbar-expand-xl bottom-nav incubator" aria-label="Main Navigation"><div class="container-fluid nav-container">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
       <span class="menu-title">Menu</span>
@@ -117,12 +117,8 @@
     -->
     <a id="search-button" class="btn btn-primary" href="aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
-</nav><aside class="col-md-12 lesson-progress"><div style="width: 23%" class="percentage">
-    23%
-  </div>
-  <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="23" style="width: 23%">
-    </div>
+</nav><aside class="col-md-12 lesson-progress"><div class="progress incubator">
+    <div class="progress-bar incubator" role="progressbar" style="width: 23%" aria-valuenow="23" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">23%</div>
   </div>
 </aside><div class="container">
       <div class="row">
@@ -178,7 +174,7 @@
               </div><!--div.sidenav-view-selector -->
             </div><!--/div.col -->
 
-            <hr></div><!--/div.mobile-row -->
+          </div><!--/div.mobile-row -->
 
           <div class="accordion accordion-flush" id="accordion-chapters-toggle">
             <div class="accordion-item">
@@ -306,8 +302,8 @@
         <!-- START: inst/pkgdown/templates/content-instructor.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter Top"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="differential-expression-analysis.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="choosing_the_right_model.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link" href="differential-expression-analysis.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link float-end" href="choosing_the_right_model.html" rel="next">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
@@ -320,9 +316,9 @@
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
-      <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
+    </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Cross Species Functional Alignment</h1>
-        <p>Last updated on 2026-04-21 |
+        <p>Last updated on 2026-06-24 |
 
         <a href="https://github.com/asliuyar/translational-omics-AD/edit/main/episodes/mouse-human-alignment.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -3262,7 +3258,7 @@ Subdomains allows for more granular comparisons</li>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" tabindex="-1" aria-label="code-block-123-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb123-2"><a href="#cb123-2" tabindex="-1" aria-label="code-block-123-2"></a>R version <span class="dv">4</span>.<span class="fl">5.3</span> (<span class="dv">2026-03-11</span>)</span>
+<span id="cb123-2"><a href="#cb123-2" tabindex="-1" aria-label="code-block-123-2"></a>R version <span class="dv">4</span>.<span class="fl">6.0</span> (<span class="dv">2026-04-24</span>)</span>
 <span id="cb123-3"><a href="#cb123-3" tabindex="-1" aria-label="code-block-123-3"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>pc<span class="sc">-</span>linux<span class="sc">-</span>gnu</span>
 <span id="cb123-4"><a href="#cb123-4" tabindex="-1" aria-label="code-block-123-4"></a>Running under<span class="sc">:</span> Ubuntu <span class="dv">24</span>.<span class="fl">04.4</span> LTS</span>
 <span id="cb123-5"><a href="#cb123-5" tabindex="-1" aria-label="code-block-123-5"></a></span>
@@ -3285,11 +3281,11 @@ Subdomains allows for more granular comparisons</li>
 <span id="cb123-22"><a href="#cb123-22" tabindex="-1" aria-label="code-block-123-22"></a>[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span id="cb123-23"><a href="#cb123-23" tabindex="-1" aria-label="code-block-123-23"></a></span>
 <span id="cb123-24"><a href="#cb123-24" tabindex="-1" aria-label="code-block-123-24"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
-<span id="cb123-25"><a href="#cb123-25" tabindex="-1" aria-label="code-block-123-25"></a> [<span class="dv">1</span>] BiocManager_1.<span class="fl">30.27</span> compiler_4.<span class="fl">5.3</span>      cli_3.<span class="fl">6.5</span>          </span>
-<span id="cb123-26"><a href="#cb123-26" tabindex="-1" aria-label="code-block-123-26"></a> [<span class="dv">4</span>] tools_4.<span class="fl">5.3</span>         pillar_1.<span class="fl">11.1</span>       otel_0.<span class="fl">2.0</span>         </span>
-<span id="cb123-27"><a href="#cb123-27" tabindex="-1" aria-label="code-block-123-27"></a> [<span class="dv">7</span>] glue_1.<span class="fl">8.0</span>          yaml_2.<span class="fl">3.12</span>         vctrs_0.<span class="fl">7.2</span>        </span>
-<span id="cb123-28"><a href="#cb123-28" tabindex="-1" aria-label="code-block-123-28"></a>[<span class="dv">10</span>] knitr_1<span class="fl">.51</span>          xfun_0<span class="fl">.57</span>           lifecycle_1.<span class="fl">0.5</span>    </span>
-<span id="cb123-29"><a href="#cb123-29" tabindex="-1" aria-label="code-block-123-29"></a>[<span class="dv">13</span>] rlang_1.<span class="fl">2.0</span>         renv_1.<span class="fl">2.0</span>          evaluate_1.<span class="fl">0.5</span>     </span></code></pre>
+<span id="cb123-25"><a href="#cb123-25" tabindex="-1" aria-label="code-block-123-25"></a> [<span class="dv">1</span>] BiocManager_1.<span class="fl">30.27</span> compiler_4.<span class="fl">6.0</span>      cli_3.<span class="fl">6.6</span>          </span>
+<span id="cb123-26"><a href="#cb123-26" tabindex="-1" aria-label="code-block-123-26"></a> [<span class="dv">4</span>] tools_4.<span class="fl">6.0</span>         pillar_1.<span class="fl">11.1</span>       otel_0.<span class="fl">2.0</span>         </span>
+<span id="cb123-27"><a href="#cb123-27" tabindex="-1" aria-label="code-block-123-27"></a> [<span class="dv">7</span>] glue_1.<span class="fl">8.1</span>          yaml_2.<span class="fl">3.12</span>         vctrs_0.<span class="fl">7.3</span>        </span>
+<span id="cb123-28"><a href="#cb123-28" tabindex="-1" aria-label="code-block-123-28"></a>[<span class="dv">10</span>] knitr_1<span class="fl">.51</span>          xfun_0<span class="fl">.59</span>           lifecycle_1.<span class="fl">0.5</span>    </span>
+<span id="cb123-29"><a href="#cb123-29" tabindex="-1" aria-label="code-block-123-29"></a>[<span class="dv">13</span>] rlang_1.<span class="fl">2.0</span>         renv_1.<span class="fl">2.3</span>          evaluate_1.<span class="fl">0.5</span>     </span></code></pre>
 </div>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
@@ -3333,7 +3329,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.1.0)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.1.1)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -3355,8 +3351,8 @@ any links that you are not going to use.
   "url": "https://asliuyar.github.io/translational-omics-AD/mouse-human-alignment.html",
   "identifier": "https://asliuyar.github.io/translational-omics-AD/mouse-human-alignment.html",
   "dateCreated": "2024-10-02",
-  "dateModified": "2026-04-21",
-  "datePublished": "2026-05-19"
+  "dateModified": "2026-06-24",
+  "datePublished": "2026-06-24"
 }
 
   </script><script>

@@ -68,7 +68,7 @@
         </ul></div>
     </div>
   </div>
-  <hr></header><nav class="navbar navbar-expand-xl bottom-nav incubator" aria-label="Main Navigation"><div class="container-fluid nav-container">
+</header><nav class="navbar navbar-expand-xl bottom-nav incubator" aria-label="Main Navigation"><div class="container-fluid nav-container">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
       <span class="menu-title">Menu</span>
@@ -171,7 +171,7 @@
               </div><!--div.sidenav-view-selector -->
             </div><!--/div.col -->
 
-            <hr></div><!--/div.mobile-row -->
+          </div><!--/div.mobile-row -->
 
           <div class="accordion accordion-flush" id="accordion-chapters-toggle">
             <div class="accordion-item">
@@ -284,13 +284,13 @@
         <!-- START: inst/pkgdown/templates/content-syllabus.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link float-end" href="../instructor/introduction.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next: Introduction to... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
-      <hr></nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Schedule</h1>
+    </nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Schedule</h1>
       
 
 <p>This is a new lesson built with <a href="https://carpentries.github.io/sandpaper-docs" class="external-link">The Carpentries
@@ -375,19 +375,28 @@ any links that you are not going to use.
       </p>
       </section><section id="setup"><p>For this lesson, you will be working in the R programming language
 and the RStudio development environment on the data analysis and sharing
-platform <a href="https://www.cavatica.org/" class="external-link">CAVATICA</a>.</p>
+platform <a href="https://www.cavatica.org/" class="external-link">CAVATICA</a>. Links to <a href="https://docs.cavatica.org/" class="external-link">CAVATICA documentation</a> are
+provided. You can also watch this <a href="https://platform-support.velsera.com/hc/en-us/articles/30173756363537-Cavatica-Onboarding-Videos" class="external-link">set
+of youtube videos</a> to orient yourself to this cloud computing
+platform.</p>
+<p>You can also follow this lesson on your local computer.</p>
+<p>In either case you will need a <a href="https://www.synapse.org/" class="external-link">Synapse account</a> for data access.
+Synapse is an ecosystem for responsible data sharing, innovative data
+reuse, and collaboration.</p>
 <section><h2 class="section-heading" id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a></h2>
-<hr class="half-width"><div class="section level3">
-<h3 id="access-cavatica">Access CAVATICA<a class="anchor" aria-label="anchor" href="#access-cavatica"></a></h3>
+<hr class="half-width"><p>Register for a <a href="https://www.synapse.org/" class="external-link">Synapse
+account</a>.</p>
+<div class="section level3">
+<h3 id="option-1--access-cavatica">Option 1. Access CAVATICA<a class="anchor" aria-label="anchor" href="#option-1--access-cavatica"></a></h3>
 <ol style="list-style-type: decimal"><li><p><a href="https://docs.cavatica.org/docs/sign-up-for-cavatica" class="external-link">Sign up for a
-free CAVATICA account</a>.</p></li>
-<li><p>Request your free pilot fund cloud credits by <a href="https://docs.cavatica.org/docs/getting-started" class="external-link">contacting
-CAVATICA support</a>.</p></li>
+CAVATICA account</a>.</p></li>
+<li><p>Log into <a href="https://pgc-accounts.sbgenomics.com/auth/login" class="external-link">CAVATICA</a>.</p></li>
 <li><p><a href="https://docs.cavatica.org/docs/quickstart#create-a-project" class="external-link">Create
 a project</a>.</p></li>
 <li><p>For <strong>Billing group</strong>, select
 <code>Pilot Funds</code> if you have received free pilot fund cloud
-credits.</p></li>
+credits. Otherwise, select funds provided to you in the course or that
+you supplied with your own funds.</p></li>
 <li><p>Change the default setting to <code>Allow network access</code>.
 <img src="../fig/block-network-access.png" class="figure"></p></li>
 <li><p>Run a <a href="https://docs.cavatica.org/docs/run-an-analysis-using-data-cruncher" class="external-link">Data
@@ -399,6 +408,16 @@ tab.</p></li>
 more about default and other available <a href="https://docs.cavatica.org/docs/about-libraries-in-a-data-cruncher-analysis#rstudio" class="external-link">environments
 and libraries for RStudio</a>.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="option-2--use-your-local-computer-">Option 2. Use your local computer.<a class="anchor" aria-label="anchor" href="#option-2--use-your-local-computer-"></a></h3>
+<p>While not recommended, it is possible to work through the lessons on
+your local machine (i.e. without using CAVATICA). Instructions for doing
+this are listed below. You should not download controlled data to your
+computer. Use CAVATICA instead if you will analyze controlled data like
+that from most human studies.</p>
+<p><a href="https://carpentries.github.io/workshop-template/#r-1" class="external-link">Install R
+and RStudio</a> to get started.</p>
+</div>
 <div class="section level3">
 <h3 id="package-installation">Package Installation<a class="anchor" aria-label="anchor" href="#package-installation"></a></h3>
 <p>Next, install the required packages for this lesson. In RStudio, copy
@@ -621,7 +640,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
 </section></section></main><nav class="bottom-pagination mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link float-end" href="../instructor/introduction.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
@@ -649,7 +668,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.1.0)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/" class="external-link">varnish (1.1.1)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -671,8 +690,8 @@ any links that you are not going to use.
   "url": "https://asliuyar.github.io/translational-omics-AD/instructor/index.html",
   "identifier": "https://asliuyar.github.io/translational-omics-AD/instructor/index.html",
   "dateCreated": "2024-10-02",
-  "dateModified": "2026-05-19",
-  "datePublished": "2026-05-19"
+  "dateModified": "2026-06-24",
+  "datePublished": "2026-06-24"
 }
 
   </script><script>
