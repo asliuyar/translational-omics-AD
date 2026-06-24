@@ -136,36 +136,6 @@ synLogin(authToken = "<paste your personal access token here>")
 For more information on managing Synapse credentials with synapser, see
 the documentation here: https://r-docs.synapse.org/articles/manageSynapseCredentials.html.
 
-```r
-# When the following query arises, type 'a'
-# Update all/some/none? [a/s/n]: a
-
-# When the following query arises, type 'n' (it is faster)
-# Do you want to install from sources the packages which need compilation? 
-# (Yes/no/cancel) n
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-
-    install.packages("BiocManager")
-
-BiocManager::install("clusterProfiler")
-BiocManager::install("DESeq2")
-BiocManager::install("AnnotationDbi")
-BiocManager::install("org.Mm.eg.db")
-BiocManager::install("org.Hs.eg.db")
-BiocManager::install("GO.db")
-BiocManager::install("EnhancedVolcano")
-```
-```r
-library("DESeq2"))
-library("AnnotationDbi"))
-library("org.Mm.eg.db"))
-library("org.Hs.eg.db"))
-library("GO.db"))
-library("EnhancedVolcano"))
-library("clusterProfiler"))
-```
-
 ## Project Setup
 
 Before you begin, determine your working directory (`get(wd)` and `set(wd)`), and 
