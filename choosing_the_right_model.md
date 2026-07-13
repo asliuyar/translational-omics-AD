@@ -1,6 +1,5 @@
 ---
 title: "Choosing the right animal models"
-output: html_document
 teaching: 90
 exercises: 90
 ---
@@ -87,23 +86,23 @@ Here we are showing matrix view of gene content overlap between these  module, a
 ### AD Subtypes
 Post mortem transcriptomics from AMP-AD and similar studies have enabled the partitioning of AD cases into potential disease subtypes. These studies have often stratified AD subjects into inflammatory and non-inflammatory subtypes.
 
-<!--html_preserve--><div id="fddwjmglic" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#fddwjmglic table {
+<!--html_preserve--><div id="jmoaijjsxe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jmoaijjsxe table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fddwjmglic thead, #fddwjmglic tbody, #fddwjmglic tfoot, #fddwjmglic tr, #fddwjmglic td, #fddwjmglic th {
+#jmoaijjsxe thead, #jmoaijjsxe tbody, #jmoaijjsxe tfoot, #jmoaijjsxe tr, #jmoaijjsxe td, #jmoaijjsxe th {
   border-style: none;
 }
 
-#fddwjmglic p {
+#jmoaijjsxe p {
   margin: 0;
   padding: 0;
 }
 
-#fddwjmglic .gt_table {
+#jmoaijjsxe .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -129,12 +128,12 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-left-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_caption {
+#jmoaijjsxe .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fddwjmglic .gt_title {
+#jmoaijjsxe .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -146,7 +145,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-bottom-width: 0;
 }
 
-#fddwjmglic .gt_subtitle {
+#jmoaijjsxe .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -158,7 +157,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-top-width: 0;
 }
 
-#fddwjmglic .gt_heading {
+#jmoaijjsxe .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -170,13 +169,13 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-right-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_bottom_border {
+#jmoaijjsxe .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_col_headings {
+#jmoaijjsxe .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -191,7 +190,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-right-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_col_heading {
+#jmoaijjsxe .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -211,7 +210,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   overflow-x: hidden;
 }
 
-#fddwjmglic .gt_column_spanner_outer {
+#jmoaijjsxe .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -223,15 +222,15 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   padding-right: 4px;
 }
 
-#fddwjmglic .gt_column_spanner_outer:first-child {
+#jmoaijjsxe .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fddwjmglic .gt_column_spanner_outer:last-child {
+#jmoaijjsxe .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fddwjmglic .gt_column_spanner {
+#jmoaijjsxe .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -243,11 +242,11 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   width: 100%;
 }
 
-#fddwjmglic .gt_spanner_row {
+#jmoaijjsxe .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fddwjmglic .gt_group_heading {
+#jmoaijjsxe .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -273,7 +272,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   text-align: left;
 }
 
-#fddwjmglic .gt_empty_group_heading {
+#jmoaijjsxe .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -288,15 +287,15 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   vertical-align: middle;
 }
 
-#fddwjmglic .gt_from_md > :first-child {
+#jmoaijjsxe .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fddwjmglic .gt_from_md > :last-child {
+#jmoaijjsxe .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fddwjmglic .gt_row {
+#jmoaijjsxe .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -315,7 +314,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   overflow-x: hidden;
 }
 
-#fddwjmglic .gt_stub {
+#jmoaijjsxe .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -328,7 +327,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   padding-right: 5px;
 }
 
-#fddwjmglic .gt_stub_row_group {
+#jmoaijjsxe .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -342,15 +341,15 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   vertical-align: top;
 }
 
-#fddwjmglic .gt_row_group_first td {
+#jmoaijjsxe .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fddwjmglic .gt_row_group_first th {
+#jmoaijjsxe .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fddwjmglic .gt_summary_row {
+#jmoaijjsxe .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -360,16 +359,16 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   padding-right: 5px;
 }
 
-#fddwjmglic .gt_first_summary_row {
+#jmoaijjsxe .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_first_summary_row.thick {
+#jmoaijjsxe .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fddwjmglic .gt_last_summary_row {
+#jmoaijjsxe .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -379,7 +378,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-bottom-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_grand_summary_row {
+#jmoaijjsxe .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -389,7 +388,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   padding-right: 5px;
 }
 
-#fddwjmglic .gt_first_grand_summary_row {
+#jmoaijjsxe .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -399,7 +398,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-top-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_last_grand_summary_row_top {
+#jmoaijjsxe .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -409,11 +408,11 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-bottom-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_striped {
+#jmoaijjsxe .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fddwjmglic .gt_table_body {
+#jmoaijjsxe .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -422,7 +421,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-bottom-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_footnotes {
+#jmoaijjsxe .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -436,7 +435,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-right-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_footnote {
+#jmoaijjsxe .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -445,7 +444,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   padding-right: 5px;
 }
 
-#fddwjmglic .gt_sourcenotes {
+#jmoaijjsxe .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -459,7 +458,7 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   border-right-color: #D3D3D3;
 }
 
-#fddwjmglic .gt_sourcenote {
+#jmoaijjsxe .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -467,72 +466,72 @@ Post mortem transcriptomics from AMP-AD and similar studies have enabled the par
   padding-right: 5px;
 }
 
-#fddwjmglic .gt_left {
+#jmoaijjsxe .gt_left {
   text-align: left;
 }
 
-#fddwjmglic .gt_center {
+#jmoaijjsxe .gt_center {
   text-align: center;
 }
 
-#fddwjmglic .gt_right {
+#jmoaijjsxe .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fddwjmglic .gt_font_normal {
+#jmoaijjsxe .gt_font_normal {
   font-weight: normal;
 }
 
-#fddwjmglic .gt_font_bold {
+#jmoaijjsxe .gt_font_bold {
   font-weight: bold;
 }
 
-#fddwjmglic .gt_font_italic {
+#jmoaijjsxe .gt_font_italic {
   font-style: italic;
 }
 
-#fddwjmglic .gt_super {
+#jmoaijjsxe .gt_super {
   font-size: 65%;
 }
 
-#fddwjmglic .gt_footnote_marks {
+#jmoaijjsxe .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fddwjmglic .gt_asterisk {
+#jmoaijjsxe .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fddwjmglic .gt_indent_1 {
+#jmoaijjsxe .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fddwjmglic .gt_indent_2 {
+#jmoaijjsxe .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fddwjmglic .gt_indent_3 {
+#jmoaijjsxe .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fddwjmglic .gt_indent_4 {
+#jmoaijjsxe .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fddwjmglic .gt_indent_5 {
+#jmoaijjsxe .gt_indent_5 {
   text-indent: 25px;
 }
 
-#fddwjmglic .katex-display {
+#jmoaijjsxe .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#fddwjmglic div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jmoaijjsxe div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
