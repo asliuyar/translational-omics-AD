@@ -1,6 +1,5 @@
 ---
 title: "Cross Species Functional Alignment"
-output: html_document
 teaching: 60
 exercises: 120
 ---

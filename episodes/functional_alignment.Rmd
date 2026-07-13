@@ -1,6 +1,5 @@
 ---
 title: "Functional Alignment across Biological Systems"
-output: html_document
 teaching: 45
 exercises: 90
 ---

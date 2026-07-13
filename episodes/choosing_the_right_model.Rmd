@@ -1,6 +1,5 @@
 ---
 title: "Choosing the right animal models"
-output: html_document
 teaching: 90
 exercises: 90
 ---
